@@ -60,7 +60,11 @@ class Not_1_2Data {
 	}
 
 	public static function getByIdComprobado($m){
-		$sql = "select * from ".self::$tablename." where serieDocModifica='$m'";
+		/**select NC.*, FT.SERIE, FT.COMPROBANTE FROM nota AS NC
+INNER JOIN factura AS FT ON(FT.id = NC.ID_TIPO_DOC) 
+where NC.serieDocModifica='F001-00000005' */
+		$sql  = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM ".self::$tablename." AS NC ";
+		$sql .= "INNER JOIN factura AS FT ON(FT.id = NC.ID_TIPO_DOC) where NC.serieDocModifica='$m'";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Boleta2Data();
@@ -90,6 +94,8 @@ class Not_1_2Data {
 			$data->sumImpVenta = $r['sumImpVenta'];
 			$data->ublVersionId = $r['ublVersionId'];
 			$data->customizationId = $r['customizationId'];
+			$data->SERIE = $r['SERIE'];
+			$data->COMPROBANTE = $r['COMPROBANTE'];
 
 			$found = $data;
 			break;

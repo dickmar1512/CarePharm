@@ -202,11 +202,6 @@
     style="<?php if (isset($_SESSION["user_id"]) || isset($_SESSION["client_id"])): ?> <?php else: ?>background-image: url('img/fondo3.jpg') !important; background-repeat: no-repeat;  background-size: cover !important;<?php endif; ?>"
     class="<?php if (isset($_SESSION["user_id"]) || isset($_SESSION["client_id"])): ?> hold-transition sidebar-mini layout-fixed  <?php else: ?>login-page<?php endif; ?>">
     <div class="wrapper">
-        <!-- Preloader -->
-        <!-- <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div> -->
-
         <?php if (isset($_SESSION["user_id"]) || isset($_SESSION["client_id"])): ?>
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -339,6 +334,9 @@
                             data-accordion="false">
                             <?php
                             $admin = UserData::getById($_SESSION["user_id"])->is_admin;
+                            $dirtec = UserData::getById($_SESSION["user_id"])->is_dirtec;
+                            $caja = UserData::getById($_SESSION["user_id"])->is_caja;
+                            $motonmax = UserData::getById($_SESSION["user_id"])->montomax;
                             if (isset($_SESSION["user_id"])): ?>
                                 <li class="nav-item">
                                     <a href="./?view=home" class="nav-link">
@@ -373,7 +371,7 @@
                                         </li>     
                                     </ul>
                                 </li>
-                                <?php if ($admin == 1) { ?>
+                                <?php if ($admin == 1 || $dirtec == 1) { ?>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class="bx bxs-shopping-bag"></i>
@@ -417,7 +415,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <?php if ($admin == 1) { ?>
+                                <?php if ($admin == 1 || $dirtec == 1) { ?>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class='fas fa-tag'></i>
@@ -440,19 +438,7 @@
                                         </ul>  
                                     </li>
                                 <?php } ?>
-                                <!-- <li class="nav-item">
-                                    <a href="./?view=clients" class="nav-link">
-                                        <i class='fa fa-user'></i>
-                                        <p>Clientes</p>
-                                    </a>
-                                </li> -->
-                                <?php if ($admin == 1) { ?>
-                                    <!-- <li class="nav-item">
-                                        <a href="./?view=providers" class="nav-link">
-                                            <i class='fa fa-truck'></i>
-                                            <p>Proveedores</p>
-                                        </a>
-                                    </li> -->
+                                <?php if ($admin == 1 || $dirtec == 1) { ?>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class='fa fa-database'></i>
@@ -521,6 +507,7 @@
                                                 <p>Registro Nota Venta</p>
                                             </a>
                                         </li>
+                                        <?php if($admin ==1 || $dirtec ==1) {?>
                                         <li class="nav-item">
                                             <a href="./?view=reportsboleta" class="nav-link">
                                                 <i class="nav-icon far fa-circle text-info"></i>
@@ -533,6 +520,7 @@
                                                 Factura
                                             </a>
                                         </li>
+                                        <?php }?>
                                         <li class="nav-item">
                                             <a href="./?view=reportsnotascredito" class="nav-link">
                                                 <i class="nav-icon far fa-circle text-info"></i>
@@ -547,7 +535,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <?php if ($admin == 1) { ?>
+                                <?php if ($admin == 1 || $dirtec == 1) { ?>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class='fa fa-cog'></i>
@@ -555,6 +543,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </a>
                                         <ul class="nav nav-treeview">
+                                            <?php if ($admin == 1) { ?>
                                             <li class="nav-item">
                                                 <a href="./?view=users" class="nav-link">
                                                     <i class="nav-icon far fa-circle text-info"></i>
@@ -566,7 +555,9 @@
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Empresa</p>
                                                 </a>
-                                            </li>                                            
+                                            </li> 
+                                            
+                                            <?php } ?>                                           
                                             <li class="nav-item">
                                                 <a href="./?view=clients" class="nav-link">
                                                     <i class="nav-icon far fa-circle text-info"></i>
@@ -725,6 +716,8 @@
 
      <!-- Scripts nota de credito factura-->
     <script src="dist/js/pages/nocfactura.js"></script>
+    <!-- Scripts nota de credito boleta-->
+    <script src="dist/js/pages/nocboleta.js"></script>
 
     <!-- Scripts onesell -->     
     <script src="dist/js/imprimir50.js" type="text/javascript"></script>
@@ -777,17 +770,14 @@
              /**
             * Script que revisa el monto máximo que debe tener en caja para hacer cierre
             */
-            // let iduser = '<?php //echo $_SESSION["user_id"];?>';
-            // if(iduser){
-            //                 let checkInterval;
-            //                 const CHECK_DELAY = 10000; // 10 minutos en milisegundos (1000 * 60 * 10)
-            //                 let lastRedirectTime = 0; // Tiempo del último redireccionamiento                          
-                                    
-
-            //     // Iniciar el intervalo
-            //     checkMonto(); // Ejecutar ahora
-            //     checkInterval = setInterval(checkMonto, CHECK_DELAY); 
-            // } 
+            let iduser = '<?php echo $_SESSION["user_id"];?>';
+            if(iduser){
+                let checkInterval;
+                const CHECK_DELAY = 600000; // 10 minutos en milisegundos (1000 * 60 * 10)                     
+                 // Iniciar el intervalo
+                checkMonto(<?=$motonmax?>); // Ejecutar ahora
+                checkInterval = setInterval(checkMonto, CHECK_DELAY); 
+            } 
             
             $('#imprimir').click(function() {
                 $('#imprimir').hide();
@@ -803,52 +793,49 @@
             });	
         });
         
-        // // Función para ejecutar la consulta AJAX
-        //                     function checkMonto() {
-        //                         // Si ha pasado menos de 10 minutos desde el último redireccionamiento, no hacer nada
-        //                         console.log("Date.now==>",(Date.now()) )
-        //                         console.log("lastRedirectTime==>",lastRedirectTime);
-        //                         console.log("resta==>",(Date.now() - lastRedirectTime) )
-        //                         if (Date.now() - lastRedirectTime < CHECK_DELAY) {
-        //                             return;
-        //                         }
+        // Función para ejecutar la consulta AJAX
+                            function checkMonto(montomax) {
+                                // Si ha pasado menos de 10 minutos desde el último redireccionamiento, no hacer nada
+                                // if (Date.now() - lastRedirectTime < CHECK_DELAY) {
+                                //     return;
+                                // }
                                 
-        //                         $.ajax({
-        //                             url: './?action=getMontoMax',
-        //                             type: 'GET',
-        //                             dataType: 'json',
-        //                             success: function(response) {
-        //                                 if (response.success && response.montomax >= 100) {
-        //                                     showModal(response.montomax);
-        //                                 }
-        //                             },
-        //                             error: function(xhr, status, error) {
-        //                                 console.error("Error en la consulta:", error);
-        //                             }
-        //                         });
-        //                     }
+                                $.ajax({
+                                    url: './?action=getMontoMax',
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.success && response.montocaja >= montomax) {
+                                            showModal(response.montocaja, montomax);
+                                        }
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error("Error en la consulta:", error);
+                                    }
+                                });
+                            }
 
-        //                     // Función para mostrar el modal con SweetAlert2
-        //                     function showModal(monto) {
-        //                         Swal.fire({
-        //                             title: `Monto máximo alcanzado: ${monto}`,
-        //                             html: '¿Qué deseas hacer?',
-        //                             icon: 'info',
-        //                             showCancelButton: true,
-        //                             confirmButtonText: 'Cerrar caja',
-        //                             cancelButtonText: 'Posponer 10 minutos',
-        //                             allowOutsideClick: false,
-        //                             allowEscapeKey: false
-        //                         }).then((result) => {
-        //                             if (result.isConfirmed) {
-        //                                 // Guardar el momento del redireccionamiento
-        //                                 lastRedirectTime = Date.now();
-        //                                 window.location.href = './?view=box';
-        //                             } else {
-        //                                 // Si pospone, simplemente continuar con el intervalo existente
-        //                             }
-        //                         });
-        //                     }   
+                            // Función para mostrar el modal con SweetAlert2
+                            function showModal(monto,montomax) {
+                                Swal.fire({
+                                    title: `Monto en caja es : ${monto}<br> lo permitido es : ${montomax}`,
+                                    html: '¿Qué deseas hacer?',
+                                    icon: 'info',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Cerrar caja',
+                                    cancelButtonText: 'Posponer 10 minutos',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Guardar el momento del redireccionamiento
+                                        lastRedirectTime = Date.now();
+                                        window.location.href = './?view=box';
+                                    } else {
+                                        // Si pospone, simplemente continuar con el intervalo existente
+                                    }
+                                });
+                            }   
 
         // Función para volver a la página anterior
         function goBack() {

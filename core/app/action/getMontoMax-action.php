@@ -17,6 +17,6 @@ if (count($products) > 0) {
 		$total_total += $total;
     endforeach;    
 }
-echo json_encode(["success" => true, "montomax" => $total_total]);
+echo json_encode(["success" => true, "montocaja" => $total_total]);
 exit;
 ?>

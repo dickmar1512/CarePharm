@@ -6,6 +6,7 @@
     	printf("La conexión con el servidor de base de datos falló: %s\n", mysqli_connect_error());
     	exit();
 	}
+
 	if(count($_POST) > 0)
 	{
 		$TIPO='07';
@@ -81,7 +82,7 @@
 
 			//datos por verificar
 			$mtoTriOtroItem = '';
-			$mtoBaseTriOtroItem = '';
+			$mtoBaseTriOtroItem = 0;
 			$nomTributoIOtroItem = '';
 			$codTipTributoIOtroItem = '';
 			$porTriOtroItem = '';
@@ -99,103 +100,90 @@
 			//ARCHVIO LEY
 			$codLeyenda = $comp_ley->codLeyenda;		
 			$desLeyenda = $comp_ley->desLeyenda;	
-		}
+		} else {		
+			//ARCHIVO CAB
+			$tipOperacion = $_POST["tipOperacion"];
+			$fecEmision = $_POST["fecEmision"];
+			$horEmision = $_POST["horEmision"];
+			$fecVencimiento = $_POST["fecVencimiento"];
+			$codLocalEmisor = $_POST["codLocalEmisor"];
+			$tipDocUsuario = $_POST["tipDocUsuario"];
+			$numDocUsuario = $_POST["numDocUsuario"];
+			$rznSocialUsuario = $_POST["rznSocialUsuario"];
+			$tipMoneda = $_POST["tipMoneda"];
+			$codTipoNota = $_POST["codTipoNota"];
+			$descMotivo = $_POST["descMotivo"];
+			$tipDocModifica = $_POST["tipDocModifica"];
+			$serieDocModifica = $_POST["serieDocModifica"];
+			$sumTotTributos = $_POST["sumTotTributos"];
+			//precio total
+			$sumTotValVenta = 0;
+			$sumPrecioVenta = 0;
 
-		else{
+			//ARCHIVO DET
+			$codUnidadMedida = $_POST["codUnidadMedida"];
+			$codProducto = $_POST["codProducto"];
+			$codProductoSUNAT = $_POST["codProductoSUNAT"];
+			$codTriIGV = $_POST["codTriIGV"];
+			$mtoIgvItem = $_POST["mtoIgvItem"];
+			//$mtoBaseIgvItem = $_POST["mtoBaseIgvItem"]; *
+			if ($_POST['mtoIscItem'] == '')
+			{
+				$mtoBaseIgvItem = 0.00;
+			}else
+			{
+				$mtoBaseIgvItem = $_POST["mtoIscItem"];
+			}
 		
-		//ARCHIVO CAB
-		$tipOperacion = $_POST["tipOperacion"];
-		$fecEmision = $_POST["fecEmision"];
-		$horEmision = $_POST["horEmision"];
-		$fecVencimiento = $_POST["fecVencimiento"];
-		$codLocalEmisor = $_POST["codLocalEmisor"];
-		$tipDocUsuario = $_POST["tipDocUsuario"];
-		$numDocUsuario = $_POST["numDocUsuario"];
-		$rznSocialUsuario = $_POST["rznSocialUsuario"];
-		$tipMoneda = $_POST["tipMoneda"];
-		$codTipoNota = $_POST["codTipoNota"];
-		$descMotivo = $_POST["descMotivo"];
-		$tipDocModifica = $_POST["tipDocModifica"];
-		$serieDocModifica = $_POST["serieDocModifica"];
-		$sumTotTributos = $_POST["sumTotTributos"];
-		//precio total
-		$sumTotValVenta = 0;
-		$sumPrecioVenta = 0;
+			$nomTributoIgvItem = $_POST["nomTributoIgvItem"];
+			$codTipTributoIgvItem = $_POST["codTipTributoIgvItem"];
+			$tipAfeIGV = $_POST["tipAfeIGV"];
+			$porIgvItem = $_POST["porIgvItem"];
+			$codTriISC = "-";
+			$mtoIscItem = $_POST["mtoIscItem"];
+			$mtoBaseIscItem = 0;
+			$nomTributoIscItem = $_POST["nomTributoIscItem"];
+			$codTipTributoIscItem = $_POST["codTipTributoIscItem"];
+			$tipSisISC = $_POST["tipSisISC"];
+			$porIscItem = $_POST["porIscItem"];
+			$codTriOtroItem = "-";
 
-		//ARCHIVO DET
-		$codUnidadMedida = $_POST["codUnidadMedida"];
-		$codProducto = $_POST["codProducto"];
-		$codProductoSUNAT = $_POST["codProductoSUNAT"];
-		$codTriIGV = $_POST["codTriIGV"];
-		$mtoIgvItem = $_POST["mtoIgvItem"];
-		//$mtoBaseIgvItem = $_POST["mtoBaseIgvItem"]; *
-		if ($_POST['mtoIscItem'] == '')
-		{
-			$mtoBaseIgvItem = 0.00;
+			$sumTotTributosItem = $_POST["sumTotTributosItem"];
+
+			//datos por verificar
+			$mtoTriOtroItem = '';
+			$mtoBaseTriOtroItem = 0;
+			$nomTributoIOtroItem = '';
+			$codTipTributoIOtroItem = '';
+			$porTriOtroItem = '';
+			// fin datos por verificar
+
+			$mtoValorReferencialUnitario = $_POST["mtoValorReferencialUnitario"];
+
+			//ARCHVIO TRI
+			$ideTributo = $_POST["ideTributo"];
+			$nomTributo = $_POST["nomTributo"];
+			$codTipTributo = $_POST["codTipTributo"];
+			$mtoBaseImponible = 0;//$_POST["mtoBaseImponible"];
+			$mtoTributo = $_POST["mtoTributo"];
+
+			//$sell_id = $_POST["id"];
+
+			//ARCHVIO LEY
+			$codLeyenda = "1000";
+
+			//ARCHIVO ACA
+			$ctaBancoNacionDetraccion = "-";
+			$codBienDetraccion = "-";
+			$porDetraccion = "-";
+			$mtoDetraccion = "-";
+			$codPaisCliente = 'PE';
+			$codUbigeoCliente = $_POST['codUbigeoCliente'];
+			$desDireccionCliente = $_POST['desDireccionCliente'];
+			$codPaisEntrega = "-";
+			$codUbigeoEntrega = "-";
+			$desDireccionEntrega = "-";
 		}
-		else
-		{
-			$mtoBaseIgvItem = $_POST["mtoIscItem"];
-		}
-		
-		$nomTributoIgvItem = $_POST["nomTributoIgvItem"];
-		$codTipTributoIgvItem = $_POST["codTipTributoIgvItem"];
-		$tipAfeIGV = $_POST["tipAfeIGV"];
-		$porIgvItem = $_POST["porIgvItem"];
-		$codTriISC = "-";
-		$mtoIscItem = $_POST["mtoIscItem"];
-		$mtoBaseIscItem = 0;
-		$nomTributoIscItem = $_POST["nomTributoIscItem"];
-		$codTipTributoIscItem = $_POST["codTipTributoIscItem"];
-		$tipSisISC = $_POST["tipSisISC"];
-		$porIscItem = $_POST["porIscItem"];
-		$codTriOtroItem = "-";
-
-		$sumTotTributosItem = $_POST["sumTotTributosItem"];
-
-		//datos por verificar
-		$mtoTriOtroItem = '';
-		$mtoBaseTriOtroItem = '';
-		$nomTributoIOtroItem = '';
-		$codTipTributoIOtroItem = '';
-		$porTriOtroItem = '';
-		// fin datos por verificar
-
-		$mtoValorReferencialUnitario = $_POST["mtoValorReferencialUnitario"];
-
-		//ARCHVIO TRI
-		$ideTributo = $_POST["ideTributo"];
-		$nomTributo = $_POST["nomTributo"];
-		$codTipTributo = $_POST["codTipTributo"];
-		$mtoBaseImponible = 0;//$_POST["mtoBaseImponible"];
-		$mtoTributo = $_POST["mtoTributo"];
-
-		//$sell_id = $_POST["id"];
-
-		//ARCHVIO LEY
-		$codLeyenda = "2001";		
-
-		if ($codLeyenda == "2001")
-		{
-			$desLeyenda = "BIENES TRANSFERIDOS EN LA AMAZONIA REGION SELVA PARA SER CONSUMIDOS EN LA MISMA";//$_POST["desLeyenda"];
-		}
-		if ($codLeyenda == "2002")
-		{
-			$desLeyenda = "SERVICIOS PRESTADOS EN LA AMAZONIA REGION SELVA PARA SER CONSUMIDOS EN LA MISMA";//$_POST["desLeyenda"];
-		}		
-
-		//ARCHIVO ACA
-		$ctaBancoNacionDetraccion = "-";
-		$codBienDetraccion = "-";
-		$porDetraccion = "-";
-		$mtoDetraccion = "-";
-		$codPaisCliente = 'PE';
-		$codUbigeoCliente = $_POST['codUbigeoCliente'];
-		$desDireccionCliente = $_POST['desDireccionCliente'];
-		$codPaisEntrega = "-";
-		$codUbigeoEntrega = "-";
-		$desDireccionEntrega = "-";
-	}
 
 		//########## CONTENIDO ARCHIVO DET === 32 ITEMS #############################
 		$downloadfile2 = "../efact1.3.4/sunat_archivos/sfs/DATA/".$RUC."-".$TIPO."-".$SERIE."-".$COMPROBANTE.".det";
@@ -226,12 +214,9 @@
 			$operations = OperationData::getAllProductsBySellId($SELLID);
 
 
-			if($TIPO_NOTA=='01' || $TIPO_NOTA=='02' || $TIPO_NOTA=='06'){
-
+		if($TIPO_NOTA=='01' || $TIPO_NOTA=='02' || $TIPO_NOTA=='06'){
 			foreach ($operations as $item)
 			{
-
-
 				$product  = $item->getProduct();
 
 				$cantidad = $item->q;
@@ -283,7 +268,7 @@
 								$mtoBaseTriOtroItem."|".
 								$nomTributoIOtroItem."|".
 								$codTipTributoIOtroItem."|".
-								$porTriOtroItem."|".
+								$porTriOtroItem."|-||||||".
 								$mtoPrecioVentaUnitario."|".
 								$mtoValorVentaItem."|".
 								$mtoValorReferencialUnitario."|".PHP_EOL;
@@ -342,7 +327,7 @@
 				  \"$porIgvItem\",
 				  \"$codTriISC\",
 				  \"$mtoIscItem\",
-				  \"$mtoBaseIscItem,\",
+				  \"$mtoBaseIscItem\",
 				  \"$nomTributoIscItem\",
 				  \"$codTipTributoIscItem\",
 				  \"$tipSisISC\",
@@ -420,7 +405,7 @@
 								$mtoBaseTriOtroItem."|".
 								$nomTributoIOtroItem."|".
 								$codTipTributoIOtroItem."|".
-								$porTriOtroItem."|".
+								$porTriOtroItem."|-||||||".
 								$mtoPrecioVentaUnitario."|".
 								$mtoValorVentaItem."|".
 								$mtoValorReferencialUnitario."|".PHP_EOL;
@@ -479,7 +464,7 @@
 				  \"$porIgvItem\",
 				  \"$codTriISC\",
 				  \"$mtoIscItem\",
-				  \"$mtoBaseIscItem,\",
+				  \"$mtoBaseIscItem\",
 				  \"$nomTributoIscItem\",
 				  \"$codTipTributoIscItem\",
 				  \"$tipSisISC\",
@@ -546,7 +531,7 @@
 								$mtoBaseTriOtroItem."|".
 								$nomTributoIOtroItem."|".
 								$codTipTributoIOtroItem."|".
-								$porTriOtroItem."|".
+								$porTriOtroItem."|-||||||".
 								$mtoPrecioVentaUnitario."|".
 								$mtoValorVentaItem."|".
 								$mtoValorReferencialUnitario."|".PHP_EOL;
@@ -605,7 +590,7 @@
 				  \"$porIgvItem\",
 				  \"$codTriISC\",
 				  \"$mtoIscItem\",
-				  \"$mtoBaseIscItem,\",
+				  \"$mtoBaseIscItem\",
 				  \"$nomTributoIscItem\",
 				  \"$codTipTributoIscItem\",
 				  \"$tipSisISC\",
@@ -673,7 +658,7 @@
 								$mtoBaseTriOtroItem."|".
 								$nomTributoIOtroItem."|".
 								$codTipTributoIOtroItem."|".
-								$porTriOtroItem."|".
+								$porTriOtroItem."|-||||||".
 								$mtoPrecioVentaUnitario."|".
 								$mtoValorVentaItem."|".
 								$mtoValorReferencialUnitario."|".PHP_EOL;
@@ -732,7 +717,7 @@
 				  \"$porIgvItem\",
 				  \"$codTriISC\",
 				  \"$mtoIscItem\",
-				  \"$mtoBaseIscItem,\",
+				  \"$mtoBaseIscItem\",
 				  \"$nomTributoIscItem\",
 				  \"$codTipTributoIscItem\",
 				  \"$tipSisISC\",
@@ -758,10 +743,10 @@
 			}
 
 
-			else if($TIPO_NOTA=='07'){
-				$data = $_POST['arraydet'];
+	else if($TIPO_NOTA=='07'){
+		$data = $_POST['arraydet'];
 
-				foreach ($operations as $item)
+		foreach ($operations as $item)
 			{
 				$product  = $item->getProduct();
 
@@ -810,7 +795,7 @@
 								$mtoBaseTriOtroItem."|".
 								$nomTributoIOtroItem."|".
 								$codTipTributoIOtroItem."|".
-								$porTriOtroItem."|".
+								$porTriOtroItem."|-||||||".
 								$mtoPrecioVentaUnitario."|".
 								$mtoValorVentaItem."|".
 								$mtoValorReferencialUnitario."|".PHP_EOL;
@@ -869,7 +854,7 @@
 				  \"$porIgvItem\",
 				  \"$codTriISC\",
 				  \"$mtoIscItem\",
-				  \"$mtoBaseIscItem,\",
+				  \"$mtoBaseIscItem\",
 				  \"$nomTributoIscItem\",
 				  \"$codTipTributoIscItem\",
 				  \"$tipSisISC\",
@@ -889,11 +874,12 @@
 
 				$sumTotValVenta = $cantidad*$precio_unitario + $sumTotValVenta;
 				$sumPrecioVenta = $sumTotValVenta+$sumTotTributos;//$_POST["sumPrecioVenta"]; UNID * PREC. UNIT
+				}
 			}
 		}
-			}
-			}
-
+	}
+       		$numLetra = NumeroLetras::convertir(number_format($sumPrecioVenta,2,'.',','));
+			$desLeyenda = $numLetra;
 
 			#BASE DE DATOS ARCHIVO .CAB
 			$sql_CAB = "insert into nota (
@@ -1044,7 +1030,6 @@
 			$conexion->query($sql_LEY);			
 
 			echo "true";
-
 			return true;
 
 			//print "<script>window.location='index.php?view=onesell&id=$s[1]';</script>";

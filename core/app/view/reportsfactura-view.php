@@ -47,7 +47,7 @@
 				$facturas = Factura2Data::get_facturas_x_fecha($_GET["sd"],$_GET["ed"], $_GET["selSerie"], $_GET["comprobante"]);
 			?>
 		<?php if(count($facturas) > 0):?>
-			<p align="center"><!-- <button id="imprimir" class="btn btn-md btn-info"><i class="fa fa-print"></i> IMPRIMIR</button> --><a href="index.php?view=excel_facturas&ini=<?php echo $_GET['sd'] ?>&fin=<?php echo $_GET['ed']?>"; class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</a></p>
+			<p align="center"><a href="index.php?view=excel_facturas&ini=<?php echo $_GET['sd'] ?>&fin=<?php echo $_GET['ed']?>"; class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</a></p>
 		<table class="table table-bordered">
 			<?php 
 				$subtotal = 0;
@@ -71,8 +71,9 @@
 				foreach($facturas as $fac)
 				{
 					$nro++;
-			$notacomprobar = $fac->SERIE."-".$fac->COMPROBANTE; 
-			$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
+					//VERIFICAR SI SE EMITIO NOTAS DE CREDITO O DEBITO 
+					$notacomprobar = $fac->SERIE."-".$fac->COMPROBANTE; 
+					$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
 					?>
 						<tr
 
@@ -96,30 +97,23 @@
 										$valor = $fac->sumPrecioVenta  + (float)$probar->sumPrecioVenta;
 
 									}
-									elseif ($probar->TIPO_DOC==7) {	$valor=0; }
+									elseif ($probar->TIPO_DOC==7) {	$valor=$probar->sumTotValVenta; }
 									else {
 											$valor = $fac->sumPrecioVenta;
 									}
-						$total += $valor;
+							$total += $valor;
 						}else {
 											$valor = $fac->sumPrecioVenta;
 											$total += $valor;
 									}
 
-						echo 'S/ '.$valor ?></td>
-
-				<!-- <td style="text-align: center;" class="<?php if($fac->ESTADO==1){ echo "btn-success"; } else{ echo "btn-danger"; } ?>">
-					<?php if($fac->ESTADO==1){ echo "GENERADO"; } else{ echo "RECHAZADA"; } ?>
-				</td> -->
+						echo $valor ?></td>
 							
 				<td class="text-center">
-					<?php //VERIFICAR SI SE EMITIO NOTAS DE CREDITO O DEBITO 
-						$notacomprobar = $fac->SERIE."-".$fac->COMPROBANTE; 
-						$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
-
+					<?php 
 						if (isset($probar)) {
 							if ($probar->TIPO_DOC==7) {
-								echo "Nota de Credito emitida";
+								echo "N.C: ".$probar->SERIE."-".$probar->COMPROBANTE;
 							}
 							if ($probar->TIPO_DOC==8) {
 								echo "Nota de Debito emitida";
@@ -137,7 +131,7 @@
 						<?php } ?>
 				</td>
 				<td>
-					<a href="index.php?view=onesell2t&id=<?php echo $fac->EXTRA1 ?>"
+					<a href="index.php?view=onesell&id=<?php echo $fac->EXTRA1 ?>&tipodoc=1"
 						style="background-color: #000; font-size: 15px;"
 						class="btn btn-info btn-xs"><i class="fa fa-eye"> Ver</i></a>		
 				</td>
@@ -149,10 +143,10 @@
 			?>
 			<tfoot>
 				<td colspan="6"></td>
-				<td><?php echo 'S/ '. number_format($total,2,'.',',');?></td>
+				<td><?php echo ''. number_format($total,2,'.',',');?></td>
 			</tfoot>
 		</table>
-		<h1>Total: S/ <?php echo number_format($total,2,'.',','); ?></h1>
+		<h1>Total:<?php echo number_format($total,2,'.',','); ?></h1>
 
 		<?php else:
 		// si no hay operaciones

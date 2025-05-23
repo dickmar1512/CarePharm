@@ -78,8 +78,6 @@ class Factura2Data {
 				INNER JOIN factura fac ON cab.ID_TIPO_DOC = fac.id
 				WHERE cab.fecEmision BETWEEN '".$fecha_inicio."' AND '".$fecha_fin."' AND cab.TIPO_DOC = 1 $condicion";
 
-				// echo $sql; exit();
-
 		$query = Executor::doit($sql);
 
 		return Model::many($query[0],new Factura2Data());

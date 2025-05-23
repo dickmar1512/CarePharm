@@ -18,7 +18,9 @@
 		]
 	];
 
-	$dbPath = '../efact1.3.4/bd/BDFacturador.db';
+	$dbPath = '../efact1.3.4/bd/BDFacturador.db';	
+	$rutaXML = '../efact1.3.4/sunat_archivos/sfs/FIRMA';
+	$rutaCDR = '../efact1.3.4/sunat_archivos/sfs/RPTA';
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -120,8 +122,7 @@
 							<th>Descargar</th>
 							<th>Usuario</th>
 						</thead>
-						<?php foreach ($products as $sell): 
-
+						<?php foreach ($products as $sell):
 								try {
 									$db = new SQLite3($dbPath);
 									$query = "SELECT * FROM DOCUMENTO WHERE NUM_DOCU = '" . $sell->serie . "-" . $sell->comprobante . "'";
@@ -173,9 +174,20 @@
 									// Obtener nombre de situación (si existe)
 									$nombreSituacion = !empty($situacion) ? current($situacion)['nombre'] : 'Ejecutar Facturador sunat';
 									$estado = $nombreSituacion;
+							
+									$descargarXML = false;
+									$descargarCDR = false;
+
+									if($estadoSituacion == "02" || $estadoSituacion == "07" || $estadoSituacion == "08" || $estadoSituacion == "09") {
+										$descargarXML = true;
+									}elseif($estadoSituacion == "03" || $estadoSituacion == "04" || $estadoSituacion == "05" || $estadoSituacion == "10" || $estadoSituacion == "11" || $estadoSituacion == "12") {
+										$descargarXML = true;
+										$descargarCDR = true;
+									}
+									
 								} catch (Exception $e) {
 									die("Error al conectar o consultar la base de datos: " . $e->getMessage());
-								}
+								} 
 
 								$fechaObj = new DateTime($sell->created_at);
 								$fechaFormateada = $fechaObj->format('d/m/Y H:i:s');
@@ -216,7 +228,26 @@
 								<!-- <td><?//=$fechaGeneracion?></td> -->
 								<td><?=$fechaEnvio?></td>
 								<td><?=$estado?></td>
-								<td><?="aqui"?></td>
+								<td>
+									<?php
+									if ($descargarXML) {
+										$comprobanteXML = $nombreArchivo . ".xml";
+										$comprobanteCDR = "R" . $nombreArchivo . ".zip";
+										?>
+										<a href="<?= $rutaXML ?>/<?= $comprobanteXML ?>" class="btn btn-xs btn-default" download="<?= $comprobanteXML ?>">
+											<i class="fas fa-download"></i> XML
+										</a>
+										<?php
+										if ($descargarCDR) {
+											?>
+
+										<a href="<?= $rutaCDR ?>/<?= $comprobanteCDR ?>" class="btn btn-xs btn-default" target="_blank">
+											<i class="fas fa-download"></i> CDR
+										</a>
+									<?php 
+										}
+									} ?>
+								</td>
 								<td style="width:30px;">
 									<?= $usuario->username ?>
 								</td>

@@ -1,3 +1,15 @@
+<script>
+    	$('#imprimir').hide();
+      	$('#div_opciones').hide(); 
+	    $('.main-footer').hide();    	
+      	// $('.logo').hide();
+      	window.print();
+
+      	$('#imprimir').show();
+      	$('#div_opciones').show();         
+	    $('.main-footer').show();
+      	// $('.logo').show(); 
+</script>
 <?php 
 
 header('Content-Type: application/vnd.ms-excel');
@@ -46,8 +58,8 @@ header('content-disposition: attachment;filename=FACTURAS.xls');
 				foreach($facturas as $fac)
 				{
 					$nro++;
-			$notacomprobar = $fac->SERIE."-".$fac->COMPROBANTE; 
-			$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
+					$notacomprobar = $fac->SERIE."-".$fac->COMPROBANTE; 
+					$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
 					?>
 						<tr
 
@@ -71,7 +83,7 @@ header('content-disposition: attachment;filename=FACTURAS.xls');
 										$valor = $fac->sumPrecioVenta  + (float)$probar->sumPrecioVenta;
 
 									}
-									elseif ($probar->TIPO_DOC==7) {	$valor=0; }
+									elseif ($probar->TIPO_DOC==7) {	$valor=$probar->sumTotValVenta; }
 									else {
 											$valor = $fac->sumPrecioVenta;
 									}
@@ -81,19 +93,12 @@ header('content-disposition: attachment;filename=FACTURAS.xls');
 											$total += $valor;
 									}
 
-						echo 'S/ '.$valor ?></td>
+						echo $valor ?></td>
 						<td><?php if ($valor == 0) {
-							echo "Con Nota de Crédito";
+							echo "N.C: ".$probar->SERIE."-".$probar->COMPROBANTE;
 						}else{
 							echo "";
-						} ?></td>
-
-				<!-- <td style="text-align: center;" class="<?php if($fac->ESTADO==1){ echo "btn-success"; } else{ echo "btn-danger"; } ?>">
-					<?php if($fac->ESTADO==1){ echo "GENERADO"; } else{ echo "RECHAZADA"; } ?>
-				</td> -->
-							
-				
-				
+						} ?></td>	
 						</tr>
 					<?php
 					//$total = $fac->sumPrecioVenta + $total;

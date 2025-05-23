@@ -77,7 +77,7 @@ $("#fin").click(function () {
 				    url: 'index.php?view=addnotacreditoboleta',
 
 			    	success : function(data){
-						window.location.href = "index.php?view=notacreditoboleta&num="+serie+'-'+comp;		
+						window.location.href = "index.php?view=notacreditoboletat&num="+serie+'-'+comp;		
 			    	},
 			});
 	});

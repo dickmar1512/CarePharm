@@ -1,10 +1,7 @@
 <?php 
 	//Incluyo la clase
-
-	include "lib/simplexlsx.class.php";
-
-	echo "importar a excel";
-    $xlsx = new SimpleXLSX( 'excel_productos.xlsx' );//Instancio la clase y le paso como parametro el archivo a leer
+include "lib/simplexlsx.class.php";
+$xlsx = new SimpleXLSX( 'excel_productos.xlsx' );//Instancio la clase y le paso como parametro el archivo a leer
 $fp = fopen( 'datos.csv', 'w');//Abrire un archivo "datos.csv", sino existe se creara
   foreach( $xlsx->rows() as $fields ) 
   {//Itero la hoja de calculo
@@ -18,7 +15,7 @@ fclose($fp);//Cierro el archivo "datos.csv"
  $db_user="milenio";
  $db_pass="armagedon";
    
-     $xlsx = new SimpleXLSX( 'excel_productos.xlsx' );
+     $xlsx = new SimpleXLSX('excel_productos.xlsx' );
     try {
       $conn = new PDO( "mysql:host=$db_host;dbname=$db_name", "$db_user", "$db_pass");
       $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

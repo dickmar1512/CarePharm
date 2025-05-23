@@ -72,13 +72,13 @@ $fechaFormateada = $fechaObj->format('d/m/Y');
 					</div>
 					<div class="col-md-9">
 						<div class="row">
-							<div class="col-md-2">
+							<!-- <div class="col-md-2">
 								<div class="float">
 									<button id="imprimir50mm" class="btn btn-md btn-info"><i class="fa fa-print"></i>
 										IMPRIMIR
 										50mm</button>
 								</div>
-							</div>
+							</div> -->
 							<div class="col-md-2">
 								<div class="float">
 									<button id="imprimir80mm" class="btn btn-md btn-info"><i class="fa fa-print"></i>
@@ -86,20 +86,20 @@ $fechaFormateada = $fechaObj->format('d/m/Y');
 										80mm</button>
 								</div>
 							</div>
-							<div class="col-md-2">
+							<!-- <div class="col-md-2">
 								<div class="float">
 									<button id="imprimirA5" class="btn btn-md btn-info"><i class="fa fa-print"></i>
 										IMPRIMIR
 										A5</button>
 								</div>
-							</div>
-							<div class="col-md-2">
+							</div> -->
+							<!-- <div class="col-md-2">
 								<div class="float">
 									<button id="imprimirA4" class="btn btn-md btn-info"><i class="fa fa-print"></i>
 										IMPRIMIR
 										A4</button>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>

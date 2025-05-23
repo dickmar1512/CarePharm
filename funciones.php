@@ -116,4 +116,23 @@
       return $rows;
     }
   }
+
+  function datosbyNroDocBoleta($enlace, $numdoc)
+  {
+    $consulta = "SELECT d.* FROM det d
+                INNER JOIN boleta f ON (F.id = d.ID_TIPO_DOC)
+                WHERE  d.TIPO_DOC = 1 AND CONCAT(f.SERIE,'-',f.COMPROBANTE) = '".$numdoc."'";
+            
+    $rows = [];
+
+    if ($resultado = mysqli_query($enlace, $consulta))
+    {
+      while($fila = mysqli_fetch_array($resultado, MYSQLI_ASSOC))
+      {
+        $rows[] = $fila;
+      }
+
+      return $rows;
+    }
+  }
 ?>

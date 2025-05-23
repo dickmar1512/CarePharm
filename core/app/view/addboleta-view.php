@@ -81,30 +81,14 @@
 
 
 		//ARCHVIO LEY
-		//$codLeyenda = "1000";
+		$codLeyenda = "1000";
 		
 		$sumDescTotal = 0;
 		$sumOtrosCargos = 0;
 		$sumTotalAnticipos = 0;
 		
 		$mtoBaseIscItem = str_replace(',', '.', $mtoBaseIscItem); // Reemplazar coma por punto
-		$mtoBaseIscItem = floatval($mtoBaseIscItem);
-
-		// if ($codLeyenda == "2001")
-		// {
-		// 	$desLeyenda = "BIENES TRANSFERIDOS EN LA AMAZONIA REGION SELVA PARA SER CONSUMIDOS EN LA MISMA";//$_POST["desLeyenda"];
-		// }
-		// if ($codLeyenda == "2002")
-		// {
-		// 	$desLeyenda = "SERVICIOS PRESTADOS EN LA AMAZONIA REGION SELVA PARA SER CONSUMIDOS EN LA MISMA";//$_POST["desLeyenda"];
-		// }
-
-		// if ($codLeyenda == "1000")
-		// {
-			$sumImpVentaLey = $sumPrecioVenta-$sumDescTotal+$sumOtrosCargos-$sumTotalAnticipos;
-			$numLetra = NumeroLetras::convertir(number_format($sumImpVentaLey,2,'.',','));
-			$desLeyenda = $numLetra;
-		//}		
+		$mtoBaseIscItem = floatval($mtoBaseIscItem);	
 
 		//ARCHIVO ACA
 		$ctaBancoNacionDetraccion = "-";
@@ -404,6 +388,9 @@
 			$sumImpVenta = $sumPrecioVenta-$sumDescTotal+$sumOtrosCargos-$sumTotalAnticipos;//$_POST["sumImpVenta"];  UNID * PREC. UNIT
 			$ublVersionId = $_POST["ublVersionId"];
 			$customizationId = $_POST["customizationId"];
+
+			$numLetra = NumeroLetras::convertir(number_format($sumImpVenta,2,'.',','));
+			$desLeyenda = $numLetra;
 
 			#BASE DE DATOS ARCHIVO .CAB
 			$sql_CAB = "insert into cab (

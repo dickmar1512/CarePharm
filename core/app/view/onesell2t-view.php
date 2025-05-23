@@ -21,6 +21,16 @@
 		<?php
 	}
 
+// 	$venta = Factura2Data::getByExtra($_GET["id"]);
+
+// $comp_cab = Cab_1_2Data::getById($venta->id, $_GET["tipodoc"]);
+// $comp_aca = Aca_1_2Data::getById($venta->id, $_GET["tipodoc"]);
+// $detalles = Det_1_2Data::getById($venta->id, $_GET["tipodoc"]);
+// $comp_tri = Tri_1_2Data::getById($venta->id, $_GET["tipodoc"]);
+// $comp_ley = Ley_1_2Data::getById($venta->id, $_GET["tipodoc"]);
+// $sell = SellData::getById($venta->EXTRA1);
+
+
 	$product = Factura2Data::getByExtra($_GET["id"]);
 	$comp_cab = Cab_1_2Data::getById($product->id, 1);
 	$comp_aca = Aca_1_2Data::getById($product->id, 1);
@@ -29,7 +39,6 @@
 	$comp_ley = Ley_1_2Data::getById($product->id, 1);
 
 	$sell = SellData::getById($product->EXTRA1);
-    //$mesero = UserData::getById($sell->mesero_id);
 
     $operations = OperationData::getAllProductsBySellId($_GET["id"]);
 

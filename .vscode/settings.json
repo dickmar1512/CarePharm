@@ -2,5 +2,6 @@
     "php.stubs": [
         "*",
         "bzip2"
-    ]
+    ],
+    "php.validate.executablePath": ""
 }

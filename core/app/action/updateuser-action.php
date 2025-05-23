@@ -5,6 +5,8 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if (!empty($data)) {
     $is_admin = isset($data["is_admin"]) ? 1 : 0;
+    $is_caja = isset($data["is_caja"]) ? 1 : 0;
+    $is_dirtec = isset($data["is_dirtec"]) ? 1 : 0;
     $is_active = isset($data["is_active"]) ? 1 : 0;
     $is_desc = isset($data["is_desc"]) ? 1 : 0;
 
@@ -15,6 +17,8 @@ if (!empty($data)) {
     $user->email = $data["email"];
     $user->montomax = $data["montomax"];
     $user->is_admin = $is_admin;
+    $user->is_caja = $is_caja;
+    $user->is_dirtec = $is_dirtec;
     $user->is_active = $is_active;
     $user->is_desc = $is_desc;
     $user->update();

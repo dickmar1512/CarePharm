@@ -32,7 +32,7 @@
 				<div class="row" style="display: flex; justify-content: center;">
 					<div class="col-md-12">
 						<div class="row" style="display: flex; justify-content: center;">
-							<div class="col-md-10">
+							<div class="col-md-12">
 								<?php
 								$users = UserData::getAll();
 								if (count($users) > 0) {
@@ -40,11 +40,13 @@
 									?>
 									<table class="table table-bordered table-hover">
 										<thead>
-											<th>Nombre completo</th>
-											<th>Nombre de usuario</th>
+											<th>Nombre</th>
+											<th>usuario</th>
 											<th>Email</th>
 											<th>Activo</th>
-											<th>Admin</th>
+											<th>Rol Admin</th>
+											<th>Rol D.T</th>
+											<th>Rol Caja</th>
 											<th>Descuentos</th>
 											<th>Monto Max.</th>
 											<th></th>
@@ -56,21 +58,35 @@
 												<td><?php echo $user->name . " " . $user->lastname; ?></td>
 												<td><?php echo $user->username; ?></td>
 												<td><?php echo $user->email; ?></td>
-												<td>
+												<td style="width:30px; text-align: center;">
 													<?php if ($user->is_active): ?>
 														<i class="fas fa-check text-success"></i>
 													<?php else: ?>
 														<i class="fas fa-ban text-warning"></i>
 													<?php endif; ?>
 												</td>
-												<td>
+												<td style="width:30px; text-align: center;">
 													<?php if ($user->is_admin): ?>
 														<i class="fas fa-check text-success"></i>
 													<?php else: ?>
 														<i class="fas fa-ban text-warning"></i>
 													<?php endif; ?>
 												</td>
-												<td>
+												<td style="width:30px; text-align: center;">
+													<?php if ($user->is_dirtec): ?>
+														<i class="fas fa-check text-success"></i>
+													<?php else: ?>
+														<i class="fas fa-ban text-warning"></i>
+													<?php endif; ?>
+												</td>
+												<td style="width:30px; text-align: center;">
+													<?php if ($user->is_caja): ?>
+														<i class="fas fa-check text-success"></i>
+													<?php else: ?>
+														<i class="fas fa-ban text-warning"></i>
+													<?php endif; ?>
+												</td>
+												<td style="width:30px; text-align: center;">
 													<?php if ($user->is_desc): ?>
 														<i class="fas fa-check text-success"></i>
 													<?php else: ?>
@@ -81,7 +97,6 @@
 													<?php echo $user->montomax; ?>
 												</td>
 												<td style="width:30px;">
-													<!-- <a href="index.php?view=edituser&id=<?php echo $user->id; ?>" class="btn btn-warning btn-xs">Editar</a> -->
 													<a href="#" class="btn btn-warning btn-xs edit-user" data-id="<?php echo $user->id; ?>">Editar</a>
 												</td>
 											</tr>
@@ -247,7 +262,21 @@
 					<div class="form-group">
 						<div class="checkbox">
 							<label>
-								<input type="checkbox" name="is_admin" ${user.is_admin ? 'checked' : ''}> Es administrador
+								<input type="checkbox" name="is_admin" ${user.is_admin == 1 ? 'checked' : ''}> Es usuario administrador
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="is_dirtec" ${user.is_dirtec == 1 ? 'checked' : ''}> Es Usuario dirección técnica
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" name="is_caja" ${user.is_caja == 1 ? 'checked' : ''}> Es usuario caja
 							</label>
 						</div>
 					</div>
