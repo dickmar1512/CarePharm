@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 	<h1>Agregar Usuario</h1>
 	<br>
-		<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=adduser" role="form">
+		<form class="form-horizontal" method="post" id="addproduct" action="./?view=adduser" role="form">
 
 
   <div class="form-group">

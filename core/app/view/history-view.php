@@ -84,7 +84,7 @@
 										$("#oper-" + <?php echo $operation->id; ?>).click(function () {
 											x = confirm("Estas seguro que quieres eliminar esto ??");
 											if (x == true) {
-												window.location = "index.php?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
+												window.location = "./?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
 											}
 										});
 
@@ -169,7 +169,7 @@
 											$("#oper-" + <?php echo $operation->id; ?>).click(function () {
 												x = confirm("Estas seguro que quieres eliminar esto ??");
 												if (x == true) {
-													window.location = "index.php?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
+													window.location = "./?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
 												}
 											});
 										</script>

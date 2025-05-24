@@ -71,8 +71,8 @@
 
 												</td>
 												<td style="min-width:100px;">
-													<a href="index.php?view=input&product_id=<?php echo $product->id; ?>" class="btn btn-xs btn-primary"><i class="fas fa-arrow-circle-up"></i> Alta</a>
-													<a href="index.php?view=history&product_id=<?php echo $product->id; ?>"
+													<a href="./?view=input&product_id=<?php echo $product->id; ?>" class="btn btn-xs btn-primary"><i class="fas fa-arrow-circle-up"></i> Alta</a>
+													<a href="./?view=history&product_id=<?php echo $product->id; ?>"
 														class="btn btn-xs btn-success"><i class="fas fa-file"></i>
 														GENERAR KARDEX</a>
 												</td>

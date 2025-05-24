@@ -95,10 +95,10 @@ $("#fin").click(function () {
 				    		"tipo":tipo,
 				    		"arraydet": arraydet
 				    	},
-				    url: 'index.php?view=addnotacredito',
+				    url: './?view=addnotacredito',
 
 			    	success : function(data){
-			    		window.location.href = "index.php?view=notacredito&num="+serie+'-'+comp;
+			    		window.location.href = "./?view=notacredito&num="+serie+'-'+comp;
 			    	},
 			});
 	});

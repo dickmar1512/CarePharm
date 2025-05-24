@@ -116,13 +116,14 @@
 							<th>Cliente</th>
 							<th>Importe </th>
 							<th>Fecha Emision</th>
-							<!-- <th>Fecha Gene.</th> -->
 							<th>Fecha Envio</th>
 							<th>Estado Envio</th>
 							<th>Descargar</th>
 							<th>Usuario</th>
 						</thead>
 						<?php foreach ($products as $sell):
+								$notacomprobar = $sell->serie . "-" . $sell->comprobante; 
+								$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
 								try {
 									$db = new SQLite3($dbPath);
 									$query = "SELECT * FROM DOCUMENTO WHERE NUM_DOCU = '" . $sell->serie . "-" . $sell->comprobante . "'";
@@ -173,7 +174,7 @@
 
 									// Obtener nombre de situación (si existe)
 									$nombreSituacion = !empty($situacion) ? current($situacion)['nombre'] : 'Ejecutar Facturador sunat';
-									$estado = $nombreSituacion;
+									$estado = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7) ? "N.CRE: ".$probar->SERIE."-".$probar->COMPROBANTE :$nombreSituacion;
 							
 									$descargarXML = false;
 									$descargarCDR = false;
@@ -192,12 +193,25 @@
 								$fechaObj = new DateTime($sell->created_at);
 								$fechaFormateada = $fechaObj->format('d/m/Y H:i:s');
 							?>
-							<tr>
-								<td style="width:30px;">
+							<tr style="background: <?php if (isset($probar)) {
+											if ($probar->TIPO_DOC==8) {	echo "#C2FCCF"; }
+											if ($probar->TIPO_DOC==7) {	echo "#FFC4C4"; }
+										} ?>">
+								<td style="width:60px;">
 									<a href="?view=onesell&id=<?= $sell->id ?>&tipodoc=<?= $sell->tipo_comprobante ?>"
 										class="btn btn-xs btn-default">
 										<i class="fas fa-eye"></i>
 									</a>
+									<?php
+									if(isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7)
+									{
+										?>
+										<a href="./?view=notacreditoboletat&num=<?=$probar->SERIE."-".$probar->COMPROBANTE ?>" class="btn btn-xs btn-danger" title="Ver Nota de Credito">
+											<i class="fas fa-file-invoice"></i>
+										</a>
+										<?php
+									}
+									?>
 									<?php
 									$usuario = UserData::getById($sell->user_id);
 									$cliente = PersonData::getById($sell->person_id);
@@ -206,7 +220,7 @@
 
 									foreach ($objOper as $oper) {
 										$objProd = ProductData::getById($oper->product_id);
-										$tc += $oper->q * $objProd->price_in;
+										$tc += (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7)  ? 0 : $oper->q * $objProd->price_in;
 									}
 									?>
 								</td>
@@ -217,9 +231,9 @@
 								<td>
 
 									<?php
-									$total = $sell->total;
+									$total = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7)  ? 0 : $sell->total;
 									echo "<b>" . number_format($total, 2) . "</b>";
-									$tv += $total;
+									$tv += (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7)  ? 0 : $total;
 
 									?>
 
@@ -263,11 +277,11 @@
 						<?php if ($admin == 1) { ?>
 							<tr>
 								<th colspan="3" style="text-align: right;">Total de capital :</th>
-								<th><?= $tc ?></th>
+								<th><?= number_format($tc,2,'.',',') ?></th>
 							</tr>
 							<tr>
 								<th colspan="3" style="text-align: right;">Total de Ganancia :</th>
-								<th><?= $tv - $tc ?></th>
+								<th><?= number_format(($tv - $tc),2,'.',',') ?></th>
 							</tr>
 						<?php }
 						?>

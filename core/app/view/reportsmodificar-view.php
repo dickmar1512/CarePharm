@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1>Modificar Comprobantes</h1>
-			<form action="index.php?view=editarcomprobantesvarios">
+			<form action="./?view=editarcomprobantesvarios">
 				<input type="hidden" name="view" value="editarcomprobantesvarios">
 				<div class="row">
 					<div class="col-md-2">

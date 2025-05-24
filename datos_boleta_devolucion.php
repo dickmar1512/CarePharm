@@ -74,10 +74,10 @@ $("#fin").click(function () {
 				    		"tipo":tipo,
 				    		"arraydet": arraydet
 				    	},
-				    url: 'index.php?view=addnotacreditoboleta',
+				    url: './?view=addnotacreditoboleta',
 
 			    	success : function(data){
-						window.location.href = "index.php?view=notacreditoboletat&num="+serie+'-'+comp;		
+						window.location.href = "./?view=notacreditoboletat&num="+serie+'-'+comp;		
 			    	},
 			});
 	});

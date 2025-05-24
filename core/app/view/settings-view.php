@@ -33,7 +33,7 @@
 						<?php
 							$empresa = EmpresaData::getDatos();
 						?>
-						<form action="index.php?view=updateempresa" method="post" class="form-horizontal">
+						<form action="./?view=updateempresa" method="post" class="form-horizontal">
 							<div class="col-md-12">
 								<div class="row">
 									<div class="col-md-3">

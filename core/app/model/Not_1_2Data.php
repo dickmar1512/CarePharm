@@ -60,11 +60,10 @@ class Not_1_2Data {
 	}
 
 	public static function getByIdComprobado($m){
-		/**select NC.*, FT.SERIE, FT.COMPROBANTE FROM nota AS NC
-INNER JOIN factura AS FT ON(FT.id = NC.ID_TIPO_DOC) 
-where NC.serieDocModifica='F001-00000005' */
+		$serie = explode("-", $m)[0];
+		$tblComprobante = $serie == "B001" ? "boleta" : "factura";
 		$sql  = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM ".self::$tablename." AS NC ";
-		$sql .= "INNER JOIN factura AS FT ON(FT.id = NC.ID_TIPO_DOC) where NC.serieDocModifica='$m'";
+		$sql .= "INNER JOIN ".$tblComprobante." AS FT ON(FT.id = NC.ID_TIPO_DOC) where NC.serieDocModifica='$m'";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Boleta2Data();

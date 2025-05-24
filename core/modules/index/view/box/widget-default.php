@@ -1,8 +1,8 @@
 <div class="row">
 	<div class="col-md-12">
 <div class="btn-group pull-right">
-<a href="./index.php?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i> Historial</a>
-<a href="./index.php?view=processbox" class="btn btn-primary ">Procesar Ventas <i class="fa fa-arrow-right"></i></a>
+<a href="././?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i> Historial</a>
+<a href="././?view=processbox" class="btn btn-primary ">Procesar Ventas <i class="fa fa-arrow-right"></i></a>
 </div>
 		<h1><i class='fa fa-archive'></i> Caja</h1>
 		<div class="clearfix"></div>

@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-12">
   	<h1>Nuevo Proveedor</h1>
-  	<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=addprovider" role="form">
+  	<form class="form-horizontal" method="post" id="addproduct" action="./?view=addprovider" role="form">
       <div class="row text-center">
         <label class="radio-inline"><input type="radio" name="optTipoPersona" checked value="3">Persona</label>
         <label class="radio-inline"><input type="radio" name="optTipoPersona" value="1">Empresa</label>

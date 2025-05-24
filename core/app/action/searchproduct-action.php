@@ -58,7 +58,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
 							echo $q;
 						} ?></td>
 						<td style="width:700px;">
-							<form method="post" action="index.php?view=addtocart">
+							<form method="post" action="./?view=addtocart">
 								<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 								<input type="hidden" name="idpaquete" value="X">
 								<input type="hidden" name="f_price_in" value="<?php echo $product->price_in; ?>">
@@ -95,7 +95,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
 							</form>
 						</td>
 						<!-- <td class="hide">
-							<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i
+							<a href="./?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i
 									class="glyphicon glyphicon-pencil"></i></a>
 						</td> -->
 					</tr>
@@ -107,7 +107,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
 			<?php endforeach; ?>
 		</table>
 		<?php if ($products_in_cero > 0) {
-			echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary'>Ir al Inventario</a></p>";
+			echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='./?view=inventary'>Ir al Inventario</a></p>";
 		} ?>
 
 		<?php

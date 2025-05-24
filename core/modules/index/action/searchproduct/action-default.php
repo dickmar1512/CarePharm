@@ -30,7 +30,7 @@ $q= OperationData::getQYesF($product->id);
 		<td>
 			<?php echo $q; ?>
 		</td>
-		<td style="width:250px;"><form method="post" action="index.php?view=addtocart">
+		<td style="width:250px;"><form method="post" action="./?view=addtocart">
 		<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 
 <div class="input-group">

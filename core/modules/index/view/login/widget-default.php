@@ -1,7 +1,7 @@
 <?php
 
 if(isset($_SESSION["user_id"]) && $_SESSION["user_id"]!=""){
-		print "<script>window.location='index.php?view=home';</script>";
+		print "<script>window.location='./?view=home';</script>";
 }
 
 ?>
@@ -21,7 +21,7 @@ if(isset($_SESSION["user_id"]) && $_SESSION["user_id"]!=""){
 			    	<h3 class="panel-title">Iniciar Sesion</h3>
 			 	</div>
 			  	<div class="panel-body">
-			    	<form accept-charset="UTF-8" role="form" method="post" action="index.php?view=processlogin">
+			    	<form accept-charset="UTF-8" role="form" method="post" action="./?view=processlogin">
                     <fieldset>
 			    	  	<div class="form-group">
 			    		    <input class="form-control" placeholder="Usuario" name="mail" type="text">

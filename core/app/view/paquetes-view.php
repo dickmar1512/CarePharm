@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<div class="btn-group  pull-right">
-			<a href="index.php?view=newpaquete" class="btn btn-default">Agregar Kit de Productos</a>
+			<a href="./?view=newpaquete" class="btn btn-default">Agregar Kit de Productos</a>
 			<?php
 				$permiso = PermisoData::get_permiso_x_key('descargar');
 				if($permiso->Pee_Valor == 1)
@@ -59,13 +59,13 @@ if($spaginas>0){ $npaginas++;}
 $px=$page-1;
 if($px>0):
 ?>
-<a class="btn btn-sm btn-default" href="<?php echo "index.php?view=paquetes&limit=$limit&page=".($px); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Atras </a>
+<a class="btn btn-sm btn-default" href="<?php echo "./?view=paquetes&limit=$limit&page=".($px); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Atras </a>
 <?php endif; ?>
 <?php 
 $px=$page+1;
 if($px<=$npaginas):
 ?>
-<a class="btn btn-sm btn-default" href="<?php echo "index.php?view=paquetes&limit=$limit&page=".($px); ?>">Adelante <i class="glyphicon glyphicon-chevron-right"></i></a>
+<a class="btn btn-sm btn-default" href="<?php echo "./?view=paquetes&limit=$limit&page=".($px); ?>">Adelante <i class="glyphicon glyphicon-chevron-right"></i></a>
 <?php endif; ?>
 </div>
 <div class="clearfix"></div>
@@ -95,11 +95,11 @@ if($px<=$npaginas):
 		
 
 		<td style="width:70px;">
-		<a href="index.php?view=editkit&id=<?php echo $kit->idpaquete; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+		<a href="./?view=editkit&id=<?php echo $kit->idpaquete; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
 		<?php if($kit->estado==1):?>
-		<a href="index.php?view=delkit&id=<?php echo $kit->idpaquete; ?>&est=0&fecha=<?=$fecha?>" class="btn btn-xs btn-danger"><i class="fa fa-ban" placeholder="Desactivar"></i></a>
+		<a href="./?view=delkit&id=<?php echo $kit->idpaquete; ?>&est=0&fecha=<?=$fecha?>" class="btn btn-xs btn-danger"><i class="fa fa-ban" placeholder="Desactivar"></i></a>
 		<?php else:?>
-		<a href="index.php?view=delkit&id=<?php echo $kit->idpaquete; ?>&est=1&fecha=" class="btn btn-xs btn-success"><i class="fa fa-check-circle"></i></a>	
+		<a href="./?view=delkit&id=<?php echo $kit->idpaquete; ?>&est=1&fecha=" class="btn btn-xs btn-success"><i class="fa fa-check-circle"></i></a>	
 		<?php endif;?>	
 		</td>
 	</tr>
@@ -109,7 +109,7 @@ if($px<=$npaginas):
 <?php
 
 for($i=0;$i<$npaginas;$i++){
-	echo "<a href='index.php?view=paquetes&limit=$limit&page=".($i+1)."' class='btn btn-default btn-sm'>".($i+1)."</a> ";
+	echo "<a href='./?view=paquetes&limit=$limit&page=".($i+1)."' class='btn btn-default btn-sm'>".($i+1)."</a> ";
 }
 ?>
 </div>

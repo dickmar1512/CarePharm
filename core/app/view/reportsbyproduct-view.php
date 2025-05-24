@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-12">
-	<a href="index.php?view=addproduct" class="btn btn-primary pull-right">Agregar Producto</a>
+	<a href="./?view=addproduct" class="btn btn-primary pull-right">Agregar Producto</a>
 		<h1>Reporte por producto</h1>
 		<p class="alert alert-success">Debe seleccionar un producto para visualizar su reporte.</p>
 		<div class="clearfix"></div>
@@ -38,14 +38,14 @@ if($spaginas>0){ $npaginas++;}
 $px=$page-1;
 if($px>0):
 ?>
-<a class="btn btn-sm btn-default" href="<?php echo "index.php?view=products&limit=$limit&page=".($px); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Atras </a>
+<a class="btn btn-sm btn-default" href="<?php echo "./?view=products&limit=$limit&page=".($px); ?>"><i class="glyphicon glyphicon-chevron-left"></i> Atras </a>
 <?php endif; ?>
 
 <?php 
 $px=$page+1;
 if($px<=$npaginas):
 ?>
-<a class="btn btn-sm btn-default" href="<?php echo "index.php?view=products&limit=$limit&page=".($px); ?>">Adelante <i class="glyphicon glyphicon-chevron-right"></i></a>
+<a class="btn btn-sm btn-default" href="<?php echo "./?view=products&limit=$limit&page=".($px); ?>">Adelante <i class="glyphicon glyphicon-chevron-right"></i></a>
 <?php endif; ?>
 </div>
 <div class="clearfix"></div>
@@ -60,7 +60,7 @@ if($px<=$npaginas):
 		<td><?php echo $product->id; ?></td>
 		<td><?php echo $product->name; ?></td>
 		<td>
-		<a href="index.php?view=productreport&id=<?php echo $product->id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-eye-open"></i> Ver Reporte</a>
+		<a href="./?view=productreport&id=<?php echo $product->id; ?>" class="btn btn-primary"><i class="glyphicon glyphicon-eye-open"></i> Ver Reporte</a>
 		</td>
 	</tr>
 	<?php endforeach;?>
@@ -69,7 +69,7 @@ if($px<=$npaginas):
 <?php
 
 for($i=0;$i<$npaginas;$i++){
-	echo "<a href='index.php?view=products&limit=$limit&page=".($i+1)."' class='btn btn-default btn-sm'>".($i+1)."</a> ";
+	echo "<a href='./?view=products&limit=$limit&page=".($i+1)."' class='btn btn-default btn-sm'>".($i+1)."</a> ";
 }
 ?>
 </div>

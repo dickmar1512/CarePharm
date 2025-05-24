@@ -74,7 +74,7 @@ $("#fin").click(function () {
 				    		"tipo":tipo,
 				    		"arraydet": arraydet
 				    	},
-				    url: 'index.php?view=addnotacreditoboleta',
+				    url: './?view=addnotacreditoboleta',
 
 			    	success : function(data){
 			    			$("#datos").html('');

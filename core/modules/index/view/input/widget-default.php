@@ -8,7 +8,7 @@ $product = ProductData::getById($_GET['product_id']);
   <div style="font-size:34px;">Alta en inventario</div>
 		<h2>Producto: <?php echo $product->name; ?></h2>
 
-<br><form class="form-horizontal" method="post" action="index.php?view=processinput" role="form">
+<br><form class="form-horizontal" method="post" action="./?view=processinput" role="form">
    <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Unidad</label>
     <div class="col-lg-10">

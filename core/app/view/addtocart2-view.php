@@ -48,7 +48,7 @@ if($process==false){
 $_SESSION["errors"] = $errors;
 	?>	
 <script>
-	window.location="index.php?view=repuestosordentrabajo&id=$orden_id";
+	window.location="./?view=repuestosordentrabajo&id=$orden_id";
 </script>
 <?php
 }
@@ -82,7 +82,7 @@ if($can==false){
 $_SESSION["errors"] = $errors;
 	?>	
 <script>
-	window.location="index.php?view=repuestosordentrabajo&id=$orden_id";
+	window.location="./?view=repuestosordentrabajo&id=$orden_id";
 </script>
 <?php
 }
@@ -119,6 +119,6 @@ if($found==false){
 }
 }
 
-print "<script>window.location='index.php?view=repuestosordentrabajo&id=$orden_id';</script>";
+print "<script>window.location='./?view=repuestosordentrabajo&id=$orden_id';</script>";
 
 ?>

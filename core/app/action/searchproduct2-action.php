@@ -35,7 +35,7 @@ if(count($products)>0){
 		<td><b>S/ <?php echo $product->price_out; ?></b></td>
 		<td><?php echo $q; ?></td>
 		<td style="width:350px;">
-			<form method="post" action="index.php?view=addtocart2">
+			<form method="post" action="./?view=addtocart2">
 				<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 				<input type="hidden" name="orden_id" value="<?php echo $_GET["orden_id"] ?>">
 				<div class="input-group">
@@ -48,7 +48,7 @@ if(count($products)>0){
 			</form>
 		</td>
 		<td>
-			<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+			<a href="./?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
 		</td>
 	</tr>
 	

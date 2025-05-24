@@ -10,7 +10,7 @@ if(count($_POST)>0){
 	$user->update_client();
 
 
-print "<script>window.location='index.php?view=clients';</script>";
+print "<script>window.location='./?view=clients';</script>";
 
 
 }

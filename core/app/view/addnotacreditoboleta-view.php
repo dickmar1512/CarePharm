@@ -16,7 +16,6 @@
 		$COMPROBANTE = $_POST["comp"];
 		$NUM=$_POST["numDoc"];
 
-		// echo $NUM; exit();
 		$RUC = '';
 		$SELLID=0;
 
@@ -218,11 +217,8 @@
 			foreach ($operations as $item)
 			{
 				$product  = $item->getProduct();
-
 				$cantidad = $item->q;
-
-				if($product->is_stock==0)
-					$cantidad=1;
+				if($product->is_stock==0) $cantidad=1;
 				
 				$precio_unitario = $item->prec_alt;
 
@@ -231,9 +227,10 @@
 				$producto = new ProductData();
 
 				$producto->name= $descripcion_producto;
-				$producto->stock = $cantidad;
-
-				if($producto->is_stock==1){
+				$producto->stock = $product->stock;
+				$producto->id = $product->id;
+				
+				if($product->is_stock==1){
 					$producto->stock = $producto->stock + $cantidad;
 					$producto->update_stock();
 				}
@@ -1032,7 +1029,6 @@
 			echo "true";
 			return true;
 
-			//print "<script>window.location='index.php?view=onesell&id=$s[1]';</script>";
-			
+			//print "<script>window.location='./?view=onesell&id=$s[1]';</script>";		
 	}	
  ?>

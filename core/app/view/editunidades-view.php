@@ -3,7 +3,7 @@
 	<div class="col-md-12">
 	<h1>Editar Unidad Medida</h1>
 	<br>
-		<form class="form-horizontal" method="post" id="addgrupounidades" action="index.php?view=updateunidades" role="form">
+		<form class="form-horizontal" method="post" id="addgrupounidades" action="./?view=updateunidades" role="form">
       <div class="form-group">
         <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>
         <div class="col-md-6">

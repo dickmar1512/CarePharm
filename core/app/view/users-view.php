@@ -184,7 +184,7 @@
 					.then(response => {
 						if (response.success) {
 						Swal.fire('Éxito!', 'El usuario ha sido agregado correctamente.', 'success')
-							.then(() => window.location = 'index.php?view=users'); // Redirigir tras éxito
+							.then(() => window.location = './?view=users'); // Redirigir tras éxito
 						} else {
 							Swal.fire('Error!', 'Hubo un problema al agregar el usuario.', 'error');
 						}
@@ -321,7 +321,7 @@
 				.then(response => {
 					if (response.success) {
 						Swal.fire('Éxito', 'El usuario ha sido actualizado correctamente.', 'success')
-						.then(() => window.location = 'index.php?view=users'); // Redirigir tras éxito;
+						.then(() => window.location = './?view=users'); // Redirigir tras éxito;
 					} else {
 						Swal.fire('Error', 'Hubo un problema al actualizar el usuario.', 'error');
 					}

@@ -4,7 +4,7 @@
 			<div class="col-md-8">
 				<!-- Single button -->
 				<div class="btn-group pull-right">
-					<a href="./index.php?view=boxhistory" class="btn btn-default"><i class="fa fa-clock-o"></i>
+					<a href="././?view=boxhistory" class="btn btn-default"><i class="fa fa-clock-o"></i>
 						Historial</a>
 					<div class="btn-group">
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -46,7 +46,7 @@
 							?>
 							<tr>
 								<td style="width:30px;">
-									<a href="./index.php?view=onesell&id=<?php echo $sell->id;?>&tipodoc=<?=$tipodoc?>"
+									<a href="././?view=onesell&id=<?php echo $sell->id;?>&tipodoc=<?=$tipodoc?>"
 										class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>
 									<?php
 									$operations = OperationData::getAllProductsBySellId($sell->id);

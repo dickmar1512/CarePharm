@@ -100,7 +100,7 @@ $total = 0;
 				<td><?php echo $product->name; ?></td>
 				<td><b>S/ <?php echo number_format($p["precio_unitario"], 2, '.', ','); ?></b></td>
 				<td><b>S/ <?php  $pt = $p["precio_unitario"]*$p["q"]; $total +=$pt; echo number_format($pt, 2, '.', ','); ?></b></td>
-				<td style="width:30px;"><a href="index.php?view=clearcart2&product_id=<?php echo $product->id; ?>&orden_id=<?php echo $_GET['id'] ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
+				<td style="width:30px;"><a href="./?view=clearcart2&product_id=<?php echo $product->id; ?>&orden_id=<?php echo $_GET['id'] ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
 			</tr>
 		<?php endforeach; ?>
 		<tfoot>
@@ -111,13 +111,13 @@ $total = 0;
 			</tr>
 		</tfoot>
 	</table>
-	<form action="index.php?view=addrepuestos" class="form-horizontal" method="post">
+	<form action="./?view=addrepuestos" class="form-horizontal" method="post">
 		<input type="hidden" name="orden_id" value="<?php echo $_GET['id'] ?>">
 		<div class="form-group">
 		    <div class="col-lg-offset-2 col-lg-10">
 		    	<div class="checkbox">
 		        	<label>
-						<a href="index.php?view=clearcart2" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+						<a href="./?view=clearcart2" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
 		        		<button class="btn btn-lg btn-primary">Agregar Repuestos</button>
 		        	</label>
 		      	</div>

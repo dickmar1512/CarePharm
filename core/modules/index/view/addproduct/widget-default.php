@@ -52,7 +52,7 @@ $op->is_oficial=1;
 $op->add();
 }
 
-print "<script>window.location='index.php?view=products';</script>";
+print "<script>window.location='./?view=products';</script>";
 
 
 }

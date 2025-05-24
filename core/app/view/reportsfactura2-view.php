@@ -99,9 +99,9 @@
 							<td><?php echo 'S/ '.$fac->sumPrecioVenta ?></td>
 							<td class="text-center boton">
 								<!-- <a href="SFS_v1.1/sunat_archivos/sfs/REPO/<?php echo $fac->RUC ?>-01-<?php echo $fac->SERIE ?>-<?php echo $fac->COMPROBANTE ?>.pdf" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-file-pdf">Ver</i> PDF</a> -->
-								<a href="index.php?view=onesell2t&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
-								<a href="index.php?view=noc2&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs btn-warning"><i class="fa fa-file-pdf">N.C.</i></a>
-								<a href="index.php?view=nodf&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs btn-default"><i class="fa fa-file-pdf">N.D.</i></a>
+								<a href="./?view=onesell2t&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
+								<a href="./?view=noc2&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs btn-warning"><i class="fa fa-file-pdf">N.C.</i></a>
+								<a href="./?view=nodf&id=<?php echo $fac->EXTRA1 ?>" class="btn btn-info btn-xs btn-default"><i class="fa fa-file-pdf">N.D.</i></a>
 							</td>
 						</tr>
 					<?php

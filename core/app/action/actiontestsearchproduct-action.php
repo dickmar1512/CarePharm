@@ -22,7 +22,7 @@ $q= OperationData::getQYesF($product->id);
 	?>
 	<?php 
 	if($q>0):?>
-		<form method="post" action="index.php?view=addtocart">
+		<form method="post" action="./?view=addtocart">
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td style="width:80px;"><?php echo $product->id; ?></td>
 		<td><?php echo $product->name; ?></td>

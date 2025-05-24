@@ -22,9 +22,9 @@
 				<div class="row" style="display: flex; justify-content: right;">
 					<div class="col-md-8">
 						<div class="btn-group pull-right">
-							<a href="./index.php?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i>
+							<a href="././?view=boxhistory" class="btn btn-primary "><i class="fa fa-clock-o"></i>
 								Historial</a>
-							<a href="./index.php?view=processbox" class="btn btn-primary ">Procesar Ventas <i
+							<a href="././?view=processbox" class="btn btn-primary ">Procesar Ventas <i
 									class="fa fa-arrow-right"></i></a>
 						</div>
 						<div class="clearfix"></div>
@@ -51,8 +51,14 @@
 										<th>Usuario</th>
 									</tr>
 								</thead>
-								<?php foreach ($products as $sell): ?>
-									<tr>
+								<?php foreach ($products as $sell): 
+										$notacomprobar = $sell->serie . "-" . $sell->comprobante; 
+										$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
+									?>
+									<tr style="background: <?php if (isset($probar)) {
+											if ($probar->TIPO_DOC==8) {	echo "#C2FCCF"; }
+											if ($probar->TIPO_DOC==7) {	echo "#FFC4C4"; }
+										} ?>">
 										<td><?= $i++ ?></td>
 										<td><?= $sell->serie . "-" . $sell->comprobante ?>
 										<td style="text-align: center;">
@@ -61,7 +67,7 @@
 											$total = 0;
 											foreach ($operations as $operation) {
 												$product = $operation->getProduct();
-												$total += $operation->q * ($operation->prec_alt - $operation->descuento);
+												$total += (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7) ? 0 : $operation->q * ($operation->prec_alt - $operation->descuento);
 											}
 											$total_total += $total;
 											echo "<b> " . number_format($total, 2, ".", ",") . "</b>";

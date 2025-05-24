@@ -3,7 +3,7 @@ $user = UserData::getById(Session::getUID());
 $grades = UnidadMedidaData::getAll();
 ?>
 <section class="content-header">
-<a href='index.php?view=newunidades' class='btn btn-default pull-right'><i class='glyphicon glyphicon-plus-sign'></i> Agregar</a>
+<a href='./?view=newunidades' class='btn btn-default pull-right'><i class='glyphicon glyphicon-plus-sign'></i> Agregar</a>
 			<h1><i class="fa fa-th-list"></i> Unidades de Medida</h1>
 </section>
 <section class="content">
@@ -46,14 +46,14 @@ $grades = UnidadMedidaData::getAll();
 	<td style="width:90px;">
 
 		
-		<a href="index.php?view=editunidades&id=<?php echo $career->id; ?>" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-pencil"></i></a>
+		<a href="./?view=editunidades&id=<?php echo $career->id; ?>" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-pencil"></i></a>
 		<a href="#" id="del-<?php echo $career->id; ?>" class="btn btn-sm btn-danger hide"><i class='glyphicon glyphicon-trash'></i></a>
-<!--		<a href="index.php?view=hidecategory&id=<?php echo $career->id; ?>" class="btn btn-sm btn-default tip" title="Desactivar Categoria"><i class='glyphicon glyphicon-eye-close'></i></a> -->
+<!--		<a href="./?view=hidecategory&id=<?php echo $career->id; ?>" class="btn btn-sm btn-default tip" title="Desactivar Categoria"><i class='glyphicon glyphicon-eye-close'></i></a> -->
 <script>
 	$("#del-<?php echo $career->id?>").click(function(){
 		c = confirm("Seguro quieres eliminar ??");
 		if(c==true){
-			window.location = "index.php?view=delgrupounidades&id=<?php echo $career->id; ?>";
+			window.location = "./?view=delgrupounidades&id=<?php echo $career->id; ?>";
 		}
 	});
 </script>

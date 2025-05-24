@@ -5,7 +5,7 @@ $categories = CategoryData::getAll();
 	<div class="col-md-12">
 	<h1>Nuevo Producto</h1>
 	<br>
-		<form class="form-horizontal" method="post" enctype="multipart/form-data" id="addproduct" action="index.php?view=addproduct" role="form">
+		<form class="form-horizontal" method="post" enctype="multipart/form-data" id="addproduct" action="./?view=addproduct" role="form">
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Imagen</label>

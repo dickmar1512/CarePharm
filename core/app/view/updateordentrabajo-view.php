@@ -24,6 +24,6 @@
 		
 		$activo->update_activo();
 
-		print "<script>window.location='index.php?view=oneorden&id=$orden_id';</script>";
+		print "<script>window.location='./?view=oneorden&id=$orden_id';</script>";
 	}
 ?>

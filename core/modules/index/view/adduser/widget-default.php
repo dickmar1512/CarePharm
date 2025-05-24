@@ -12,7 +12,7 @@ if(count($_POST)>0){
 	$user->password = sha1(md5($_POST["password"]));
 	$user->add();
 
-print "<script>window.location='index.php?view=users';</script>";
+print "<script>window.location='./?view=users';</script>";
 
 
 }

@@ -1021,7 +1021,7 @@ if (count($_POST) > 0) {
 
 	return true;
 
-	//print "<script>window.location='index.php?view=onesell&id=$s[1]';</script>";
+	//print "<script>window.location='./?view=onesell&id=$s[1]';</script>";
 
 }
 ?>

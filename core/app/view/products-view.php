@@ -5,7 +5,7 @@
 			<div class="col-sm-6">
 				<h1 class="m-0"><i class="fa fa-list"></i>
 					Lista de Productos y Servicios
-					(<a href="index.php?view=actstock" class="btn btn-xs btn-info">
+					(<a href="./?view=actstock" class="btn btn-xs btn-info">
 						<i class="fas fa-pencil-alt"></i>
 					</a>)
 				</h1>
@@ -27,7 +27,7 @@
 		<div class="card card-default">
 			<div class="card-header">
 				<div class="btn-group float-sm-right">
-					<!-- <a href="index.php?view=newproduct" class="btn btn-primary"><i class="fas fa-box-open"></i> Agregar
+					<!-- <a href="./?view=newproduct" class="btn btn-primary"><i class="fas fa-box-open"></i> Agregar
 						Producto o Servicio</a> -->
 					<button id="openModalNuevoProducto" class="btn btn-primary">
 						<i class="fas fa-box-open"></i>
@@ -91,7 +91,7 @@
 												<i class="fas fa-pencil-alt"></i>
 											</a>
 											<!-- <a href="#" class="btn btn-warning btn-xs edit-client"	data-id="<?php echo $client->id; ?>">Editar</a>	 -->
-											<a href="index.php?view=delproduct&id=<?php echo $product->id; ?>"
+											<a href="./?view=delproduct&id=<?php echo $product->id; ?>"
 												class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
 										</td>
 									</tr>

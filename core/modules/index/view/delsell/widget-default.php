@@ -8,6 +8,6 @@ foreach ($operations as $op) {
 }
 
 $sell->del();
-Core::redir("./index.php?view=sells");
+Core::redir("././?view=sells");
 
 ?>

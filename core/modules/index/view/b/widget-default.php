@@ -3,7 +3,7 @@
 
 <!-- Single button -->
 <div class="btn-group pull-right">
-<a href="./index.php?view=boxhistory" class="btn btn-default"><i class="fa fa-clock-o"></i> Historial</a>
+<a href="././?view=boxhistory" class="btn btn-default"><i class="fa fa-clock-o"></i> Historial</a>
 <div class="btn-group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
     <i class="fa fa-download"></i> Descargar <span class="caret"></span>
@@ -33,7 +33,7 @@ $total_total = 0;
 
 	<tr>
 		<td style="width:30px;">
-<a href="./index.php?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>			
+<a href="././?view=onesell&id=<?php echo $sell->id; ?>" class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>			
 
 
 <?php

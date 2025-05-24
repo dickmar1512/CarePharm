@@ -10,6 +10,6 @@ if(count($_POST)>0){
 	$user->company = addslashes($_POST["grado"]);
 	$user->update_client();
 
-	print "<script>window.location='index.php?view=clients';</script>";
+	print "<script>window.location='./?view=clients';</script>";
 }
 ?>

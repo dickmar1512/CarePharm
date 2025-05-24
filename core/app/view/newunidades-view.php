@@ -11,7 +11,7 @@ $user = UserData::getById(Session::getUID());
         <h3 class="box-title"></h3>
       </div>
       <div class="box-body table-responsive">
-        <form class="form-horizontal" method="post" action="index.php?view=addunidades" role="form">
+        <form class="form-horizontal" method="post" action="./?view=addunidades" role="form">
           <div class="form-group">
             <label for="inputEmail1" class="col-lg-3 control-label">Nombre</label>
             <div class="col-lg-8">

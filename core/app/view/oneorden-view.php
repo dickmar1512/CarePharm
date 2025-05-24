@@ -10,7 +10,7 @@
 			<div class="row pull-right">
 				<!-- <a href="" class="btn btn-success">Generar Comprobante</a>
 				<button id="imprimir" class="btn btn-md btn-info"><i class="fa fa-print"></i> IMPRIMIR</button> -->
-				<form method="post" action="index.php?view=addfacturao" class="form-inline" onsubmit="return enviado2()">
+				<form method="post" action="./?view=addfacturao" class="form-inline" onsubmit="return enviado2()">
 					<input type="hidden" value="<?php echo $_GET["id"] ?>" name="orden_id">					
 					<?php
 						if($orden->estado == 0)
@@ -170,7 +170,7 @@
 											<td><?php echo $det->prec_alt ?></td>
 											<td><?php echo $subtotal ?></td>
 											<td class="text-center">
-												<a href="index.php?view=deleterepuesto&id=<?php echo $det->id; ?>&orden_id=<?php echo $orden->id; ?>" class="btn btn-xs btn-danger eliminar_repuesto"><i class="fa fa-trash"></i></a>
+												<a href="./?view=deleterepuesto&id=<?php echo $det->id; ?>&orden_id=<?php echo $orden->id; ?>" class="btn btn-xs btn-danger eliminar_repuesto"><i class="fa fa-trash"></i></a>
 											</td>
 										</tr>
 										<?php

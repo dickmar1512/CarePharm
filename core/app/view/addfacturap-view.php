@@ -525,6 +525,6 @@
 
 		echo "El archivo de texto se creo correctamente";
 
-		print "<script>window.location='index.php?view=onesell2&id=$sell_id';</script>";
+		print "<script>window.location='./?view=onesell2&id=$sell_id';</script>";
 	}	
  ?>

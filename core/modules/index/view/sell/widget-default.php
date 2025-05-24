@@ -91,12 +91,12 @@ $product = ProductData::getById($p["product_id"]);
 	<td><?php echo $product->name; ?></td>
 	<td><b>S/ <?php echo number_format($product->price_out); ?></b></td>
 	<td><b>S/ <?php  $pt = $product->price_out*$p["q"]; $total +=$pt; echo number_format($pt); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
+	<td style="width:30px;"><a href="./?view=clearcart&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
 </tr>
 
 <?php endforeach; ?>
 </table>
-<form method="post" class="form-horizontal" id="processsell" action="index.php?view=processsell">
+<form method="post" class="form-horizontal" id="processsell" action="./?view=processsell">
 <h2>Resumen</h2>
 <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Cliente</label>
@@ -156,7 +156,7 @@ $clients = PersonData::getClients();
     <div class="col-lg-offset-2 col-lg-10">
       <div class="checkbox">
         <label>
-		<a href="index.php?view=clearcart" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+		<a href="./?view=clearcart" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
         <button class="btn btn-lg btn-primary"><i class="glyphicon glyphicon-usd"></i><i class="glyphicon glyphicon-usd"></i> Finalizar Venta</button>
         </label>
       </div>

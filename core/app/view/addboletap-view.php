@@ -544,6 +544,6 @@
 
 		echo "El archivo de texto se creo correctamente";
 
-		print "<script>window.location='index.php?view=onesell&id=$sell_id';</script>";
+		print "<script>window.location='./?view=onesell&id=$sell_id';</script>";
 	}	
  ?>

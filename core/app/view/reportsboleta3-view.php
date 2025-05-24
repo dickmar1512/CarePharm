@@ -76,9 +76,9 @@
 				<td><?php echo $bol->rznSocialUsuario ?></td>
 				<td><?php echo 'S/ '.$bol->sumPrecioVenta ?></td>
 				<td class="text-center">
-					<a href="index.php?view=onesellc&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
-					<a href="index.php?view=nocboleta&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs btn-warning"><i class="fa fa-file-pdf">N.C.</i></a>
-								<a href="index.php?view=nodboleta&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs btn-default"><i class="fa fa-file-pdf">N.D.</i></a>
+					<a href="./?view=onesellc&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
+					<a href="./?view=nocboleta&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs btn-warning"><i class="fa fa-file-pdf">N.C.</i></a>
+								<a href="./?view=nodboleta&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs btn-default"><i class="fa fa-file-pdf">N.D.</i></a>
 				</td>
 			</tr>
 		<?php

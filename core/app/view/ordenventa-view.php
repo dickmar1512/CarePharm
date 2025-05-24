@@ -45,7 +45,7 @@ endif;
 					<div class="col-md-9">
 						<div class="row">
 							<!-- <div class="col-md-3">
-								<form method="post" action="index.php?view=addfacturao" class="form-inline"
+								<form method="post" action="./?view=addfacturao" class="form-inline"
 									onsubmit="return enviado2()">
 									<input type="hidden" value="<?php echo $_GET["id"] ?>" name="orden_id">
 									<div class="input-group col-md-6">

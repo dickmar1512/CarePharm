@@ -11,7 +11,7 @@ if($product!=null):
     <p class="alert alert-info">La informacion del producto se ha actualizado exitosamente.</p>
   <?php setcookie("prdupd","",time()-18600); endif; ?>
 	<br><br>
-		<form class="form-horizontal" method="post" id="addproduct" enctype="multipart/form-data" action="index.php?view=updateproduct" role="form">
+		<form class="form-horizontal" method="post" id="addproduct" enctype="multipart/form-data" action="./?view=updateproduct" role="form">
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label">Imagen*</label>

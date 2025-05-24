@@ -4,5 +4,5 @@ $idpaq = $_GET["id"];
 
 $op  = Det_kit::delId($iddet);
 
-Core::redir("./index.php?view=editkit&id=$idpaq");
+Core::redir("././?view=editkit&id=$idpaq");
 ?>

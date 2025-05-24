@@ -65,13 +65,13 @@
 									if($sell->estado == 1)
 									{
 										?>
-											<a href="index.php?view=onesellc&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+											<a href="./?view=onesellc&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 										<?php
 									} 
 									else
 									{
 										?>
-											<a href="index.php?view=onesellf&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+											<a href="./?view=onesellf&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 										<?php
 									}
 								}
@@ -82,19 +82,19 @@
 										if($sell->estado == 1)
 										{
 											?>
-												<a href="index.php?view=onesell2c&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+												<a href="./?view=onesell2c&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 											<?php
 										} 
 										else
 										{
 											?>
-												<a href="index.php?view=onesell2f&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+												<a href="./?view=onesell2f&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 											<?php
 										}
 									}
 									else
 									{ ?>
-                                       <a href="index.php?view=onesellorden&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                       <a href="./?view=onesellorden&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 							  <?php }
 								}
 								
@@ -124,7 +124,7 @@
 						</td>
 						<td><?php echo $sell->created_at; ?></td>
 						<td style="width:30px;">
-							<!-- <a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">
+							<!-- <a href="./?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">
 								<i class="fa fa-trash"></i></a> -->
 							<?=$usuario->username?>		
 								</td>

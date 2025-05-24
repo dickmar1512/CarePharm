@@ -18,9 +18,9 @@ if($_POST["is_oficial"]=="1"){
 
 $add = $op->add();
 if($op->is_oficial==1){
- print "<script>window.location='index.php?view=history&product_id=$_POST[product_id]';</script>";
+ print "<script>window.location='./?view=history&product_id=$_POST[product_id]';</script>";
 }else{
-  //[disabled] print "<script>window.location='index.php?view=historyn&product_id=$_POST[product_id]';</script>";
+  //[disabled] print "<script>window.location='./?view=historyn&product_id=$_POST[product_id]';</script>";
 
 }
 

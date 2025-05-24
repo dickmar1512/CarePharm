@@ -11,7 +11,7 @@ if($kit!=null):
     <p class="alert alert-info">La informacion del Kit se ha actualizado exitosamente.</p>
   <?php setcookie("kitupd","",time()-18600); endif; ?>
 	<br><br>
-		<form class="form-horizontal" method="post" id="addkitt" enctype="multipart/form-data" action="index.php?view=updatekit" role="form">
+		<form class="form-horizontal" method="post" id="addkitt" enctype="multipart/form-data" action="./?view=updatekit" role="form">
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-3 control-label">Imagen*</label>
@@ -140,7 +140,7 @@ if(count($detkit)>0){
     <td>S/ <?php echo number_format($detalle->precio,2,'.',','); ?></td>
     <td>S/ <?php echo number_format($detalle->descuento,2,'.',','); ?></td>
     <td style="width:70px;">
-    <a href="index.php?view=deldetkit&id=<?=$kit->idpaquete?>&iddet=<?=$detalle->iddetalle?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+    <a href="./?view=deldetkit&id=<?=$kit->idpaquete?>&iddet=<?=$detalle->iddetalle?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
     </td>
   </tr>
   <?php endforeach;?>

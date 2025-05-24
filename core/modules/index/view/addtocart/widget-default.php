@@ -39,7 +39,7 @@ if($process==false){
 $_SESSION["errors"] = $errors;
 	?>	
 <script>
-	window.location="index.php?view=sell";
+	window.location="./?view=sell";
 </script>
 <?php
 }
@@ -71,7 +71,7 @@ if($can==false){
 $_SESSION["errors"] = $errors;
 	?>	
 <script>
-	window.location="index.php?view=sell";
+	window.location="./?view=sell";
 </script>
 <?php
 }
@@ -107,7 +107,7 @@ if($found==false){
 
 }
 }
- print "<script>window.location='index.php?view=sell';</script>";
+ print "<script>window.location='./?view=sell';</script>";
 // unset($_SESSION["cart"]);
 
 ?>

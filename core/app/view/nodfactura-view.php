@@ -121,10 +121,10 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 				    		"tipo":tipo,
 				    		"interes":interes
 				    	},
-				    url: 'index.php?view=addnotadebito',
+				    url: './?view=addnotadebito',
 
 			    	success : function(data){
-			    	window.location.href = "index.php?view=notadebitot&num="+serie+'-'+comp;  		
+			    	window.location.href = "./?view=notadebitot&num="+serie+'-'+comp;  		
 			    	},
 			});
 		}
@@ -159,7 +159,7 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 				    		"tipo": tipo,
 				    		"dscto": dscto
 				    	},
-				    url: 'index.php?view=addnotacredito',
+				    url: './?view=addnotacredito',
 
 			    	success : function(data){
 			    			$("#datos").html('');

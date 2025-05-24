@@ -29,7 +29,7 @@ if(count($_POST)>0)
 	  {
 	   $kits= $kit->add();
 	  }
-	  print "<script>window.location='index.php?view=paquetes';</script>";
+	  print "<script>window.location='./?view=paquetes';</script>";
 }
 else
 {}

@@ -12,6 +12,6 @@ $p->update();
 
 setcookie("added",$p->title);
 
-print "<script>window.location='index.php?view=editpost&id=$p->id';</script>";
+print "<script>window.location='./?view=editpost&id=$p->id';</script>";
 }
 ?>

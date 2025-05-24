@@ -8,7 +8,7 @@
 	<div class="col-md-12">
 	<h1>Nuevo Kit de Productos</h1>
 	<br>
-		<form class="form-horizontal" method="post" enctype="multipart/form-data" id="addkit" action="index.php?view=addkit" role="form">
+		<form class="form-horizontal" method="post" enctype="multipart/form-data" id="addkit" action="./?view=addkit" role="form">
 
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Imagen</label>

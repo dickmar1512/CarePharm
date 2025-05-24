@@ -30,7 +30,7 @@
 								<i class='fa fa-user-plus'></i>
 								Nuevo Cliente
 							</button> -->
-                            <a href="index.php?view=newcategory" class="btn btn-default"><i class='fa fa-plus'></i>
+                            <a href="./?view=newcategory" class="btn btn-default"><i class='fa fa-plus'></i>
                                 Nueva Categoria</a>
                         </div>
                     </div>
@@ -59,8 +59,8 @@
 									<td><?php echo $categoria->name; ?></td>
                                     <td><?php echo $categoria->description; ?></td>
 									<td style="display: flex; justify-content: center;">
-										<a href="index.php?view=editcategory&id=<?php echo $categoria->id;?>" class="btn btn-warning btn-xs">Editar</a> 
-										<a href="index.php?view=delcategory&id=<?php echo $categoria->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
+										<a href="./?view=editcategory&id=<?php echo $categoria->id;?>" class="btn btn-warning btn-xs">Editar</a> 
+										<a href="./?view=delcategory&id=<?php echo $categoria->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
                                         <?php 
 										if ($categoria->status == 1): ?>
 											<a href="#" class="btn btn-warning btn-xs edit-client" data-id="<?=$categoria->id; ?>" title="Editar Categoria"><i class="fas fa-pencil-alt"></i></a>

@@ -9,7 +9,7 @@ if(count($_POST)>0){
 	$user->phone1 = $_POST["phone1"];
 	$user->add_provider();
 
-print "<script>window.location='index.php?view=providers';</script>";
+print "<script>window.location='./?view=providers';</script>";
 
 
 }

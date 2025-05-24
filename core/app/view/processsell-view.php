@@ -60,7 +60,7 @@
 				$_SESSION["errors"] = $errors;
 				?>
 					<script>
-						window.location="index.php?view=sell";
+						window.location="./?view=sell";
 					</script>
 				<?php
 			}

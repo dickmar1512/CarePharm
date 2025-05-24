@@ -10,7 +10,7 @@ if(isset($_SESSION["user_id"])){
 		setcookie("password_updated","true");
 		print "<script>window.location='logout.php';</script>";
 	}else{
-		print "<script>window.location='index.php?view=security&msg=invalidpasswd';</script>";		
+		print "<script>window.location='./?view=security&msg=invalidpasswd';</script>";		
 	}
 
 }else {

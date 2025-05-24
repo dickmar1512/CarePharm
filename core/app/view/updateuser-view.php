@@ -23,7 +23,7 @@ print "<script>alert('Se ha actualizado el password');</script>";
 
 	}
 
-print "<script>window.location='index.php?view=users';</script>";
+print "<script>window.location='./?view=users';</script>";
 
 
 }

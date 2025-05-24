@@ -5,7 +5,7 @@ if($product!=null):
 ?>
 <div class="row">
 	<div class="col-md-12">
-	<a href="index.php?view=reportsbyproduct" class="pull-right btn btn-lg btn-default	"> <i class="glyphicon glyphicon-chevron-left"></i> Regresar  </a>
+	<a href="./?view=reportsbyproduct" class="pull-right btn btn-lg btn-default	"> <i class="glyphicon glyphicon-chevron-left"></i> Regresar  </a>
 	<h1><?php echo $product->name; ?> <small>Reportes</small></h1>
 <div class="jumbotron" id="wellcome">
 	<h2>Bienvenido al sistema de reportes</h2>

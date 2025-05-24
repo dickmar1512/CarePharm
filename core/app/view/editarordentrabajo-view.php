@@ -7,7 +7,7 @@
 	<div class="col-md-8">
 	<h1><small>Editar Orden Trabajo</small></h1>
 	<br><br>
-		<form class="form-horizontal" action="index.php?view=updateordentrabajo" method="post">
+		<form class="form-horizontal" action="./?view=updateordentrabajo" method="post">
       <input type="hidden" name="orden_id" value="<?php echo $orden->id ?>">
       <div class="form-group">
         <label for="inputEmail1" class="col-lg-3 control-label">Tipo de Servicio *</label>

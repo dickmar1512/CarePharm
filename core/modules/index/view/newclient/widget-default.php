@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 	<h1>Nuevo Cliente</h1>
 	<br>
-		<form class="form-horizontal" method="post" id="addproduct" action="index.php?view=addclient" role="form">
+		<form class="form-horizontal" method="post" id="addproduct" action="./?view=addclient" role="form">
 
 
   <div class="form-group">

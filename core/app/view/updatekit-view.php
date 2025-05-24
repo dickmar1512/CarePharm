@@ -32,7 +32,7 @@ if(count($_POST)>0)
 		}
 	}
 	setcookie("kitupd","true");
-	print "<script>window.location='index.php?view=editkit&id=$_POST[kit_id]';</script>";
+	print "<script>window.location='./?view=editkit&id=$_POST[kit_id]';</script>";
 }
 
 ?>

@@ -2,7 +2,7 @@
 	<h2>Ordenes de Servicio</h2>
 	<div class="col-md-12">
 		<div class="row pull-right">
-			<a  href="index.php?view=neworden" class="btn btn-success">GENERAR ORDEN DE TRABAJO</a>
+			<a  href="./?view=neworden" class="btn btn-success">GENERAR ORDEN DE TRABAJO</a>
 		</div>
 	</div>	
 	<div class="col-md-12">
@@ -57,13 +57,13 @@
 										?>
 									</td>
 									<td>
-										<a href="index.php?view=oneorden&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+										<a href="./?view=oneorden&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
 										<?php
 											if($orden->estado == 0)
 											{
 												?>
-													<a href="index.php?view=editarordentrabajo&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-edit"></i></a>
-													<a href="index.php?view=repuestosordentrabajo&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-plus"></i></a>
+													<a href="./?view=editarordentrabajo&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-edit"></i></a>
+													<a href="./?view=repuestosordentrabajo&id=<?php echo $orden->id; ?>" class="btn btn-xs btn-default"><i class="fa fa-plus"></i></a>
 												<?php
 											}
 										?>

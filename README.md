@@ -1,2 +1,0 @@
-# CarePharm
-#Sistema de farmacia

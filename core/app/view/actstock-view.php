@@ -6,5 +6,5 @@ foreach ($products as $prod) :
 	$prod->update_stock2($idprod);
 endforeach;
 
-print "<script>window.location='index.php?view=products';</script>";
+print "<script>window.location='./?view=products';</script>";
 ?>

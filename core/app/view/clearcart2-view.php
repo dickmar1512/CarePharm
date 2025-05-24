@@ -32,5 +32,5 @@ else
 	unset($_SESSION["cart2"]);
 }
 
-print "<script>window.location='index.php?view=repuestosordentrabajo&id=$orden_id';</script>";
+print "<script>window.location='./?view=repuestosordentrabajo&id=$orden_id';</script>";
 ?>

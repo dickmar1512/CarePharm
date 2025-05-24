@@ -50,7 +50,7 @@ if(count($products)>0){
 		<td><?php if($product->is_stock==0){ echo "Ilimitado";}else {echo $q;} ?></td>
 				
 			<td style="width:600px;">
-			<form method="post" action="index.php?view=adddetkit">
+			<form method="post" action="./?view=adddetkit">
 				<input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
 				<input type="hidden" name="idpaquete" value="<?php echo $idpaquete; ?>">
 				<div class="input-group">
@@ -75,7 +75,7 @@ if(count($products)>0){
 			</form>
 			</td>
 		<td class="hide">
-			<a href="index.php?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+			<a href="./?view=editproduct&id=<?php echo $product->id; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
 		</td>
 	</tr>
 	
@@ -85,7 +85,7 @@ if(count($products)>0){
 	<?php endforeach;?>
 </table>
 <?php if($products_in_cero>0)
-{ //echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary'>Ir al Inventario</a></p>"; 
+{ //echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='./?view=inventary'>Ir al Inventario</a></p>"; 
 }?>
 
 	<?php

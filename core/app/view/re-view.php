@@ -103,7 +103,7 @@ $ORDEN = generaCerosComprobante($id_comprobante_actual_o);
 												$q = $product->stock;
 												$i++;
 												?>
-												<form method="post" action="index.php?view=addtore">
+												<form method="post" action="./?view=addtore">
 													<tr class="<?php if ($q <= $product->inventary_min) {
 														echo "danger";
 													} ?>">
@@ -232,7 +232,7 @@ $ORDEN = generaCerosComprobante($id_comprobante_actual_o);
 													</b>
 												</td>
 												<td style="width:30px;">
-													<a href="index.php?view=clearre&product_id=<?php echo $product->id; ?>"
+													<a href="./?view=clearre&product_id=<?php echo $product->id; ?>"
 														class="btn btn-danger">
 														<i class="glyphicon glyphicon-remove"></i> Cancelar
 													</a>
@@ -240,7 +240,7 @@ $ORDEN = generaCerosComprobante($id_comprobante_actual_o);
 											</tr>
 										<?php endforeach; ?>
 									</table>
-									<form method="post" class="form-horizontal" id="processsell" action="index.php?view=processre">
+									<form method="post" class="form-horizontal" id="processsell" action="./?view=processre">
 										<h2>Ingrese documento d compra:</h2>
 										<div class="form-group">
 											<label for="inputEmail1" class="col-lg-2 control-label">TIPO COMPROBANTE</label>
@@ -305,7 +305,7 @@ $ORDEN = generaCerosComprobante($id_comprobante_actual_o);
 											<div class="col-lg-offset-2 col-lg-8">
 												<div class="checkbox">
 													<label>
-														<a href="index.php?view=clearre" class="btn btn-lg btn-danger"><i
+														<a href="./?view=clearre" class="btn btn-lg btn-danger"><i
 																class="glyphicon glyphicon-remove"></i> Cancelar</a>
 														<button class="btn btn-lg btn-primary"><i class="fa fa-refresh"></i> Procesar
 															Reabastecimiento</button>

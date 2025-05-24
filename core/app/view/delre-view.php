@@ -8,5 +8,5 @@ foreach ($operations as $op) {
 }
 
 $sell->del();
-Core::redir("./index.php?view=res");
+Core::redir("././?view=res");
 ?>

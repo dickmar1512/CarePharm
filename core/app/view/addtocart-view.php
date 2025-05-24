@@ -29,7 +29,7 @@ if (!isset($_SESSION["cart"])) {
 		$_SESSION["errors"] = $errors;
 		?>
 		<script>
-			window.location = "index.php?view=sell";
+			window.location = "./?view=sell";
 		</script>
 		<?php
 	}
@@ -54,7 +54,7 @@ if (!isset($_SESSION["cart"])) {
 		$_SESSION["errors"] = $errors;
 		?>
 		<script>
-			window.location = "index.php?view=sell";
+			window.location = "./?view=sell";
 		</script>
 		<?php
 	}
@@ -85,5 +85,5 @@ if (!isset($_SESSION["cart"])) {
 
 	}
 }
-print "<script>window.location='index.php?view=sell';</script>";
+print "<script>window.location='./?view=sell';</script>";
 ?>

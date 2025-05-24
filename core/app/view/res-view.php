@@ -70,9 +70,9 @@
 										</td>
 										<td><?php echo $sell->created_at; ?></td>
 										<?php if ($admin == 1) { ?>
-											<td style="width:30px;"><a href="index.php?view=editre&id=<?php echo $sell->id; ?>"
+											<td style="width:30px;"><a href="./?view=editre&id=<?php echo $sell->id; ?>"
 													class="btn btn-xs btn-info"><i class="fa fa-pencil"></i></a></td>
-											<td style="width:30px;"><a href="index.php?view=delre&id=<?php echo $sell->id; ?>"
+											<td style="width:30px;"><a href="./?view=delre&id=<?php echo $sell->id; ?>"
 													class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a></td>
 										<?php } ?>
 									</tr>

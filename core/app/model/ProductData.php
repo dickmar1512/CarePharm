@@ -77,7 +77,7 @@ class ProductData {
 	}
 
 	public function update_stock(){
-		$sql = "update ".self::$tablename." stock=\"$this->stock\" where id=$this->id";
+		$sql = "update ".self::$tablename." set stock='".$this->stock."' where id=$this->id";
 		Executor::doit($sql);
 	}
 

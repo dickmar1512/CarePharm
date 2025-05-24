@@ -7,7 +7,7 @@ foreach ($products as $product) {
 }
 
 $category->del();
-Core::redir("./index.php?view=categories");
+Core::redir("././?view=categories");
 
 
 ?>

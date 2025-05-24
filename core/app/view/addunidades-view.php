@@ -7,6 +7,6 @@ $unidad->add();
 
 // setcookie("gradeadded",$grade->name);
 
-print "<script>window.location='index.php?view=unidades';</script>";
+print "<script>window.location='./?view=unidades';</script>";
 
 ?>

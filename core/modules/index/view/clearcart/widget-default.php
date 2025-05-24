@@ -19,6 +19,6 @@ if(isset($_GET["product_id"])){
  unset($_SESSION["cart"]);
 }
 
-print "<script>window.location='index.php?view=sell';</script>";
+print "<script>window.location='./?view=sell';</script>";
 
 ?>

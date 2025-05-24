@@ -19,6 +19,6 @@ if(isset($_GET["product_id"])){
  unset($_SESSION["reabastecer"]);
 }
 
-print "<script>window.location='index.php?view=re';</script>";
+print "<script>window.location='./?view=re';</script>";
 
 ?>

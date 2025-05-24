@@ -53,7 +53,7 @@
 	$_SESSION["errors"] = $errors;
 		?>	
 	<script>
-		window.location="index.php?view=sell";
+		window.location="./?view=sell";
 	</script>
 	<?php
 	}
@@ -83,7 +83,7 @@ else
 	$_SESSION["errors"] = $errors;
 		?>	
 	<script>
-		window.location="index.php?view=sell";
+		window.location="./?view=sell";
 	</script>
 	<?php
 	}
@@ -130,6 +130,6 @@ if($can==true)
 }
 }
 
-print "<script>window.location='index.php?view=sell';</script>";
+print "<script>window.location='./?view=sell';</script>";
 
 ?>

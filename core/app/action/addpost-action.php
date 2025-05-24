@@ -12,6 +12,6 @@ $p->add();
 
 // setcookie("added",$p->title);
 
- print "<script>window.location='index.php?view=newpost';</script>";
+ print "<script>window.location='./?view=newpost';</script>";
 }
 ?>

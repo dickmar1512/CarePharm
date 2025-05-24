@@ -125,10 +125,10 @@ $product = Boleta2Data::getByExtra($_GET["id"]);
 				    		"tipo":tipo,
 				    		"interes":interes
 				    	},
-				    url: 'index.php?view=addnotadebitoboleta',
+				    url: './?view=addnotadebitoboleta',
 
 			    	success : function(data){
-			    	window.location.href = "index.php?view=notadebitoboletat&num="+serie+'-'+comp;  		
+			    	window.location.href = "./?view=notadebitoboletat&num="+serie+'-'+comp;  		
 			    	},
 			});
 		}
@@ -163,7 +163,7 @@ $product = Boleta2Data::getByExtra($_GET["id"]);
 				    		"tipo": tipo,
 				    		"dscto": dscto
 				    	},
-				    url: 'index.php?view=addnotacredito',
+				    url: './?view=addnotacredito',
 
 			    	success : function(data){
 			    			$("#datos").html('');

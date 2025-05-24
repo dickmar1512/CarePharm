@@ -456,7 +456,7 @@ $empresa = EmpresaData::getDatos();
 
 																	</b></td>
 																<td style="width:30px;"><a
-																		href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>"
+																		href="./?view=clearcart&product_id=<?php echo $product->id; ?>"
 																		class="btn btn-danger"><i class="fa fa-trash"></i></a>
 																</td>
 															</tr>
@@ -540,7 +540,7 @@ $empresa = EmpresaData::getDatos();
 															<div class="checkbox">
 																<label>
 																	<input name="is_oficial" type="hidden" value="1">
-																	<a href="index.php?view=clearcart"
+																	<a href="./?view=clearcart"
 																		class="btn btn-lg btn-danger"><i
 																			class="glyphicon glyphicon-remove"></i>
 																		Cancelar</a>
@@ -831,7 +831,7 @@ $empresa = EmpresaData::getDatos();
 
 																	</b></td>
 																<td style="width:30px;"><a
-																		href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>"
+																		href="./?view=clearcart&product_id=<?php echo $product->id; ?>"
 																		class="btn btn-danger"><i class="fa fa-trash"></i></a>
 																</td>
 															</tr>
@@ -914,7 +914,7 @@ $empresa = EmpresaData::getDatos();
 															<div class="checkbox">
 																<label>
 																	<input name="is_oficial" type="hidden" value="1">
-																	<a href="index.php?view=clearcart"
+																	<a href="./?view=clearcart"
 																		class="btn btn-lg btn-danger"><i
 																			class="glyphicon glyphicon-remove"></i>
 																		Cancelar</a>
@@ -1074,7 +1074,7 @@ $empresa = EmpresaData::getDatos();
 
 															</b></td>
 														<td style="width:30px;"><a
-																href="index.php?view=clearcart&product_id=<?php echo $product->id; ?>"
+																href="./?view=clearcart&product_id=<?php echo $product->id; ?>"
 																class="btn btn-danger"><i class="fa fa-trash"></i></a>
 														</td>
 													</tr>
@@ -1152,7 +1152,7 @@ $empresa = EmpresaData::getDatos();
 												<td colspan="8" style="text-align: right;">
 													<label>
 														<input name="is_oficial" type="hidden" value="1">
-														<a href="index.php?view=clearcart"
+														<a href="./?view=clearcart"
 															class="btn btn-lg btn-danger">
 															<i class="glyphicon glyphicon-remove"></i> Cancelar
 														</a>

@@ -6,7 +6,7 @@
 		<small>(Todo pago ingresado restará al ingreso bruto del mes elegido)</small>
 	</h1>
 	<br>
-	<form class="form-horizontal" method="post" id="addIng" enctype="multipart/form-data" action="index.php?view=addIng" role="form">
+	<form class="form-horizontal" method="post" id="addIng" enctype="multipart/form-data" action="./?view=addIng" role="form">
     <div class="form-group">
 	    <label for="inputEmail1" class="col-lg-3 control-label">Ingresos del mes de:</label>
 		        <div class="col-md-3">
@@ -108,7 +108,7 @@ if(count($detkit)>0){
     <td>S/ <?php echo number_format($detalle->precio,2,'.',','); ?></td>
     <td>S/ <?php echo number_format($detalle->descuento,2,'.',','); ?></td>
     <td style="width:70px;">
-    <a href="index.php?view=deldetkit&id=<?=$kit->idpaquete?>&iddet=<?=$detalle->iddetalle?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+    <a href="./?view=deldetkit&id=<?=$kit->idpaquete?>&iddet=<?=$detalle->iddetalle?>" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
     </td>
   </tr>
   <?php endforeach;?>

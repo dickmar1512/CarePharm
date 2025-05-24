@@ -47,7 +47,7 @@
 				$facturas = Factura2Data::get_facturas_x_fecha($_GET["sd"],$_GET["ed"], $_GET["selSerie"], $_GET["comprobante"]);
 			?>
 		<?php if(count($facturas) > 0):?>
-			<p align="center"><a href="index.php?view=excel_facturas&ini=<?php echo $_GET['sd'] ?>&fin=<?php echo $_GET['ed']?>"; class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</a></p>
+			<p align="center"><a href="./?view=excel_facturas&ini=<?php echo $_GET['sd'] ?>&fin=<?php echo $_GET['ed']?>"; class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</a></p>
 		<table class="table table-bordered">
 			<?php 
 				$subtotal = 0;
@@ -121,17 +121,17 @@
 						}else{
 					?>
 
-					<a href="index.php?view=nocfactura&id=<?php echo $fac->EXTRA1 ?>" 
+					<a href="./?view=nocfactura&id=<?php echo $fac->EXTRA1 ?>" 
 						class="btn btn-xs " style="background: red; color: #FFF">
 						<i class="fa fa-file"> N.Cre.</i></a>
-					<!--a href="index.php?view=nodfactura&id=<?php echo $fac->EXTRA1 ?>" 
+					<!--a href="./?view=nodfactura&id=<?php echo $fac->EXTRA1 ?>" 
 						class="btn btn-xs " style="background: green; color: #FFF">
 						<i class="fa fa-file"> N.Deb.</i></a-->
 
 						<?php } ?>
 				</td>
 				<td>
-					<a href="index.php?view=onesell&id=<?php echo $fac->EXTRA1 ?>&tipodoc=1"
+					<a href="./?view=onesell&id=<?php echo $fac->EXTRA1 ?>&tipodoc=1"
 						style="background-color: #000; font-size: 15px;"
 						class="btn btn-info btn-xs"><i class="fa fa-eye"> Ver</i></a>		
 				</td>

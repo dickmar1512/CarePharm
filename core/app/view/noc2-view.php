@@ -114,7 +114,7 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 		var motivo = $("#motivo").val();
 
 		if(tipo=="01" || tipo=="02" || tipo=="06"){
-			// window.location.href = "index.php?view=onesell2&id="+3;
+			// window.location.href = "./?view=onesell2&id="+3;
 			$.ajax({
 				    type : "POST",
 				    data: {
@@ -124,11 +124,11 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 				    		"comp": comp,
 				    		"tipo":tipo
 				    	},
-				    url: 'index.php?view=addnotacredito',
+				    url: './?view=addnotacredito',
 
 			    	success : function(data){
 			    			if(data)	
-			    				window.location.href = "index.php?view=notacreditot&num="+serie+'-'+comp;
+			    				window.location.href = "./?view=notacreditot&num="+serie+'-'+comp;
 			    	},
 			});
 		}
@@ -163,10 +163,10 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 				    		"tipo": tipo,
 				    		"dscto": dscto
 				    	},
-				    url: 'index.php?view=addnotacredito',
+				    url: './?view=addnotacredito',
 
 			    	success : function(data){
-			    			window.location.href = "index.php?view=notacredito&num="+serie+'-'+comp;		
+			    			window.location.href = "./?view=notacredito&num="+serie+'-'+comp;		
 			    	},
 			});
 		}

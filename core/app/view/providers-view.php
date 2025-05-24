@@ -24,7 +24,7 @@
 						<h4>Directorio de Proveedores</h4>
 					</div>
 					<div class="col-md-6"  style="display: flex; justify-content: right;">
-						<!-- <a href="index.php?view=newprovider" class="btn btn-default">
+						<!-- <a href="./?view=newprovider" class="btn btn-default">
 							<i class='fa fa-truck'></i>
 							Nuevo Proveedor
 						</a> -->

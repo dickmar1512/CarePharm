@@ -44,7 +44,7 @@ $process = true;
 			unset($_SESSION["reabastecer"]);
 			setcookie("selled","selled");
 ////////////////////
-print "<script>window.location='index.php?view=onere&id=$s[1]';</script>";
+print "<script>window.location='./?view=onere&id=$s[1]';</script>";
 		}
 	}
 }

@@ -36,7 +36,7 @@ $products_in_cero=0;
 	 foreach($products as $product):
 $q= OperationData::getQYesF($product->id);
 	?>
-		<form method="post" action="index.php?view=addtore">
+		<form method="post" action="./?view=addtore">
 	<tr class="<?php if($q<=$product->inventary_min){ echo "danger"; }?>">
 		<td style="width:80px;"><?php echo $product->id; ?></td>
 		<td><?php echo $product->name; ?></td>
@@ -116,12 +116,12 @@ $product = ProductData::getById($p["product_id"]);
 	<td><?php echo $product->name; ?></td>
 	<td><b>$ <?php echo number_format($product->price_in); ?></b></td>
 	<td><b>$ <?php  $pt = $product->price_in*$p["q"]; $total +=$pt; echo number_format($pt); ?></b></td>
-	<td style="width:30px;"><a href="index.php?view=clearre&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
+	<td style="width:30px;"><a href="./?view=clearre&product_id=<?php echo $product->id; ?>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a></td>
 </tr>
 
 <?php endforeach; ?>
 </table>
-<form method="post" class="form-horizontal" id="processsell" action="index.php?view=processre">
+<form method="post" class="form-horizontal" id="processsell" action="./?view=processre">
 <h2>Resumen</h2>
 <div class="form-group">
     <label for="inputEmail1" class="col-lg-2 control-label">Proveedor</label>
@@ -173,7 +173,7 @@ $clients = PersonData::getProviders();
     <div class="col-lg-offset-2 col-lg-10">
       <div class="checkbox">
         <label>
-		<a href="index.php?view=clearre" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
+		<a href="./?view=clearre" class="btn btn-lg btn-danger"><i class="glyphicon glyphicon-remove"></i> Cancelar</a>
         <button class="btn btn-lg btn-primary"><i class="fa fa-refresh"></i> Procesar Reabastecimiento</button>
         </label>
       </div>

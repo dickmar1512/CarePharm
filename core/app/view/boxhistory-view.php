@@ -34,10 +34,12 @@
 						</thead>
 						<?php foreach ($boxes as $box):
 							$sells = SellData::getByBoxId($box->id);
+							// $notacomprobar = $sells->serie . "-" . $sells->comprobante;
+							// $probar = Not_1_2Data::getByIdComprobado($notacomprobar);
 							?>
 							<tr>
 								<td style="width:30px;">
-									<a href="./index.php?view=b&id=<?php echo $box->id; ?>" class="btn btn-default btn-xs">
+									<a href="././?view=b&id=<?php echo $box->id; ?>" class="btn btn-default btn-xs">
 										<i class="fa fa-arrow-right"></i></a>
 								</td>
 								<td style="text-align: center;">

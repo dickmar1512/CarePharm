@@ -44,7 +44,7 @@ else
 		}
 	}
 }
-print "<script>window.location='index.php?view=re';</script>";
+print "<script>window.location='./?view=re';</script>";
 // unset($_SESSION["reabastecer"]);
 
 ?>

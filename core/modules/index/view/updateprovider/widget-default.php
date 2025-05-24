@@ -10,7 +10,7 @@ if(count($_POST)>0){
 	$user->update_provider();
 
 
-print "<script>window.location='index.php?view=providers';</script>";
+print "<script>window.location='./?view=providers';</script>";
 
 
 }

@@ -8,5 +8,5 @@ $op->fecha_fin=$fecha_fin;
 $op->idpaquete = $idpaq;
 $op->updateestado();
 
-Core::redir("./index.php?view=paquetes");
+Core::redir("././?view=paquetes");
 ?>

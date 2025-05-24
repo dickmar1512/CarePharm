@@ -27,7 +27,7 @@ if(count($kits)>0){
 		<td style=" font-size: 18px;"><?php echo $kit->nombre; ?></td>
 		<td style=" font-size: 18px;"><?php echo $kit->descripcion; ?></td>				
 			<td>
-			<form method="post" action="index.php?view=addtocartkit">
+			<form method="post" action="./?view=addtocartkit">
 				<input type="hidden" name="idpaquete" value="<?php echo $kit->idpaquete; ?>">
 				<div class="input-group">				
 				<input type="number" step="any" class="form-control" required name="preciokit" placeholder="Precio Unitario" value="<?php echo $kit->precio?>" 
@@ -48,7 +48,7 @@ endif;
 </table>
 <?php if($kits_in_cero>0)
 { 
-	echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='index.php?view=inventary'>Ir al Inventario</a></p>"; 
+	echo "<p class='alert alert-warning'>Se omitieron <b>$products_in_cero productos</b> que no tienen existencias en el inventario. <a href='./?view=inventary'>Ir al Inventario</a></p>"; 
 }
 else
 {

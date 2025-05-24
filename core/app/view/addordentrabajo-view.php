@@ -28,6 +28,6 @@
 
 		$ort = $orden_trabajo->add();
 
-		print "<script>window.location='index.php?view=repuestosordentrabajo&id=$ort[1]';</script>";
+		print "<script>window.location='./?view=repuestosordentrabajo&id=$ort[1]';</script>";
 	}
 ?>

@@ -41,7 +41,7 @@ if($process==false){
 $_SESSION["errors"] = $errors;
 	?>	
 <script>
-	window.location="index.php?view=sell";
+	window.location="./?view=sell";
 </script>
 <?php
 }
@@ -90,7 +90,7 @@ $_SESSION["errors"] = $errors;
 			setcookie("selled","selled");
 		}
 ////////////////////
-print "<script>window.location='index.php?view=onesell&id=$s[1]';</script>";
+print "<script>window.location='./?view=onesell&id=$s[1]';</script>";
 		}
 	}
 }

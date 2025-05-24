@@ -33,7 +33,7 @@ $sells = SellData::getByBoxId($box->id);
 
 	<tr>
 		<td style="width:30px;">
-<a href="./index.php?view=b&id=<?php echo $box->id; ?>" class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>			
+<a href="././?view=b&id=<?php echo $box->id; ?>" class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>			
 		</td>
 		<td>
 

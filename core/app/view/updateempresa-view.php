@@ -14,7 +14,7 @@ if(count($_POST)>0)
 
 	$empresa->update();
 
-	print "<script>window.location='index.php?view=settings';</script>";
+	print "<script>window.location='./?view=settings';</script>";
 }
 
 

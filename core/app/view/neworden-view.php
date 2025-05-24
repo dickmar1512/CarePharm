@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-12">
 	<h3>Generar Nueva Orden</h3>
-	<form class="form-horizontal" action="index.php?view=addordentrabajo" method="post">
+	<form class="form-horizontal" action="./?view=addordentrabajo" method="post">
     <div class="form-group">
       <label for="inputEmail1" class="col-lg-3 control-label">Tipo de Servicio *</label>
       <div class="col-lg-6">            

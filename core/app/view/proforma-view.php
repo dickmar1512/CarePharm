@@ -31,7 +31,7 @@
 						$pagina = "addboletap";
 					}					 
 				?>
-				<form method="post" action="index.php?view=<?php echo $pagina?>">
+				<form method="post" action="./?view=<?php echo $pagina?>">
 					<input type="hidden" value="<?php echo $_GET["id"] ?>" name="sell_id">
 					<button class="btn btn-md btn-danger" type="submit" id="venta"><i class="fa fa-shopping-cart"></i> VENTA</button>
 					<a id="imprimir" class="btn btn-md btn-info" href="#"><i class="fa fa-print"></i> IMPRIMIR</a>
@@ -143,8 +143,8 @@
 		<!-- <div class="row pull-right" id="div_opciones" style="display: show">
 			<label>Opciones: </label>
 			<br>
-			<a href="index.php?view=1.1_boleta" class="btn btn-primary"><i class="fa fa fa-plus-circle"></i> Generar nueva factura</a>
-			<a href="index.php?view=reporte_boleta" class="btn btn-primary"><i class="fa fa-mail-forward"></i> Ir a Reporte</a>			
+			<a href="./?view=1.1_boleta" class="btn btn-primary"><i class="fa fa fa-plus-circle"></i> Generar nueva factura</a>
+			<a href="./?view=reporte_boleta" class="btn btn-primary"><i class="fa fa-mail-forward"></i> Ir a Reporte</a>			
 		</div> -->
 	</div>
 </div><!--  fin col-md-6 -->

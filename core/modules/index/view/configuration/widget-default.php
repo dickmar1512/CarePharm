@@ -4,7 +4,7 @@
 	</div>
 	<div class="col-md-6">
 	<h2>Cambiar Contraseña</h2>
-<br>	<form class="form-horizontal" id="changepasswd" method="post" action="index.php?view=changepasswd" role="form">
+<br>	<form class="form-horizontal" id="changepasswd" method="post" action="./?view=changepasswd" role="form">
   <div class="form-group">
     <label for="inputEmail1" class="col-lg-4 control-label">Contraseña Actual</label>
     <div class="col-lg-8">

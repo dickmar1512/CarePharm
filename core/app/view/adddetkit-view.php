@@ -11,7 +11,7 @@ if(count($_POST)>0)
 	$detalle= $detkit->add();
 
 	//setcookie("kitupd","true");
-	print "<script>window.location='index.php?view=editkit&id=$detkit->idpaquete';</script>";
+	print "<script>window.location='./?view=editkit&id=$detkit->idpaquete';</script>";
 }
 
 ?>
