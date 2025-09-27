@@ -9,6 +9,7 @@ class Not_1_2Data {
 	public $numDocUsuario;
 	public $rznSocialUsuario;
 	public $descMotivo;
+	public $TIPO_DOC;
 
 	public function Not_1_2Data(){
 		//CABECERA CAB
@@ -63,7 +64,7 @@ class Not_1_2Data {
 		$serie = explode("-", $m)[0];
 		$tblComprobante = $serie == "B001" ? "boleta" : "factura";
 		$sql  = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM ".self::$tablename." AS NC ";
-		$sql .= "INNER JOIN ".$tblComprobante." AS FT ON(FT.id = NC.ID_TIPO_DOC) where NC.serieDocModifica='$m'";
+		$sql .= "INNER JOIN ".$tblComprobante." AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m' AND NC.ESTADO = 1";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Boleta2Data();

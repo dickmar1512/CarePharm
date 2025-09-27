@@ -1,3 +1,4 @@
+
 <?php
 $fecha_inicio = date("Y-m") . "-01";
 $fecha_final = date("Y-m-d");

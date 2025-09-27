@@ -17,7 +17,7 @@
 <!-- /.content-header -->
 <!-- Main content -->
 <section class="content">
-    <div class="container-fluid col-md-6">
+    <div class="container-fluid col-md-8">
         <div class="card card-default">
             <div class="card-header">
                 <div class="row">
@@ -26,12 +26,12 @@
                     </div>
                     <div class="col-md-6" style="display: flex; justify-content: right;">
                         <div class="btn-group float-sm-right">
-                            <!-- <button id="openModalNuevoCliente" class="btn btn-primary">
-								<i class='fa fa-user-plus'></i>
-								Nuevo Cliente
-							</button> -->
-                            <a href="./?view=newcategory" class="btn btn-default"><i class='fa fa-plus'></i>
-                                Nueva Categoria</a>
+                            <!-- <a href="./?view=newcategory" class="btn btn-default"><i class='fa fa-plus'></i>
+                                Nueva Categoria</a> -->
+                            <button id="openModalAgregarCategoria" class="btn btn-primary">
+								<i class='fas fa-plus'></i>
+								Agregar
+							</button>
                         </div>
                     </div>
                 </div>
@@ -45,11 +45,11 @@
 						if(count($categorias)>0){
 							// si hay usuarios
 							?>
-                        <table class="table table-bordered table-hover">
-                            <thead>
+                        <table class="table table-bordered table-hover datatable">
+                            <thead class="thead-dark">
                                 <th>Nombre</th>
                                 <th>Descripción</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </thead>
 							<tbody>
 								<?php
@@ -58,16 +58,16 @@
 								<tr>
 									<td><?php echo $categoria->name; ?></td>
                                     <td><?php echo $categoria->description; ?></td>
-									<td style="display: flex; justify-content: center;">
-										<a href="./?view=editcategory&id=<?php echo $categoria->id;?>" class="btn btn-warning btn-xs">Editar</a> 
-										<a href="./?view=delcategory&id=<?php echo $categoria->id;?>" class="btn btn-danger btn-xs">Eliminar</a>
+									<td style="display: flex; justify-content: center; width:90px;">
+										<!-- <a href="./?view=editcategory&id=<?php echo $categoria->id;?>" class="btn btn-warning btn-xs"><i class="fas fa-pencil-alt"></i></a> 
+										<a href="./?view=delcategory&id=<?php echo $categoria->id;?>" class="btn btn-danger btn-xs"><i class="fa fa-power-off img-circle"></i></a> -->
                                         <?php 
 										if ($categoria->status == 1): ?>
-											<a href="#" class="btn btn-warning btn-xs edit-client" data-id="<?=$categoria->id; ?>" title="Editar Categoria"><i class="fas fa-pencil-alt"></i></a>
-											<a href="#" class="btn btn-danger btn-xs delete-client" data-id="<?=$categoria->id.'|D'; ?>" title="Desactivar Categoria"><i class="fa fa-power-off img-circle"></i></a>													
+											<a href="#" class="btn btn-warning btn-xs edit-categoria" data-id="<?=$categoria->id; ?>" title="Editar Categoria"><i class="fas fa-pencil-alt"></i></a>
+											<a href="#" class="btn btn-danger btn-xs delete-categoria" data-id="<?=$categoria->id.'|D'; ?>" title="Desactivar Categoria"><i class="fa fa-power-off img-circle"></i></a>													
 										<?php
 										else: ?>
-											<a href="#" class="btn btn-success btn-xs delete-client" data-id="<?=$categoria->id.'|A'; ?>" title='Activar Categoria'><i class='fa fa-power-off img-circle'></i></a>
+											<a href="#" class="btn btn-success btn-xs delete-categoria" data-id="<?=$categoria->id.'|A'; ?>" title='Activar Categoria'><i class='fa fa-power-off img-circle'></i></a>
 										<?php 
 										endif; ?>
 									</td>

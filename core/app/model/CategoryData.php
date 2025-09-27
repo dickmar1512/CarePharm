@@ -18,21 +18,27 @@ class CategoryData {
 
 	public function add(){
 		$sql = "insert into category (name,description,created_at) ";
-		$sql .= "value ('".$this->name."','".$this->description."',$this->created_at)";
+		$sql .= "value ('".$this->name."','".$this->description."','".$this->created_at."')";
 		Executor::doit($sql);
 	}
 
-	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
+	// public static function delById($id){
+	// 	$sql = "delete from ".self::$tablename." where id=$id";
+	// 	Executor::doit($sql);
+	// }
+
+	// public function del(){
+	// 	$sql = "delete from ".self::$tablename." where id=$this->id";
+	// 	Executor::doit($sql);
+	// }
+
+	public function del()
+	{
+		$sql = "update " . self::$tablename . " set status = ".$this->status." where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
-		Executor::doit($sql);
-	}
-
-// partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
+    // partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
 	public function update(){
 		$sql = "update ".self::$tablename." set name='".$this->name."', description='".$this->description."' where id=$this->id";
 		Executor::doit($sql);

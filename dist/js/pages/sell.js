@@ -6,7 +6,7 @@ $('#btnAgregarItem').on('click', agregarProducto);
 $('#btnAgregarItem2').on('click', agregarProducto);
 $('#btnAgregarItem3').on('click', agregarProducto);
 
-function agregarProducto() {
+function agregarProductoOld() {
     Swal.fire({
         title: '<h3>Buscar producto por nombre o por código</h3>',
         html: `
@@ -77,6 +77,95 @@ function agregarProducto() {
             $("#searchp").on("submit", function (e) {
                 e.preventDefault();
 
+                $.get("./?action=searchproduct", $("#searchp").serialize(), function (data) {
+                    $("#show_search_results").html(data);
+                });
+                $("#product_code2").val("");
+            });
+        }
+    });
+}
+
+function agregarProducto() {
+    Swal.fire({
+        title: '<h4 style="margin: 0; font-size: 1.1em;">Buscar Producto</h4>',
+        html: `
+            <div style="text-align: left; margin-top: 10px;">
+                <form id="searchp">
+                    <input type="hidden" name="view" value="sell">
+                    <div class="input-icon-container">
+                        <input type="text" id="product_code2" autofocus name="product" 
+                               class="form-control form-control-sm" 
+                               placeholder="Nombre o código del producto..."
+                               style="padding: 6px 12px; font-size: 0.9em;">
+                        <div class="icon-wrapper">
+                            <i class="icon fas fa-search" style="color: #6c757d; font-size: 0.8em;"></i>
+                        </div>
+                    </div>
+                </form>
+                <div id="show_search_results" style="margin-top: 10px;"></div>
+            </div>
+        `,
+        showCloseButton: true,
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            container: 'custom-swal-container',
+            popup: 'custom-swal-popup compact-modal',
+            header: 'custom-swal-header',
+            title: 'custom-swal-title',
+            content: 'custom-swal-content',
+            closeButton: 'custom-swal-close-button',
+            actions: 'custom-swal-actions',
+            cancelButton: 'btn btn-sm btn-secondary'
+        },
+        width: '75%',
+        padding: '15px',
+        didOpen: () => {
+            // Estilos adicionales para hacer el modal más compacto
+            const style = document.createElement('style');
+            style.textContent = `
+                .compact-modal {
+                    font-size: 0.9em !important;
+                }
+                .compact-modal .swal2-header {
+                    padding: 10px 15px 5px !important;
+                }
+                .compact-modal .swal2-content {
+                    padding: 5px 15px !important;
+                }
+                .compact-modal .swal2-actions {
+                    padding: 10px 15px 15px !important;
+                    margin: 0 !important;
+                }
+                .compact-modal hr {
+                    margin: 8px 0 !important;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.getElementById('product_code2').focus();
+
+            $("#product_code2").on("input", function () {
+                let searchTerm = $(this).val().trim();
+
+                if (searchTerm == "") {
+                    $("#show_search_results").html("");
+                    return;
+                }
+
+                if (searchTerm.length >= 3) {
+                    $.get("./?action=searchproduct", $("#searchp").serialize(), function (data) {
+                        $("#show_search_results").html(data);
+                    });
+                } else {
+                    $("#show_search_results").html("");
+                }
+            });
+
+            $("#searchp").on("submit", function (e) {
+                e.preventDefault();
                 $.get("./?action=searchproduct", $("#searchp").serialize(), function (data) {
                     $("#show_search_results").html(data);
                 });
@@ -227,12 +316,12 @@ $(document).ready(function () {
         }
     }); 
     //Initialize Select2 Elements
-    $('.select2').select2();
+    //$('.select2').select2();
 
     //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    });
+    // $('.select2bs4').select2({
+    //   theme: 'bootstrap4'
+    // });
 });
 
 $(document).on('keydown', function(event) {

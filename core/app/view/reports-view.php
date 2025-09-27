@@ -1,6 +1,3 @@
-<?php
-$products = ProductData::getAll();
-?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
 	<div class="container-fluid">
@@ -25,19 +22,17 @@ $products = ProductData::getAll();
 		<div class="card card-default">
 			<div class="card-header">
 				<div class="row" style="display: flex; justify-content: center;">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<form>
 							<input type="hidden" name="view" value="reports">
 							<div class="row">
-								<div class="col-md-3">
-
-									<select name="product_id" class="form-control">
-										<option value=""> TODOS </option>
-										<?php foreach ($products as $p): ?>
-											<option value="<?php echo $p->id; ?>"><?php echo $p->name; ?></option>
-										<?php endforeach; ?>
+								<div class="col-md-4">
+									<select name="product_id" id="product_id" class="form-control select2bs4 col-md-12">
+										<option value="">Cargando productos...</option>
 									</select>
-
+									<div id="loading" class="mt-2" style="display: none;">
+										<small class="text-muted">Cargando...</small>
+									</div>
 								</div>
 								<div class="col-md-3">
 									<input type="date" name="sd" value="<?php if (isset($_GET["sd"])) {
@@ -54,7 +49,7 @@ $products = ProductData::getAll();
 									} ?>" class="form-control">
 								</div>
 
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<input type="submit" class="btn btn-success btn-block" value="Procesar">
 								</div>
 
@@ -66,36 +61,45 @@ $products = ProductData::getAll();
 			<!-- /.card-header -->
 			<div class="card-body">
 				<div class="row" style="display: flex; justify-content: center;">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<?php if (isset($_GET["sd"]) && isset($_GET["ed"])): ?>
 							<?php if ($_GET["sd"] != "" && $_GET["ed"] != ""): ?>
 								<?php
 								$operations = array();
 								$cont = 1;
 
-								if ($_GET["product_id"] == "") {
-									$operations = OperationData::getAllByDateOfficial($_GET["sd"], $_GET["ed"]);
-								} else {
-									$operations = OperationData::getAllByDateOfficialBP($_GET["product_id"], $_GET["sd"], $_GET["ed"]);
-								}
+								$operations = OperationData::getAllMovByDateProductId($_GET["product_id"], $_GET["sd"], $_GET["ed"]);
 								?>
 
 								<?php if (count($operations) > 0): ?>
 									<table class="table table-bordered datatable">
 										<thead class="thead-dark">
-											<th>#</th>
-											<th>Producto</th>
-											<th>Cantidad</th>
-											<th>Operacion</th>
-											<th>Fecha</th>
+											<tr>
+												<th rowspan="2">#</th>
+												<th rowspan="2">Producto</th>
+												<th colspan="2">Entrada</th>
+												<th colspan="2">Salida</th>
+												<th colspan="2">Inventario</th>
+											</tr>
+											<tr>
+												<th>Stock</th>
+												<th>Importe</th>
+												<th>Stock</th>
+												<th>Importe</th>
+												<th>Stock</th>
+												<th>Importe</th>	
+											</tr>
 										</thead>
 										<?php foreach ($operations as $operation): ?>
 											<tr>
-												<td><?php echo $cont++ ?></td>
-												<td><?php echo $operation->getProduct()->name; ?></td>
-												<td><?php echo $operation->q; ?></td>
-												<td><?php echo $operation->getOperationType()->name; ?></td>
-												<td><?php echo $operation->created_at; ?></td>
+												<td><?=$cont++ ?></td>
+												<td><?=$operation->getProduct()->name ?></td>
+												<td style="text-align: center;"><?=$operation->stock_in ?></td>
+												<td style="text-align: right;"><?=number_format($operation->importe_in,2,'.',',') ?></td>
+												<td style="text-align: center;"><?=$operation->stock_out; ?></td>
+												<td style="text-align: right;"><?=number_format($operation->importe_out,2,'.',',') ?></td>
+												<td style="text-align: center;"><?=$operation->getProduct()->stock; ?></td>
+												<td style="text-align: right;"><?=number_format(($operation->getProduct()->price_in*$operation->getProduct()->stock),2,'.',',') ?></td>
 											</tr>
 										<?php endforeach; ?>
 

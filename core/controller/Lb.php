@@ -6,7 +6,6 @@
 // @brief el objeto legobox
 // estoy inspirado : 14/oct/2014 - 0:55am - viendo : un millon de formas de morir en el oeste por 2da vez el dia de hoy
 class Lb {
-
 	public function Lb(){
 	}
 

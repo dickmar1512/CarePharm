@@ -30,6 +30,4 @@ include "controller/Lb.php";
 
 // 26 diciembre 2014
 include "controller/class.upload.php";
-
-
 ?>

@@ -11,7 +11,7 @@ function openProductModal(action, productData = null) {
     unidades.forEach(unidad => {
         unidadesOptions += `<option value="${unidad.id}" ${productData && productData.unit == unidad.id ? 'selected' : ''}>${unidad.name}</option>`;
     });
-    //console.log("productData==>",productData);
+    
     Swal.fire({
         title: action === 'edit' ? 'Editar Producto/Servicio' : 'Nuevo Producto/Servicio',
         html: `<hr>

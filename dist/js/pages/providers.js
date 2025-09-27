@@ -165,7 +165,6 @@ function tipoProveedor(providerData){
             .prop('checked', providerData.tipo_persona == 1)
             .prop('disabled', providerData.tipo_persona != 1);
     }
-
     
     var optTipoPersona = $('input:radio[name=optTipoPersona]:checked').val();
 

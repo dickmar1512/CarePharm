@@ -1,50 +1,4 @@
-moment.updateLocale('es', {
-    week: {
-        dow: 0,  // Domingo como primer día
-    }
-});
 
-var parTooltip = {
-    today: 'Ir a hoy',
-    clear: 'Limpiar selección',
-    close: 'Cerrar',
-    selectMonth: 'Seleccionar mes',
-    prevMonth: 'Mes anterior',
-    nextMonth: 'Mes siguiente',
-    selectYear: 'Seleccionar año',
-    prevYear: 'Año anterior',
-    nextYear: 'Año siguiente',
-    selectDecade: 'Seleccionar década',
-    prevDecade: 'Década anterior',
-    nextDecade: 'Década siguiente',
-    prevCentury: 'Siglo anterior',
-    nextCentury: 'Siglo siguiente'
-};
-
-$('#fechaini').datetimepicker({
-    format: 'L',
-    locale: 'es',
-    buttons: {
-        showToday: true,
-        showClose: true
-    },
-    tooltips: parTooltip
-});
-
-$('#fechafin').datetimepicker({
-    format: 'L',
-    locale: 'es',
-    buttons: {
-        showToday: true,
-        showClose: true
-    },
-    tooltips: parTooltip
-});
-
-// Inicializar select2
-$('.select2').select2({
-    theme: 'bootstrap4'
-}); 
 
 // $(document).ready(function() {     
 
@@ -54,7 +8,7 @@ $('.select2').select2({
 //         loadSellsData();
 //     });
 
-//     // Cargar datos iniciales
+//     // Cargar datos iniciales    
 //     loadSellsData();
 // });
 
@@ -79,6 +33,48 @@ $('.select2').select2({
 //         $('#loading').hide();
 //         return;
 //     }
+//      // Obtener instancia de DataTable o inicializarla si no existe
+//     let dataTable = $('#sellsnew').DataTable();
+//     if (!$.fn.DataTable.isDataTable('#sellsnew')) {
+//         dataTable = $('#sellsnew').DataTable({
+//             "responsive": true, 
+//                     "lengthChange": true, 
+//                     "autoWidth": false,
+//                     "dom": '<"row"<"col-md-3"l><"col-md-6 text-center"B><"col-md-3"f>>rtip',
+//                     "buttons": [
+//                         { extend: "copy", text: "Copiar" }, 
+//                         "csv", 
+//                         "excel", 
+//                         "pdf", 
+//                         "print", 
+//                         { extend: "colvis", text: "Visible" }
+//                     ],
+//                     "language": {
+//                         "sProcessing": "Procesando...",
+//                         "sLengthMenu": "Mostrar _MENU_ registros",
+//                         "sZeroRecords": "No se encontraron resultados",
+//                         "sEmptyTable": "Ningún dato disponible en esta tabla",
+//                         "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+//                         "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+//                         "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+//                         "sInfoPostFix": "",
+//                         "sSearch": "Buscar:",
+//                         "sUrl": "",
+//                         "sInfoThousands": ",",
+//                         "sLoadingRecords": "Cargando...",
+//                         "oPaginate": {
+//                             "sFirst": "Primero",
+//                             "sLast": "Último",
+//                             "sNext": "Siguiente",
+//                             "sPrevious": "Anterior"
+//                         },
+//                         "oAria": {
+//                             "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+//                             "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+//                         }
+//                     }
+//         });
+//     }
 
 //     // Realizar petición AJAX
 //     $.ajax({
@@ -86,66 +82,50 @@ $('.select2').select2({
 //         type: 'GET',
 //         dataType: 'json',
 //         data: params,
-//         success: function(response) {            
+//         beforeSend: function () {
+//                 $('#sellsnew tbody').html('<tr><td colspan="9" class="text-center"><i class="fas fa-spinner fa-spin"></i> Cargando...</td></tr>');
+//                 $('#total-ventas').text('0.00');                    
+//                 $('#total-capital').text('0.00');
+//                 $('#total-ganancia').text('0.00');
+//             },
+//         success: function(response) {           
 //             // Agregar nuevos datos
-//             if(response.data && response.data.length > 0) {
-//                 // Destruye la tabla existente si ya está inicializada
-//                 if ($.fn.DataTable.isDataTable('#sells')) {
-//                     $('#sells').DataTable().destroy();
+//             if(response.success){
+//                 // Limpiar y agregar nuevos datos
+//                 dataTable.clear();
+                
+//                 if(response.data && response.data.length > 0) {
+//                     response.data.forEach(venta => {
+//                         dataTable.row.add([
+//                             venta.verComprobante || '',
+//                             venta.comprobante || '',
+//                             venta.cliente || '',
+//                             venta.importe || '',
+//                             venta.fecha || '',
+//                             venta.fechaEnvio || '',
+//                             venta.estado || '',
+//                             venta.descargarXML || '',
+//                             venta.usuario || ''
+//                         ]).draw(false);
+//                     });
+//                 } else {
+//                     dataTable.row.add(['No se encontraron resultados', '', '', '', '', '', '', '', '']).draw();
 //                 }
                 
-//                 // Limpia el contenido del tbody
-//                 $('#sells tbody').empty();
-                
-//                 $('#sells').DataTable({
-//                     destroy: true,  // Destruye la tabla existente para evitar conflictos
-//                     data: response.data,
-//                     columns: [
-//                         { 
-//                             data: null,
-//                             defaultContent: '<div class="btn-group"><a href="?view=onesell&id=<?= $sell->id ?>&tipodoc=<?= $sell->tipo_comprobante ?>" class="btn btn-xs btn-default"><i class="fas fa-eye"></i></a></div>',
-//                             orderable: false
-//                         },
-//                         { data: 'comprobante' },
-//                         { data: 'cliente' },
-//                         { 
-//                             data: 'importe',
-//                             render: function(data, type, row) {
-//                                 return  parseFloat(data).toFixed(2);
-//                             }
-//                         },
-//                         { data: 'fecha' },
-//                         { data: 'usuario' }
-//                     ],
-//                     responsive: true
-//                 });
+//                 // Redibujar la tabla con los nuevos datos
+//                 dataTable.draw();
                 
 //                 // Actualizar totales
-//                 $('#total-ventas').text('S/ ' + response.total_ventas);
-                
-//                 // Solo si es admin
-//                 if(response.is_admin) {
-//                     $('#total-capital').text('S/ ' + response.total_capital);
-//                     $('#total-ganancia').text('S/ ' + response.total_ganancia);
-//                     $('.admin-only').show();
-//                 } else {
-//                     $('.admin-only').hide();
-//                 }
-//             } else {
-//                 // Mostrar mensaje si no hay datos
-//                 $('#sells').DataTable().clear().draw();
-//                 $('#sells').DataTable().row.add({
-//                     "comprobante": "No hay datos",
-//                     "cliente": "",
-//                     "importe": "",
-//                     "fecha": "",
-//                     "usuario": ""
-//                 }).draw();
+//                 $('#total-ventas').text(response.total_ventas);                    
+//                 $('#total-capital').text(response.total_capital);
+//                 $('#total-ganancia').text(response.total_ganancia);
+                 
+//             }else{
+//                 Swal.fire('Error', response.message, 'error');
 //             }
 //         },
 //         error: function(xhr, status, error) {
-//             console.error('Error al cargar datos:', error);
-//            // alert('Error al cargar los datos');
+//             Swal.fire('Error', 'Error al cargar los gastos', 'error');
 //         },
 //         complete: function() {
 //             $('#loading').hide();

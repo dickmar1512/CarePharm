@@ -7,7 +7,7 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a href="#">Clientes</a></li>
+					<li class="breadcrumb-item"><a href="#">Administración</a></li>
 					<li class="breadcrumb-item active">Lista Clientes</li>
 				</ol>
 			</div><!-- /.col -->

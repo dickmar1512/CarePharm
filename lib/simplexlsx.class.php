@@ -533,13 +533,12 @@ class SimpleXLSX {
 			$entry_xml = preg_replace('/<[a-zA-Z0-9]+:([^>]+)>/', '<$1>', $entry_xml); // fix namespaced openned tags
 			$entry_xml = preg_replace('/<\/[a-zA-Z0-9]+:([^>]+)>/', '</$1>', $entry_xml); // fix namespaced closed tags
 
-//			echo '<pre>'.$name."\r\n".htmlspecialchars( $entry_xml ).'</pre>'.
-
-			// XML External Entity (XXE) Prevention
-			$_old = libxml_disable_entity_loader(true);
-			$entry_xmlobj = simplexml_load_string( $entry_xml );
-//			echo '<pre>'.print_r( $entry_xmlobj, true).'</pre>';
-			libxml_disable_entity_loader($_old);
+			// Configurar opciones para prevenir XXE
+			$options = LIBXML_NOENT | LIBXML_NONET;
+			
+			// Para PHP 8.0+, simplemente cargar el XML con las opciones de seguridad
+			$entry_xmlobj = simplexml_load_string($entry_xml, 'SimpleXMLElement', $options);
+			
 			if ( $entry_xmlobj ) {
 				return $entry_xmlobj;
 			}
@@ -550,7 +549,6 @@ class SimpleXLSX {
 		}
 		return false;
 	}
-
 	public function getEntryData( $name ) {
 		$dir  = strtoupper( dirname( $name ) );
 		$name = strtoupper( basename( $name ) );

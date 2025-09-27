@@ -12,6 +12,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/v4-shims.min.css">
+    <link rel="stylesheet" href="plugins/font-awesome6.0.0/css/all.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -193,6 +194,25 @@
             width: auto; /* Ajusta el ancho automáticamente */
             height: 100%; /* Ocupa toda la altura del contenedor */
             cursor: pointer; /* Cambia el cursor a pointer para indicar que es clickeable */
+        }
+
+        /**Estilo para el modal de carga */
+        #loadingModal .modal-dialog {
+            max-width: 350px;
+        }
+
+        #loadingModal .modal-content {
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        #loadingModal .modal-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
         } 
     </style>
 
@@ -217,29 +237,6 @@
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
-                    <!-- Navbar Search -->
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i class="fas fa-search"></i>
-                        </a>
-                        <div class="navbar-search-block">
-                            <form class="form-inline">
-                                <div class="input-group input-group-sm">
-                                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                        aria-label="Search">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-navbar" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li> -->
-
                     <!-- Usuario conectado -->
                     <li class="nav-item dropdown">
                         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -282,12 +279,6 @@
                             <i class="fas fa-expand-arrows-alt"></i>
                         </a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
-                            role="button">
-                            <i class="fas fa-th-large"></i>
-                        </a>
-                    </li> -->
                 </ul>
             </nav>
             <!-- /.navbar -->
@@ -352,19 +343,25 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="./?view=sell" class="nav-link">
+                                            <a href="./?view=sell" class="nav-link" data-view="sell">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Generar Venta</p>
                                             </a>
                                         </li>                                       
                                         <li class="nav-item">
-                                            <a href="./?view=sells" class="nav-link">
+                                            <a href="./?view=sells" class="nav-link" data-view="sells">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Registro Venta</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=sellreportsProducts" class="nav-link">
+                                            <a href="./?view=sellsnew" class="nav-link" data-view="sellsnew">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>Registro Venta NEW</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
                                                 Ventas x Producto
                                             </a>
@@ -380,13 +377,13 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                             <li class="nav-item">
-                                                <a href="./?view=re" class="nav-link">
+                                                <a href="./?view=re" class="nav-link" data-view="re">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Reabastecer</p>
                                                 </a>
                                             </li>                                            
                                             <li class="nav-item">
-                                                <a href="./?view=res" class="nav-link">
+                                                <a href="./?view=res" class="nav-link" data-view="res">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Registro Compra</p>
                                                 </a>
@@ -402,15 +399,15 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="./?view=box" class="nav-link">
+                                            <a href="./?view=box" class="nav-link" data-view="box">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Cierre de Caja</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=ingresopag" class="nav-link">
+                                            <a href="./?view=expenseentry" class="nav-link" data-view="expenseentry">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Ingreso pagos</p>
+                                                <p>Ingreso gastos</p>
                                             </a>
                                         </li>
                                     </ul>
@@ -424,15 +421,21 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                             <li>
-                                                <a href="./?view=products" class="nav-link">
+                                                <a href="./?view=products" class="nav-link" data-view="products">
                                                     <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Listado</p>
+                                                    <p>Listado Producto</p>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="./?view=importarexcel" class="nav-link">
+                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Importar Excel</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
+                                                    <i class="nav-icon far fa-circle text-info"></i>
+                                                    <p>Listado Presentacion</p>
                                                 </a>
                                             </li>
                                         </ul>  
@@ -447,13 +450,13 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                             <li class="nav-item">
-                                                <a href="./?view=unidades" class="nav-link">
+                                                <a href="./?view=unidades" class="nav-link" data-view="unidades">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Unidades</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="./?view=categories" class="nav-link">
+                                                <a href="./?view=categories" class="nav-link" data-view="categories">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Categorias</p>
                                                 </a>
@@ -468,13 +471,13 @@
                                         </a>
                                         <ul class="nav nav-treeview">
                                             <li class="nav-item">
-                                                <a href="./?view=inventary" class="nav-link">
+                                                <a href="./?view=inventary" class="nav-link" data-view="inventary">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Inventario</p>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="./?view=reports" class="nav-link">
+                                                <a href="./?view=reports" class="nav-link" data-view="reports">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Reporte Inventario</p>
                                                 </a>
@@ -496,39 +499,39 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="./?view=sellreports" class="nav-link">
+                                            <a href="./?view=sellreports" class="nav-link" data-view="sellreports">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Ventas x Cliente</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=sellsRepostNotaVenta" class="nav-link">
+                                            <a href="./?view=sellsRepostNotaVenta" class="nav-link" data-view="sellsRepostNotaVenta">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Registro Nota Venta</p>
                                             </a>
                                         </li>
                                         <?php if($admin ==1 || $dirtec ==1) {?>
                                         <li class="nav-item">
-                                            <a href="./?view=reportsboleta" class="nav-link">
+                                            <a href="./?view=reportsboleta" class="nav-link" data-view="reportsboleta">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 Boletas
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=reportsfactura" class="nav-link">
+                                            <a href="./?view=reportsfactura" class="nav-link" data-view="reportsfactura">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 Factura
                                             </a>
                                         </li>
                                         <?php }?>
                                         <li class="nav-item">
-                                            <a href="./?view=reportsnotascredito" class="nav-link">
+                                            <a href="./?view=reportsnotascredito" class="nav-link" data-view="reportsnotascredito">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>N.C. Factura</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=reportsnotascreditoboleta" class="nav-link">
+                                            <a href="./?view=reportsnotascreditoboleta" class="nav-link" data-view="reportsnotascreditoboleta">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>N.C. Boleta</p>
                                             </a>
@@ -545,7 +548,7 @@
                                         <ul class="nav nav-treeview">
                                             <?php if ($admin == 1) { ?>
                                             <li class="nav-item">
-                                                <a href="./?view=users" class="nav-link">
+                                                <a href="./?view=users" class="nav-link" da>
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Usuarios</p>
                                                 </a>
@@ -570,7 +573,6 @@
                                                     <p>Proveedores</p>
                                                 </a>
                                             </li>
-                                            <!--<li><a href="./?view=permisos">Permisos</a></li>-->
                                         </ul>
                                     </li>
                                 <?php } ?>
@@ -601,9 +603,11 @@
             <div class="bodyLogin">
                 <div class="containerLogin">
                     <div class="form-box login">
-                        <form action="./?action=processlogin" method="post">
+                        <!-- <form action="./?action=processlogin" method="post"> -->
+                        <form id="loginForm" method="post">    
                             <h1>Care<b>Pharm</b></h1>
                             <p>Use su usuario y contraseña</p>
+                            <!-- <div id="loginMessage" class="alert alert-danger" style="display:none;"></div> -->
                             <div class="input-box">
                                 <input type="text" id="username" name="username" placeholder="Username"
                                     autocomplete="username" required>
@@ -636,6 +640,76 @@
         <?php endif; ?>
     </div>
     <!-- ./wrapper -->
+     <!-- Modal de carga con tu loader angular personalizado -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: transparent; border: none;">
+                <div class="modal-body text-center">
+                    <style type='text/css'>
+                        /**Estilo loader tipo angular */
+                        .angular-loader {
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            display: inline-block;
+                            border-top: 4px solid #FF3D00;
+                            border-right: 4px solid transparent;
+                            box-sizing: border-box;
+                            animation: rotation 1s linear infinite;
+                            position: relative;
+                            margin: 0 auto;
+                        }
+
+                        .angular-loader::before {
+                            content: '';
+                            box-sizing: border-box;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 80px;
+                            height: 80px;
+                            border-radius: 50%;
+                            border-left: 4px solid #808080;
+                            border-bottom: 4px solid transparent;
+                            animation: rotation 0.5s linear infinite reverse;
+                            margin: 10px;
+                        }
+
+                        .angular-loader::after {
+                            content: '';
+                            box-sizing: border-box;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 50%;
+                            border-right: 4px solid #00BFFF;
+                            border-top: 4px solid transparent;
+                            animation: rotation 1s linear infinite;
+                            margin: 20px;
+                        }
+
+                        @keyframes rotation {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                        
+                        .loading-text {
+                            color: white;
+                            margin-top: 20px;
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                        }
+                    </style>
+                    
+                    <div class="angular-loader"></div>
+                    <p class="loading-text">Autenticando...</p>
+                    <div id="loginMessage" class="alert alert-danger" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- REQUIRED JS SCRIPTS -->
     <!-- jQuery -->
@@ -691,33 +765,48 @@
     <script src="dist/js/demo.js"></script>
 
     <!-- Scripts home -->
-    <script src="dist/js/pages/home.js"></script>
+    <!-- <script src="dist/js/pages/home.js"></script> -->
 
     <!-- Scripts sell -->
-    <script src="dist/js/pages/sell.js"></script>
+    <!-- <script src="dist/js/pages/sell.js"></script> -->
 
     <!-- Scripts sells -->
-   <script src="dist/js/pages/sells.js"></script>
+   <!-- <script src="dist/js/pages/sells.js"></script> -->
 
     <!-- Scripts products -->
-    <script src="dist/js/pages/products.js"></script>
+    <!-- <script src="dist/js/pages/products.js"></script> -->
 
     <!-- Scripts providers -->
-    <script src="dist/js/pages/providers.js"></script>
+    <!-- <script src="dist/js/pages/providers.js"></script> -->
     
     <!-- Scripts providers -->
-    <script src="dist/js/pages/clients.js"></script>
+    <!-- <script src="dist/js/pages/clients.js"></script> -->
 
     <!-- Scripts registro de compra-->
-    <script src="dist/js/pages/res.js"></script>
+    <!-- <script src="dist/js/pages/res.js"></script> -->
 
     <!-- Scripts reabastecer compra-->
-    <script src="dist/js/pages/re.js"></script>
+    <!-- <script src="dist/js/pages/re.js"></script> -->
 
      <!-- Scripts nota de credito factura-->
-    <script src="dist/js/pages/nocfactura.js"></script>
+    <!-- <script src="dist/js/pages/nocfactura.js"></script> -->
+
     <!-- Scripts nota de credito boleta-->
-    <script src="dist/js/pages/nocboleta.js"></script>
+    <!-- <script src="dist/js/pages/nocboleta.js"></script> -->
+
+    <!-- Scripts unidades-->
+    <!-- <script src="dist/js/pages/unidades.js"></script> -->
+
+    <!-- Scripts categorias-->
+    <!-- <script src="dist/js/pages/categories.js"></script> -->
+
+    <!-- Scripts Box-->
+    <!-- <script src="dist/js/pages/box.js"></script> -->
+
+    <!-- Scripts gastos-->
+    <!-- <script src="dist/js/pages/expenseentry.js"></script> -->
+     
+    <script src="dist/js/pages/main.js"></script>
 
     <!-- Scripts onesell -->     
     <script src="dist/js/imprimir50.js" type="text/javascript"></script>
@@ -726,58 +815,129 @@
     <script src="dist/js/imprimirA4.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {  ////"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            $(".datatable").DataTable({
-                "responsive": true, 
-                "lengthChange": true, 
-                "autoWidth": false,
-                "dom": '<"row"<"col-md-3"l><"col-md-6 text-center"B><"col-md-3"f>>rtip',
-                "buttons": [
-                    { extend: "copy", text: "Copiar" }, 
-                    "csv", 
-                    "excel", 
-                    "pdf", 
-                    "print", 
-                    { extend: "colvis", text: "Visible" }
-                ],
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "Ningún dato disponible en esta tabla",
-                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "Buscar:",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Último",
-                        "sNext": "Siguiente",
-                        "sPrevious": "Anterior"
+         $(function () {
+            //Initialize Select2 Elements
+            //$('.select2').select2();
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+            theme: 'bootstrap4'
+            })
+        });
+        moment.updateLocale('es', {
+            week: {
+                dow: 0,  // Domingo como primer día
+            }
+        });
+
+        var parTooltip = {
+            today: 'Ir a hoy',
+            clear: 'Limpiar selección',
+            close: 'Cerrar',
+            selectMonth: 'Seleccionar mes',
+            prevMonth: 'Mes anterior',
+            nextMonth: 'Mes siguiente',
+            selectYear: 'Seleccionar año',
+            prevYear: 'Año anterior',
+            nextYear: 'Año siguiente',
+            selectDecade: 'Seleccionar década',
+            prevDecade: 'Década anterior',
+            nextDecade: 'Década siguiente',
+            prevCentury: 'Siglo anterior',
+            nextCentury: 'Siglo siguiente'
+        };
+
+        $('#fechaini').datetimepicker({
+            format: 'L',
+            locale: 'es',
+            buttons: {
+                showToday: true,
+                showClose: true
+            },
+            tooltips: parTooltip
+        });
+
+        $('#fechafin').datetimepicker({
+            format: 'L',
+            locale: 'es',
+            buttons: {
+                showToday: true,
+                showClose: true
+            },
+            tooltips: parTooltip
+        });
+
+        // Inicializar select2
+        // $('.select2').select2({
+        //     theme: 'bootstrap4'
+        // }); 
+
+        $(document).ready(function () {
+                $(".datatable").DataTable({
+                    "responsive": true, 
+                    "lengthChange": true, 
+                    "autoWidth": false,
+                    "dom": '<"row"<"col-md-3"l><"col-md-6 text-center"B><"col-md-3"f>>rtip',
+                    "buttons": [
+                        { extend: "copy", text: "Copiar" }, 
+                        "csv", 
+                        "excel", 
+                        "pdf", 
+                        "print", 
+                        { extend: "colvis", text: "Visible" }
+                    ],
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
                     },
-                    "oAria": {
-                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                    }
-                },
-                
-            });
-            
+                    
+                });
              /**
             * Script que revisa el monto máximo que debe tener en caja para hacer cierre
-            */
-            let iduser = '<?php echo $_SESSION["user_id"];?>';
-            if(iduser){
-                let checkInterval;
-                const CHECK_DELAY = 600000; // 10 minutos en milisegundos (1000 * 60 * 10)                     
-                 // Iniciar el intervalo
-                checkMonto(<?=$motonmax?>); // Ejecutar ahora
-                checkInterval = setInterval(checkMonto, CHECK_DELAY); 
-            } 
+            */ 
+
+            <?php if (isset($_SESSION["user_id"])): ?>
+                let iduser = '<?= $_SESSION["user_id"] ?>';
+                <?php 
+                $motonmax = 0; // Valor por defecto
+                if (isset($_SESSION["user_id"])) {
+                    $user = UserData::getById($_SESSION["user_id"]);
+                    $motonmax = $user ? $user->montomax : 0;
+                }
+                ?>
+                let motonmax = <?= $motonmax ?>;
+                
+                if(iduser && motonmax > 0){
+                    let checkInterval;
+                    const CHECK_DELAY = 600000; // 10 minutos en milisegundos (1000 * 60 * 10)                     
+                    // Iniciar el intervalo
+                    checkMonto(motonmax);
+                    
+                    function checkMonto(montoMaximo) {
+                        // Tu código existente para checkMonto
+                    }
+                }
+            <?php endif; ?>
             
             $('#imprimir').click(function() {
                 $('#imprimir').hide();
@@ -790,52 +950,114 @@
                 $('#div_opciones').show();
                 $('.main-footer').show();
                 $('.card-header').show();  
-            });	
+            });
+            
+
+             $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Mostrar modal de carga
+                $('#loadingModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                }).modal('show');
+                
+                // Ocultar mensaje de error si existe
+                $('#loginMessage').hide();
+                
+                // Limpiar mensajes anteriores
+                $('#loginMessage').removeClass('alert-success alert-danger');
+                
+                // Enviar datos por AJAX
+                $.ajax({
+                    url: './?action=processlogin',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        // Cerrar el modal primero
+                        $('#loadingModal').modal('hide');
+                        
+                        if(response.success) {
+                            // Mostrar mensaje de éxito brevemente antes de redirigir
+                            $('#loginMessage').addClass('alert-success')
+                                            .text('Autenticación exitosa, redirigiendo...')
+                                            .show();
+                            
+                            // Redirigir después de 2 segundo
+                            setTimeout(function() {
+                                window.location.href = './?view=home';
+                            }, 2000);
+                        } else {                            
+                            // Redirigir después de 2 segundo
+                             setTimeout(function() {
+                                 window.location.href = './?view=login';
+                             }, 2000);
+                            // Mostrar error específico
+                            $('#loginMessage').addClass('alert-danger')
+                                            .text(response.message || 'Credenciales incorrectas')
+                                            .show();                            
+                            // Enfocar el campo de usuario
+                            $('#username').focus();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Cerrar el modal en caso de error
+                        $('#loadingModal').modal('hide');
+                        
+                        // Mostrar mensaje de error de conexión
+                        $('#loginMessage').addClass('alert-danger')
+                                        .text('Error de conexión: ' + (xhr.responseJSON?.message || 'Intente nuevamente'))
+                                        .show();
+                        
+                        console.error('Error en login:', status, error);
+                    },
+                    complete: function() {
+                        // Esta función se ejecuta siempre, después de success o error
+                        // Podemos usarla para limpieza si es necesario
+                    }
+                });
+            });
         });
         
         // Función para ejecutar la consulta AJAX
-                            function checkMonto(montomax) {
-                                // Si ha pasado menos de 10 minutos desde el último redireccionamiento, no hacer nada
-                                // if (Date.now() - lastRedirectTime < CHECK_DELAY) {
-                                //     return;
-                                // }
-                                
-                                $.ajax({
-                                    url: './?action=getMontoMax',
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        if (response.success && response.montocaja >= montomax) {
-                                            showModal(response.montocaja, montomax);
-                                        }
-                                    },
-                                    error: function(xhr, status, error) {
-                                        console.error("Error en la consulta:", error);
-                                    }
-                                });
-                            }
+        function checkMonto(montomax) {                                
+            $.ajax({
+                url: './?action=getMontoMax',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success && response.montocaja >= montomax) {
+                        showModal(response.montocaja, montomax);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la consulta:", error);
+                }
+            });
+        }
 
-                            // Función para mostrar el modal con SweetAlert2
-                            function showModal(monto,montomax) {
-                                Swal.fire({
-                                    title: `Monto en caja es : ${monto}<br> lo permitido es : ${montomax}`,
-                                    html: '¿Qué deseas hacer?',
-                                    icon: 'info',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Cerrar caja',
-                                    cancelButtonText: 'Posponer 10 minutos',
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // Guardar el momento del redireccionamiento
-                                        lastRedirectTime = Date.now();
-                                        window.location.href = './?view=box';
-                                    } else {
+        // Función para mostrar el modal con SweetAlert2
+        function showModal(monto,montomax) {
+            Swal.fire({
+                title: `Monto en caja es : ${monto}<br> lo permitido es : ${montomax}`,
+                html: '¿Qué deseas hacer?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Cerrar caja',
+                cancelButtonText: 'Posponer 10 minutos',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                 // Guardar el momento del redireccionamiento
+                    lastRedirectTime = Date.now();
+                    window.location.href = './?view=box';
+                } else {
                                         // Si pospone, simplemente continuar con el intervalo existente
-                                    }
-                                });
-                            }   
+                }
+            });
+        }   
 
         // Función para volver a la página anterior
         function goBack() {
@@ -864,9 +1086,51 @@
                 console.error('Error al formatear fecha:', error);
                 return 'Fecha inválida';
             }
-            }
+        }
+
+        function initDataTable(tableSelector) {
+
+            $(tableSelector).DataTable({
+                    "responsive": true, 
+                    "lengthChange": true, 
+                    "autoWidth": false,
+                    "dom": '<"row"<"col-md-3"l><"col-md-6 text-center"B><"col-md-3"f>>rtip',
+                    "buttons": [
+                        { extend: "copy", text: "Copiar" }, 
+                        "csv", 
+                        "excel", 
+                        "pdf", 
+                        "print", 
+                        { extend: "colvis", text: "Visible" }
+                    ],
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                    
+                });
+            }   
     </script>
 
 </body>
-
 </html>

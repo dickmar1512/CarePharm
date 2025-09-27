@@ -122,16 +122,36 @@
 	</div>
 </section>
 <?php
-$categories = CategoryData::getAll();
-$codigo = ProductData::getbarcode();
-$unidades = UnidadMedidaData::getAll();
-foreach ($codigo as $cod) {
-    $barcode = $cod->barcode;
+function generarCodigoBarras() {
+    $primerDigito = '7';
+    $resto = '';
+    for ($i = 0; $i < 12; $i++) {
+        $resto .= mt_rand(0, 9);
+    }
+    
+    $codigo = $primerDigito . $resto;
+    
+    $sum = 0;
+    for ($i = 0; $i < 12; $i++) {
+        $sum += ($i % 2 === 0) ? $codigo[$i] * 1 : $codigo[$i] * 3;
+    }
+    $digitoControl = (10 - ($sum % 10)) % 10;
+    
+    return $codigo . $digitoControl;
 }
+
+$categories = CategoryData::getAll();
+$unidades = UnidadMedidaData::getAll();
+
+$codigo = ProductData::getbarcode();
+do {
+    $barcodegen = generarCodigoBarras();
+} while (in_array($barcodegen, $codigo));
+
 
 $fecha_actual = date("Y-m-d");
 ?>
-<input type="hidden" id="genbarcode" value="<?= $barcode?>">
+<input type="hidden" id="genbarcode" value="<?= $barcodegen?>">
 <script>
     var categories = <?php echo json_encode($categories); ?>;
 	var unidades = <?php echo json_encode($unidades); ?>;

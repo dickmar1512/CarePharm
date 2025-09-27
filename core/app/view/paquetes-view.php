@@ -95,7 +95,7 @@ if($px<=$npaginas):
 		
 
 		<td style="width:70px;">
-		<a href="./?view=editkit&id=<?php echo $kit->idpaquete; ?>" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+		<a href="./?view=editkit&id=<?php echo $kit->idpaquete; ?>" class="btn btn-xs btn-warning"><i class="fas fa-pencil-alt"></i></a>
 		<?php if($kit->estado==1):?>
 		<a href="./?view=delkit&id=<?php echo $kit->idpaquete; ?>&est=0&fecha=<?=$fecha?>" class="btn btn-xs btn-danger"><i class="fa fa-ban" placeholder="Desactivar"></i></a>
 		<?php else:?>

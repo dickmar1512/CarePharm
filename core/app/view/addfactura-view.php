@@ -202,6 +202,14 @@
 					{
 						$s = $sell->add2();
 					}
+
+					if($_POST["pagoParcial"] != 0)
+					{						
+						$pagpar = new SellData();
+						$pagpar->sellid = $s[1];
+						$pagpar->importepp = $_POST["pagoParcial"];
+						$pagpar->addPagoParcial();
+					}
 										
 					foreach($cart as  $c)
 					{
@@ -213,6 +221,7 @@
 						$op->operation_type_id=OperationTypeData::getByName("salida")->id;
 						$op->sell_id=$s[1];
 						$op->descripcion = $c["descripcion"];
+						$op->cu = $product->price_in;
 						$op->prec_alt=$c["precio_unitario"];						
 						$op->descuento = $c["descuento"];
 						$op->idpaquete = $c["idpaquete"];

@@ -1,3 +1,25 @@
+<?php
+$listaSituacion = [
+		"ListaSituacion" => [
+			["id" => "01", "nombre" => "Por Generar XML"],
+			["id" => "02", "nombre" => "XML Generado"],
+			["id" => "03", "nombre" => "Enviado y Aceptado SUNAT"],
+			["id" => "04", "nombre" => "Enviado y Aceptado SUNAT con Obs."],
+			["id" => "05", "nombre" => "Rechazado por SUNAT"],
+			["id" => "06", "nombre" => "Con Errores"],
+			["id" => "07", "nombre" => "Por Validar XML"],
+			["id" => "08", "nombre" => "Enviado a SUNAT Por Procesar"],
+			["id" => "09", "nombre" => "Enviado a SUNAT Procesando"],
+			["id" => "10", "nombre" => "Rechazado por SUNAT"],
+			["id" => "11", "nombre" => "Enviado y Aceptado SUNAT"],
+			["id" => "12", "nombre" => "Enviado y Aceptado SUNAT con Obs."]
+		]
+	];
+
+	$dbPath = '../efact1.3.4/bd/BDFacturador.db';	
+	$rutaXML = '../efact1.3.4/sunat_archivos/sfs/FIRMA';
+	$rutaCDR = '../efact1.3.4/sunat_archivos/sfs/RPTA';
+?>
 <section class="content">
 <div class="row">
 	<div class="col-md-12">
@@ -64,12 +86,79 @@
 				<th>N° DOC USUARIO</th>
 				<th>RAZÓN SOCIAL</th>
 				<th>PRECIO VENTA</th>
+				<th>ESTADO</th>
 				<th class="text-center boton">OPCIONES</th>
 			</thead>
 			<?php
 				foreach($facturas as $fac)
 				{
 					$nro++;
+
+					try {
+										$db = new SQLite3($dbPath);
+										$query = "SELECT * FROM DOCUMENTO WHERE NUM_DOCU = '" . $fac->{"28"} . "-" . $fac->{"29"} . "'";
+										$results = $db->query($query);
+
+										// Verificar si la consulta devolvió resultados
+										if ($results === false) {
+											die("Error en la consulta SQL: " . $db->lastErrorMsg());
+										}
+
+										$documento = $results->fetchArray(SQLITE3_ASSOC);
+
+										// Si no hay resultados, asignar valores por defecto
+										if ($documento === false) {
+											$documento = [
+												'FEC_GENE' => null,
+												'FEC_ENVI' => null,
+												'FEC_CARG' => null,
+												'TIP_DOCU' => null,
+												'NUM_DOCU' => null,
+												'NUM_RUC' => null,
+												'NOM_ARCH' => null,
+												'TIP_ARCH' => null,
+												'DES_OBSE' => null,
+												'FIRM_DIGITAL' => null,
+												'IND_SITU' => null
+											];
+										}
+
+										// Asignar valores con operador ternario y validación
+										$estado = "";
+										$fechaGeneracion = $documento['FEC_GENE'] ?? '-';
+										$fechaEnvio = $documento['FEC_ENVI'] ?? '-';
+										$fechaCarga = $documento['FEC_CARG'] ?? '-';
+										$tipoComprobante = $documento['TIP_DOCU'] ?? '-';
+										$numeroComprobante = $documento['NUM_DOCU'] ?? '-';
+										$numeroRuc = $documento['NUM_RUC'] ?? '-';
+										$nombreArchivo = $documento['NOM_ARCH'] ?? '-';
+										$tipoArchivo = $documento['TIP_ARCH'] ?? '-';
+										$observaciones = $documento['DES_OBSE'] ?? '-';
+										$firmadoDigital = $documento['FIRM_DIGITAL'] ?? '-';
+										$estadoSituacion = $documento['IND_SITU'] ?? '-';
+
+										// Buscar situación (con validación)
+										$situacion = array_filter($listaSituacion['ListaSituacion'], function($item) use ($estadoSituacion) {
+											return $item['id'] == $estadoSituacion;
+										});
+
+										// Obtener nombre de situación (si existe)
+										$nombreSituacion = !empty($situacion) ? current($situacion)['nombre'] : 'Ejecutar Facturador sunat';
+										//$estado = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC ==7) ? "N.CRE: ".$probar->SERIE."-".$probar->COMPROBANTE :$nombreSituacion;
+								
+										$descargarXML = false;
+										$descargarCDR = false;
+
+										if($estadoSituacion == "02" || $estadoSituacion == "07" || $estadoSituacion == "08" || $estadoSituacion == "09") {
+											$descargarXML = true;
+										}elseif($estadoSituacion == "03" || $estadoSituacion == "04" || $estadoSituacion == "05" || $estadoSituacion == "10" || $estadoSituacion == "11" || $estadoSituacion == "12") {
+											$descargarXML = true;
+											$descargarCDR = true;
+										}
+										
+									} catch (Exception $e) {
+										die("Error al conectar o consultar la base de datos: " . $e->getMessage());
+									}
 					?>
 						<tr>
 							<td><?php echo $nro ?></td>
@@ -80,6 +169,7 @@
 							<td><?php echo $fac->numDocUsuario ?></td>
 							<td><?php echo $fac->rznSocialUsuario ?></td>
 							<td><?php echo 'S/ '.$fac->sumPrecioVenta ?></td>
+							<td><?php echo $nombreSituacion ?></td>
 							<td class="text-center boton">
 								<?php 
 								$nota_credito = Boleta2Data::getByID($fac->ID_TIPO_DOC);

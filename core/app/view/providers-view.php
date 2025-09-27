@@ -7,7 +7,8 @@
 			</div><!-- /.col -->
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-right">
-					<li class="breadcrumb-item"><a href="#">Proveedores</a></li>
+					<li class="breadcrumb-item"><a href="#">Administración</a></li>
+					<li class="breadcrumb-item active">Lista Proveedores</li>
 				</ol>
 			</div><!-- /.col -->
 		</div><!-- /.row -->
@@ -24,10 +25,6 @@
 						<h4>Directorio de Proveedores</h4>
 					</div>
 					<div class="col-md-6"  style="display: flex; justify-content: right;">
-						<!-- <a href="./?view=newprovider" class="btn btn-default">
-							<i class='fa fa-truck'></i>
-							Nuevo Proveedor
-						</a> -->
 						<div class="btn-group float-sm-right">
 							<button id="openModalNuevoProveedor" class="btn btn-primary">
 								<i class='fa fa-truck'></i>

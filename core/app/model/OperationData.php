@@ -11,11 +11,13 @@ class OperationData {
 	public $descripcion;
 	public $idpaquete;
 	public $created_at;
+	public $cu;
 
 	public function OperationData(){
 		$this->name              = "";
 		$this->product_id        = "";
 		$this->q                 = "";
+		$this->cu 			     = 0;
 		$this->cut_id            = "";
 		$this->operation_type_id = "";
 		$this->descripcion       = "";
@@ -24,8 +26,8 @@ class OperationData {
 	}
 
 	public function add(){
-		$sql = "insert into ".self::$tablename." (product_id,q, prec_alt,descuento, operation_type_id,sell_id,created_at, descripcion,idpaquete) ";
-		$sql .= "value (\"$this->product_id\",\"$this->q\", $this->prec_alt,$this->descuento, $this->operation_type_id,$this->sell_id,\"$this->created_at\", \"$this->descripcion\",\"$this->idpaquete\")";
+		$sql = "insert into ".self::$tablename." (product_id,q,cu, prec_alt,descuento, operation_type_id,sell_id,created_at, descripcion,idpaquete) ";
+		$sql .= "value (\"$this->product_id\",\"$this->q\", $this->cu,$this->prec_alt,$this->descuento, $this->operation_type_id,$this->sell_id,\"$this->created_at\", \"$this->descripcion\",\"$this->idpaquete\")";
 		return Executor::doit($sql);
 	}
 
@@ -82,10 +84,49 @@ class OperationData {
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
+	
+	public static function getAllByDateOfficialBP($product, $start,$end)
+	{
+ 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and product_id=$product order by created_at desc";
+		
+		if($start == $end)
+		{
+			$sql = "select * from ".self::$tablename." where date(created_at) = \"$start\" order by created_at desc";
+		}
+		
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new OperationData());
+	}
 
+	public static function getAllMovByDateProductId($product_id,$start,$end)
+	{
+ 		$sql = "select op.product_id,
+					SUM(CASE WHEN op.operation_type_id = 1 THEN op.q ELSE 0 END) AS stock_in,
+					SUM(CASE WHEN op.operation_type_id = 1 THEN op.q * op.prec_alt ELSE 0 END) AS importe_in,
+					SUM(CASE WHEN op.operation_type_id = 2 THEN op.q ELSE 0 END) AS stock_out,
+					SUM(CASE WHEN op.operation_type_id = 2 THEN op.q * op.prec_alt ELSE 0 END) AS importe_out,
+					(SUM(CASE WHEN op.operation_type_id = 1 THEN op.q ELSE 0 END) - 
+					SUM(CASE WHEN op.operation_type_id = 2 THEN op.q ELSE 0 END)) AS stock_inv,
+					((SUM(CASE WHEN op.operation_type_id = 1 THEN op.q ELSE 0 END) - 
+					SUM(CASE WHEN op.operation_type_id = 2 THEN op.q ELSE 0 END)) * 
+					(SUM(CASE WHEN op.operation_type_id = 1 THEN op.q * op.prec_alt ELSE 0 END) / 
+					NULLIF(SUM(CASE WHEN op.operation_type_id = 1 THEN op.q ELSE 0 END), 0))) AS importe_inv 
+	  			from ".self::$tablename." as op where date(op.created_at) between '".$start."' and '".$end."'  ";
+		
+		if($product_id != 0)
+		{
+			$sql .= " and op.product_id = $product_id";
+		}
+
+		$sql .= " GROUP BY op.product_id ";
+
+
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new OperationData());
+	}
 
 	/*REVISA ID DE LAS SOLICITUDADES MAS VENDIDAS*/
-		public static function getAllByDateVendido($start,$end)
+	public static function getAllByDateVendido($start,$end)
 	{
  		//$sql = "select product_id,COUNT(product_id)*q AS VENTAS   from ".self::$tablename." 
  		$sql = "select product_id,sum(q) AS VENTAS   from ".self::$tablename." 
@@ -128,19 +169,6 @@ class OperationData {
  				product_id = $product_id";
 		}
 
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new OperationData());
-	}
-
-	public static function getAllByDateOfficialBP($product, $start,$end)
-	{
- 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and product_id=$product order by created_at desc";
-		
-		if($start == $end)
-		{
-			$sql = "select * from ".self::$tablename." where date(created_at) = \"$start\" order by created_at desc";
-		}
-		
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
@@ -278,6 +306,13 @@ class OperationData {
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
+	
+	public static function getInputByProductId($product_id){
+		$sql = "select * from ".self::$tablename." where product_id=$product_id and operation_type_id=1 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new OperationData());
+	}
+
 
 ////////////////////////////////////////////////////////////////////
 	public static function getInputQ($product_id,$cut_id){
@@ -297,12 +332,6 @@ class OperationData {
 
 	public static function getInputByProductIdCutId($product_id,$cut_id){
 		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id and operation_type_id=1 order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new OperationData());
-	}
-
-	public static function getInputByProductId($product_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and operation_type_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}

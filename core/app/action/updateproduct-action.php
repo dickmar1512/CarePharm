@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 // Recibir y decodificar los datos JSON
 $data = json_decode(file_get_contents("php://input"), true);
-//exit(json_encode($_FILES["image"]));
+
 if (!empty($data)) 
 {	
 	$product = ProductData::getById($data["product_id"]);

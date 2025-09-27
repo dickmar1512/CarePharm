@@ -153,13 +153,18 @@ class ProductData {
 	public static function getAlertasInventario(){
 		$sql = "SELECT * 
 				FROM ".self::$tablename."
-				WHERE stock <= inventary_min and is_stock =1 and length(barcode) > 6 and is_active=1 order  by stock asc ";
+				WHERE stock <= inventary_min 
+				and is_stock =1 
+				and length(barcode) > 6 
+				and is_active=1
+				and id in (select product_id from operation where operation_type_id = 1 group by product_id) 
+				order  by stock asc ";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
 
 	public static function getAll(){
-		$sql = "select * from ".self::$tablename." order by stock desc";
+		$sql = "select * from ".self::$tablename." where id in (select product_id from operation where operation_type_id = 1 group by product_id) order by stock desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
@@ -171,7 +176,7 @@ class ProductData {
 	}
 
 	public static function getAll2(){
-		$sql = "select * from ".self::$tablename." where stock > 0 order by id asc";
+		$sql = "select * from ".self::$tablename." where stock > 0 and is_active = 1 order by id asc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}
@@ -183,7 +188,7 @@ class ProductData {
 	}
 
 	public static function getLike($p){
-		$sql = "select * from ".self::$tablename." where barcode like '%$p%' or name like '%$p%' or id like '%$p%'";
+		$sql = "select * from ".self::$tablename." where is_active = 1 and (barcode like '%$p%' or name like '%$p%' or id like '%$p%')";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new ProductData());
 	}

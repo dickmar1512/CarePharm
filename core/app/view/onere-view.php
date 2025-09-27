@@ -17,7 +17,7 @@
 <!-- /.content-header -->
 <!-- Main content -->
 <section class="content">
-	<div class="container-fluid">
+	<div class="container-fluid col-md-8">
 		<div class="card card-default">
 			<div class="card-header">
 				<div class="row">
@@ -26,7 +26,7 @@
 							<i class="fas fa-arrow-left"></i> Volver Atrás
 						</a>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<h4> Resumen de Reabastecimiento</h4>
 					</div>
 				</div>
@@ -34,7 +34,7 @@
 			<!-- /.card-header -->
 			<div class="card-body">
 				<div class="row" style="display: flex; justify-content: center;">
-					<div class="col-md-8">
+					<div class="col-md-12">
 						<?php if (isset($_GET["id"]) && $_GET["id"] != ""): ?>
 							<?php
 							$sell = SellData::getById($_GET["id"]);

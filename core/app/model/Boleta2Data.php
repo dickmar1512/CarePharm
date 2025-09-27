@@ -6,6 +6,7 @@ class Boleta2Data {
 	public $RUC;
 	public $SERIE;
 	public $COMPROBANTE;
+	public $TIPO_DOC;
 
 	public function Boleta2Data(){
 		$this->RUC = "";

@@ -43,17 +43,16 @@ if(isset($_SESSION["reabastecer"]))
 
 				$product = ProductData::getById($c["product_id"]);				
 				$op->cu= $c["price_in"];
-				$op->prec_alt = $c["price_in"];
-				$op2->id = $c["product_id"];
-				$op2->reg_san=$c["rs"];				
-				$op2->laboratorio=$c["labo"];
-				$op2->price_in=$c["price_in"];
-
-
+				$op->prec_alt = $c["price_in"];	
 				$op->operation_type_id = 1; // 1 - entrada
 			 	$op->sell_id = $s[1];
 			 	$op->descuento= 0;
 			 	$op->q = $c["q"];
+
+				$op2->id = $c["product_id"];
+				$op2->reg_san=$c["rs"];				
+				$op2->laboratorio=$c["labo"];
+				$op2->price_in=$c["price_in"];
 
 				if(isset($_POST["is_oficial"]))
 				{
@@ -61,8 +60,8 @@ if(isset($_SESSION["reabastecer"]))
 				}
 
 				$add = $op->add();
-				$add2 = $op2->update_cu();
-				//echo "is_stock:".$product->is_stock;	
+				//$add2 = $op2->update_cu();
+				$op2->update_cu();
 
 				if($product->is_stock == 1)
 				{

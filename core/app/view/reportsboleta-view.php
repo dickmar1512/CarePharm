@@ -169,7 +169,7 @@
 
 
 								<td class="text-center boton">
-									<a href="./?view=onesellt&id=<?php echo $bol->EXTRA1 ?>" class="btn btn-info btn-xs" 
+									<a href="./?view=onesell&id=<?php echo $bol->EXTRA1 ?>&tipodoc=3" class="btn btn-info btn-xs" 
 										style="background-color: #000; font-size: 15px;"><i class="fa fa-eye"> Ver</i></a>
 								</td>
 							</tr>

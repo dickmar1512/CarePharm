@@ -14,6 +14,10 @@ if (count($products) > 0) {
 			$total += $operation->q * ($operation->prec_alt - $operation->descuento);
 		}
 
+        $notacomprobar = $sell->serie . "-" . $sell->comprobante; 
+		$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
+        $impNotaCredito = $probar->sumImpVenta ?? 0;
+        $total -= $impNotaCredito;
 		$total_total += $total;
     endforeach;    
 }

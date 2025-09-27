@@ -1,5 +1,5 @@
 <?php
-$xmlPath = '../efact1.3.4/sunat_archivos/sfs/FIRMA/10469684917-03-B001-00000003.xml';
+$xmlPath = '../efact1.3.4/sunat_archivos/sfs/FIRMA/10432470330-03-B001-00000003.xml';
 
 // Verifica si el archivo existe
 if (!file_exists($xmlPath)) {

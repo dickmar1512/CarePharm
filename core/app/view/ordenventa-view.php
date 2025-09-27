@@ -61,30 +61,9 @@ endif;
 							</div> -->
 							<div class="col-md-2">
 								<div class="col-sm-16 float-sm-right">
-									<button id="imprimir50mm" class="btn btn-md btn-info"><i class="fa fa-print"></i>
-										IMPRIMIR
-										50mm</button>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="col-sm-16 float-sm-right">
 									<button id="imprimir80mm" class="btn btn-md btn-info"><i class="fa fa-print"></i>
 										IMPRIMIR
 										80mm</button>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="col-sm-16 float-sm-right">
-									<button id="imprimirA5" class="btn btn-md btn-info"><i class="fa fa-print"></i>
-										IMPRIMIR
-										A5</button>
-								</div>
-							</div>
-							<div class="col-md-2">
-								<div class="col-sm-16 float-sm-right">
-									<button id="imprimirA4" class="btn btn-md btn-info"><i class="fa fa-print"></i>
-										IMPRIMIR
-										A4</button>
 								</div>
 							</div>
 						</div>
@@ -102,7 +81,7 @@ endif;
 										<table class="table table-bordered">
 											<tr>
 												<td style="text-align: center; width: 100px">
-													<img src="dist/img/logo2.jpg" style="height: 60px; width: 100px" />
+													<img src="dist/img/logo2.jpg" style="height: 80px; width: 100%" />
 												</td>
 												<td
 													style="text-align: center; font-family: courier new; font-size: 0.9em; width: 250px">
@@ -158,7 +137,7 @@ endif;
 													<b> FECHA EMISIÓN</b>
 												</td>
 												<td>
-													<b><?php echo ": " . $cliente->created_at; ?></b>
+													<b><?php echo ": " . $orden->created_at; ?></b>
 												</td>
 											</tr>
 										</table>
@@ -200,12 +179,12 @@ endif;
 
 
 												$datosComprobante = array(
-													"venta" => $orden,
+												 	"venta" => $orden,
 													"detalles" => $detalle,
-													"comp_cab" => $comp_cab,
-													"comp_aca" => $comp_aca,
-													"comp_tri" => $comp_tri,
-													"comp_ley" => $comp_ley,
+													//"comp_cab" => $comp_cab,
+													//"comp_aca" => $comp_aca,
+													//"comp_tri" => $comp_tri,
+													//"comp_ley" => $comp_ley,
 													"empresa" => $empresa,
 													"cajero" => $cajero,
 													"numLetra" => $numLetra

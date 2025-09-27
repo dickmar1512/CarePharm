@@ -1,73 +1,79 @@
 <?php
-$user = UserData::getById(Session::getUID());
-$grades = UnidadMedidaData::getAll();
+$unidades = UnidadMedidaData::getAll();
 ?>
-<section class="content-header">
-<a href='./?view=newunidades' class='btn btn-default pull-right'><i class='glyphicon glyphicon-plus-sign'></i> Agregar</a>
-			<h1><i class="fa fa-th-list"></i> Unidades de Medida</h1>
-</section>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				<h1 class="m-0"><i class='fa fa-th-list'></i> Unidad de medida</h1>
+			</div><!-- /.col -->
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="#">Catalogos</a></li>
+					<li class="breadcrumb-item active">Unidades</li>
+				</ol>
+			</div><!-- /.col -->
+		</div><!-- /.row -->
+	</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
 <section class="content">
-<div class="row">
-
-	<div class="col-md-12">
-	<?php if(isset($_COOKIE["gradeupdated"])):?>
-			<p class="alert alert-success"><i class='glyphicon glyphicon-ok-sign'></i> La forma de pago <b><?php echo $_COOKIE["gradeupdated"]; ?></b> ha sido actualizada exitosamente.</p>
-		<?php 
-		setcookie("gradeupdated","",time()-18600);
-		endif; ?>
-
-	<?php if(isset($_COOKIE["gradedeleted"])):?>
-			<p class="alert alert-danger"><i class='glyphicon glyphicon-minus-sign'></i> La forma de pago <b><?php echo $_COOKIE["gradedeleted"]; ?></b> ha sido eliminada exitosamente.</p>
-		<?php 
-		setcookie("gradedeleted","",time()-18600);
-		endif; ?>
-		<?php if(isset($_COOKIE["gradeadded"])):?>
-			<p class="alert alert-info"><i class='glyphicon glyphicon-ok-sign'></i> La forma de pago <b><?php echo $_COOKIE["gradeadded"]; ?></b> ha sido agregada exitosamente.</p>
-		<?php 
-		setcookie("gradeadded","",time()-18600);
-		endif; ?>
-<?php if(count($grades)>0):?>
-
-<div class="box box-solid box-primary">
-                                <div class="box-header">
-                                    <h3 class="box-title"></h3>
-                                </div>
-                                <div class="box-body table-responsive">
-<table class="table table-bordered table-hover datatable">
-<thead>
-	<th>Nombre</th>
-	<th>Sigla</th>
-	<th></th>
-</thead>
-<?php foreach($grades as $career):?>
-<tr>
-	<td><b><?php echo $career->name; ?></b></td>
-	<td><b><?php echo $career->sigla; ?></b></td>
-	<td style="width:90px;">
-
-		
-		<a href="./?view=editunidades&id=<?php echo $career->id; ?>" class="btn btn-warning btn-sm"><i class="glyphicon glyphicon-pencil"></i></a>
-		<a href="#" id="del-<?php echo $career->id; ?>" class="btn btn-sm btn-danger hide"><i class='glyphicon glyphicon-trash'></i></a>
-<!--		<a href="./?view=hidecategory&id=<?php echo $career->id; ?>" class="btn btn-sm btn-default tip" title="Desactivar Categoria"><i class='glyphicon glyphicon-eye-close'></i></a> -->
-<script>
-	$("#del-<?php echo $career->id?>").click(function(){
-		c = confirm("Seguro quieres eliminar ??");
-		if(c==true){
-			window.location = "./?view=delgrupounidades&id=<?php echo $career->id; ?>";
-		}
-	});
-</script>
-	</td>
-</tr>
-<?php endforeach; ?>
-</table>
-</div>
-</div>
-<?php else: // no careers ?>
-<div class="jumbotron">
-	<h2><i class="glyphicon glyphicon-minus-sign"></i> No hay grupo de unidades registrados </h2>
-</div>
-<?php endif; ?>
+	<div class="container-fluid col-md-8">
+		<div class="card card-default">
+			<div class="card-header">
+				<div class="row">
+					<div class="col-md-6">
+						<h4>Lista unidades</h4>
+					</div>
+					<div class="col-md-6" style="display: flex; justify-content: right;">
+						<div class="btn-group float-sm-right">
+							<button id="openModalAgregarUnidad" class="btn btn-primary">
+								<i class='fas fa-plus'></i>
+								Agregar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+				<div class="row" style="display: flex; justify-content: center;">
+					<div class="col-md-12">
+						<?php if (count($unidades) > 0): ?>
+							<table class="table table-bordered table-hover datatable">
+								<thead class="thead-dark">
+									<th>Nombre</th>
+									<th>Sigla</th>
+									<th>Acciones</th>
+								</thead>
+								<?php foreach ($unidades as $unidad): ?>
+									<tr>
+										<td><b><?php echo $unidad->name; ?></b></td>
+										<td><b><?php echo $unidad->sigla; ?></b></td>
+										<td style="width:90px;">
+											<button data-id="<?= $unidad->id ?>"
+												class="btn btn-warning btn-sm edit-unidad" title="Editar Unidad">
+												<i class="fas fa-pencil-alt"></i>
+											</button>
+											<!-- <a href="./?view=hidecategory&id=<?php echo $unidad->id; ?>" id="del-<?php echo $unidad->id; ?>" class="btn btn-sm btn-danger hide">
+														<i class='fa fa-power-off img-circle'></i>
+													</a> -->
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</table>
+						<?php else: ?>
+							<div class="callout callout-info">
+								<h2><i class="fas fa-minus-circle"></i> No hay grupo de unidades registrados
+								</h2>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 </section>

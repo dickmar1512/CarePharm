@@ -3,13 +3,13 @@
     {
     	$('#imprimir').hide();
       	$('#div_opciones').hide(); 
-	    	$('.main-footer').hide();    	
+	    $('.main-footer').hide();    	
       	// $('.logo').hide();
       	window.print();
 
       	$('#imprimir').show();
       	$('#div_opciones').show();         
-	    	$('.main-footer').show();
+	    $('.main-footer').show();
       	// $('.logo').show(); 
     }
 </script>

@@ -8,14 +8,34 @@
      return doc;
  }
 
+ // Función para calcular la altura dinámica del PDF
+function calcularAlturaDinamica(datosVenta) {
+    let alturaEstimada = 80; // Altura base para header y datos del cliente
+    
+    // Agregar altura por cada item en el detalle (aproximadamente 5mm por fila)
+    alturaEstimada += (datosVenta.detalles.length * 5) + 20; // +20 para headers de tabla
+    
+    // Agregar altura para la sección de totales y QR (aproximadamente 40mm)
+    alturaEstimada += 40;
+    
+    // Agregar altura para información adicional (cajero, medio de pago, etc.)
+    alturaEstimada += 45;
+    
+    // Altura mínima de 200mm
+    return Math.max(200, alturaEstimada);
+}
+
  // Función para generar el ticket
  $('#imprimir80mm').on('click', async () => {
     var dstosVenta = JSON.parse($("#datosComprobante").val());
+
+    // Calcular altura dinámica
+    const alturaCalculada = calcularAlturaDinamica(dstosVenta);
      // Crear un nuevo documento PDF
      const doc = new jsPDF({
          orientation: 'portrait', // Orientación vertical
          unit: 'mm', // Unidad en milímetros
-         format: [80, 200] // Tamaño del ticket: 80mm de ancho y 200mm de alto
+         format: [80, alturaCalculada] // Tamaño del ticket: 80mm de ancho y 200mm de alto
      });
 
      // Aplicar márgenes personalizados
@@ -175,20 +195,56 @@
          });                
 
          const finalY2 = doc.lastAutoTable.finalY + 5;
+         doc.setFont("helvetica", "bold");
+         doc.setFontSize(8);
          doc.text("Consulte y/o descargue su comprobante electrónico en \n www.sunat.gob.pe, utilizando su clave SOL", 40, finalY2,{ align: 'center', fontStyle: 'bold', lineHeightFactor: 1, fontSize: 7 });
-         doc.text("CAJERO: " + dstosVenta.cajero, 2, finalY2+7,{ align: 'left', fontStyle: 'bold', fontSize: 10 });    
+         doc.text("CAJERO: " + (dstosVenta.cajero).toUpperCase(), 2, finalY2+7,{ align: 'left', fontStyle: 'bold', fontSize: 10 }); 
+         
+         let medioPago = '';
+         switch (dstosVenta.sell.tipo_pago){
+            case '1':
+                medioPago = "EFECTIVO";
+                break;
+            case '2':
+                medioPago = "PLIN";
+                break;
+			case '3':
+				medioPago = "YAPE";
+				break;
+			case '4':
+				medioPago = "TARJETA DEBITO";
+				break;
+			case '5':
+				medioPago = "TARJETA CREDITO";
+				break;	
+			default:
+				medioPago = "OTRO MEDIO DE PAGO";
+				break;				
+		}
+
+         if(dstosVenta.pagoParcial.id == 0){
+           doc.setFont("helvetica", "bold");
+           doc.setFontSize(8);
+           doc.text("PAGO " + medioPago +": " + parseFloat(dstosVenta.sell.total).toFixed(2), 2, finalY2+10);  
+         }
+         else{
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8);
+            doc.text("PAGO " + medioPago +": " + (parseFloat(dstosVenta.sell.total) - parseFloat(dstosVenta.pagoParcial.importepp)).toFixed(2), 2, finalY2+10);
+            doc.text("PAGO EFECTIVO: " + (dstosVenta.pagoParcial.importepp), 2, finalY2+13); 
+         }
 
          // Generar el PDF como una URL de datos
          const pdfData = doc.output('datauristring');
 
          // Abrir el modal;
         Swal.fire({
-            title: '<h3>Comprobante: '+ dstosVenta.venta.SERIE + '-'+dstosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + fechaEmisionFormateada + ' ' + dstosVenta.comp_cab.horEmision + '</h3>', // Título de la ventana modal
+            title: '<h5>Comprobante: '+ dstosVenta.venta.SERIE + '-'+dstosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + fechaEmisionFormateada + ' ' + dstosVenta.comp_cab.horEmision + '</h5>', // Título de la ventana modal
             html: `
                 <iframe 
                     src="${pdfData}" 
                     width="100%" 
-                    height="500px" 
+                    height="550px" 
                     style="border: none;"
                 ></iframe>
             `,

@@ -26,7 +26,7 @@
 			<div class="card-body">
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" method="post" id="addproduct" action="./?view=addproductxls" role="form">
+            <form class="form-horizontal" method="post" id="addproduct" action="./?view=addproductxls" role="form" enctype="multipart/form-data"
               <div class="form-group">
                 <label for="image" class="control-label">Seleccione Archivo Excel</label>
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
@@ -42,6 +42,17 @@
             </form>
           </div>
         </div>
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success">
+                Se importaron <?php echo $_GET['rows'] ?> productos correctamente.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger">
+                Error: <?php echo htmlspecialchars($_GET['error']) ?>
+            </div>
+        <?php endif; ?>
       </div>
     </div>  
   </div>

@@ -1,6 +1,5 @@
-use PhpOffice\PhpSpreadsheet\IOFactory;
-
 <?php
+use PhpOffice\PhpSpreadsheet\IOFactory;
 require 'vendor/autoload.php'; // Asegúrate de tener PhpSpreadsheet instalado
 
 
