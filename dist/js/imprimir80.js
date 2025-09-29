@@ -27,10 +27,10 @@ function calcularAlturaDinamica(datosVenta) {
 
  // Función para generar el ticket
  $('#imprimir80mm').on('click', async () => {
-    var dstosVenta = JSON.parse($("#datosComprobante").val());
+    var datosVenta = JSON.parse($("#datosComprobante").val());
 
     // Calcular altura dinámica
-    const alturaCalculada = calcularAlturaDinamica(dstosVenta);
+    const alturaCalculada = calcularAlturaDinamica(datosVenta);
      // Crear un nuevo documento PDF
      const doc = new jsPDF({
          orientation: 'portrait', // Orientación vertical
@@ -50,12 +50,12 @@ function calcularAlturaDinamica(datosVenta) {
      doc.addImage(imgLogo, 'PNG', 15, 2, 50, 15); // (imagen, formato, x, y, ancho, alto) 30mm de ancho y 10mm de alto
 
      // Agregar datos empresa
-     doc.text(dstosVenta.empresa.Emp_RazonSocial, 40, 20,{ align: 'center', fontStyle: 'bold'}); // 40x 15y 
-     doc.text(dstosVenta.empresa.Emp_Direccion+" | Cel.: "+dstosVenta.empresa.Emp_Telefono, 40, 23, { align: 'center', fontStyle: 'bold'}); //40 18
-     doc.text("Correo: "+dstosVenta.empresa.Emp_Celular, 27, 26); // 27x 21y
+     doc.text(datosVenta.empresa.Emp_RazonSocial, 40, 20,{ align: 'center', fontStyle: 'bold'}); // 40x 15y 
+     doc.text(datosVenta.empresa.Emp_Direccion+" | Cel.: "+datosVenta.empresa.Emp_Telefono, 40, 23, { align: 'center', fontStyle: 'bold'}); //40 18
+     doc.text("Correo: "+datosVenta.empresa.Emp_Celular, 27, 26); // 27x 21y
      
      //Tipo documento
-     var docLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "BOLETA ELECTRONICA" : "FACTURA ELECTRONICA";
+     var docLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "BOLETA ELECTRONICA" : "FACTURA ELECTRONICA";
 
      // Crear una tabla con 3 filas
      doc.autoTable({
@@ -63,9 +63,9 @@ function calcularAlturaDinamica(datosVenta) {
          startX: 10,
          head: [], // Sin encabezado
          body: [
-             ["RUC: "+dstosVenta.empresa.Emp_Ruc], // Primera fila
+             ["RUC: "+datosVenta.empresa.Emp_Ruc], // Primera fila
              [docLabel], // Segunda fila (fondo negro y texto blanco)
-             [dstosVenta.venta.SERIE+" - "+dstosVenta.venta.COMPROBANTE] // Tercera fila
+             [datosVenta.venta.SERIE+" - "+datosVenta.venta.COMPROBANTE] // Tercera fila
          ],
          theme: 'grid', // Estilo de la tabla
          styles: { 
@@ -94,18 +94,18 @@ function calcularAlturaDinamica(datosVenta) {
          tableWidth: 'wrap'
      });
 
-     var nomLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "SEÑOR(ES)        " : "RAZÓN SOCIAL  ";
-     var docLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "DNI N°" : "RUC";
+     var nomLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "SEÑOR(ES)        " : "RAZÓN SOCIAL  ";
+     var docLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "DNI N°" : "RUC";
 
-     let fechaEmisionFormateada = formatearFecha(dstosVenta.comp_cab.fecEmision);
+     let fechaEmisionFormateada = formatearFecha(datosVenta.comp_cab.fecEmision);
 
-     doc.text("FECHA EMISION: " + fechaEmisionFormateada+"  "+dstosVenta.comp_cab.horEmision, 5, 55); //5 50
-     doc.text(nomLabel + ": " + dstosVenta.comp_cab.rznSocialUsuario, 5, 58);// 5 53
-     doc.text(docLabel + "                     : " + dstosVenta.comp_cab.numDocUsuario, 5, 61); // 5 56
-     doc.text("DIRECCIÓN        : " + dstosVenta.comp_aca.desDireccionCliente, 5, 64); // 5 59
+     doc.text("FECHA EMISION: " + fechaEmisionFormateada+"  "+datosVenta.comp_cab.horEmision, 5, 55); //5 50
+     doc.text(nomLabel + ": " + datosVenta.comp_cab.rznSocialUsuario, 5, 58);// 5 53
+     doc.text(docLabel + "                     : " + datosVenta.comp_cab.numDocUsuario, 5, 61); // 5 56
+     doc.text("DIRECCIÓN        : " + datosVenta.comp_aca.desDireccionCliente, 5, 64); // 5 59
 
      // Datos de la tabla
-     const datosTabla = dstosVenta.detalles;
+     const datosTabla = datosVenta.detalles;
 
      // Crear la tabla con jspdf-autotable
      doc.autoTable({
@@ -131,7 +131,7 @@ function calcularAlturaDinamica(datosVenta) {
      const finalY = doc.lastAutoTable.finalY + 5; // Posición después de la tabla
 
      // Generar el código QR
-     const qrData = dstosVenta.empresa.Emp_Ruc + "|" + dstosVenta.venta.TIPO + "|" + dstosVenta.venta.SERIE + "-"+dstosVenta.venta.COMPROBANTE + "|0.00|" + dstosVenta.comp_cab.sumImpVenta + "|" + dstosVenta.comp_cab.fecEmision+" "+ dstosVenta.comp_cab.fecEmision + "|";
+     const qrData = datosVenta.empresa.Emp_Ruc + "|" + datosVenta.venta.TIPO + "|" + datosVenta.venta.SERIE + "-"+datosVenta.venta.COMPROBANTE + "|0.00|" + datosVenta.comp_cab.sumImpVenta + "|" + datosVenta.comp_cab.fecEmision+" "+ datosVenta.comp_cab.horEmision + "|";
      const qrCanvas = document.createElement('canvas');
 
      QRCode.toCanvas(qrCanvas, qrData, { width: 50, margin: 1 }, (error) => {
@@ -145,11 +145,11 @@ function calcularAlturaDinamica(datosVenta) {
 
          // Totales
          const datosTablaTotales = [                
-             {desc:"OPE.EXONERADA", imp: dstosVenta.comp_cab.sumTotValVenta},
+             {desc:"OPE.EXONERADA", imp: datosVenta.comp_cab.sumTotValVenta},
              {desc:"OPE.INAFECTA", imp:0.00},
              {desc:"OPE.GRAVADA", imp:0.00},
              {desc:"IGV", imp:0.00},
-             {desc:"IMPORTE TOTAL",imp: dstosVenta.comp_cab.sumImpVenta}
+             {desc:"IMPORTE TOTAL",imp: datosVenta.comp_cab.sumImpVenta}
          ];
 
          // Definir la estructura de la tabla con el QR en una celda y los totales en otra
@@ -162,7 +162,7 @@ function calcularAlturaDinamica(datosVenta) {
              ["OPE.GRAVADA", datosTablaTotales[2].imp.toFixed(2)],
              ["IGV", datosTablaTotales[3].imp.toFixed(2)],
              ["IMPORTE TOTAL", datosTablaTotales[4].imp],
-             [{ content: "SON: " + dstosVenta.numLetra, colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }]
+             [{ content: "SON: " + datosVenta.numLetra, colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }]
          ];
 
          doc.autoTable({
@@ -198,10 +198,10 @@ function calcularAlturaDinamica(datosVenta) {
          doc.setFont("helvetica", "bold");
          doc.setFontSize(8);
          doc.text("Consulte y/o descargue su comprobante electrónico en \n www.sunat.gob.pe, utilizando su clave SOL", 40, finalY2,{ align: 'center', fontStyle: 'bold', lineHeightFactor: 1, fontSize: 7 });
-         doc.text("CAJERO: " + (dstosVenta.cajero).toUpperCase(), 2, finalY2+7,{ align: 'left', fontStyle: 'bold', fontSize: 10 }); 
+         doc.text("CAJERO: " + (datosVenta.cajero).toUpperCase(), 2, finalY2+7,{ align: 'left', fontStyle: 'bold', fontSize: 10 }); 
          
          let medioPago = '';
-         switch (dstosVenta.sell.tipo_pago){
+         switch (datosVenta.sell.tipo_pago){
             case '1':
                 medioPago = "EFECTIVO";
                 break;
@@ -222,16 +222,16 @@ function calcularAlturaDinamica(datosVenta) {
 				break;				
 		}
 
-         if(dstosVenta.pagoParcial.id == 0){
+         if(datosVenta.pagoParcial.id == 0){
            doc.setFont("helvetica", "bold");
            doc.setFontSize(8);
-           doc.text("PAGO " + medioPago +": " + parseFloat(dstosVenta.sell.total).toFixed(2), 2, finalY2+10);  
+           doc.text("PAGO " + medioPago +": " + parseFloat(datosVenta.sell.total).toFixed(2), 2, finalY2+10);  
          }
          else{
             doc.setFont("helvetica", "bold");
             doc.setFontSize(8);
-            doc.text("PAGO " + medioPago +": " + (parseFloat(dstosVenta.sell.total) - parseFloat(dstosVenta.pagoParcial.importepp)).toFixed(2), 2, finalY2+10);
-            doc.text("PAGO EFECTIVO: " + (dstosVenta.pagoParcial.importepp), 2, finalY2+13); 
+            doc.text("PAGO " + medioPago +": " + (parseFloat(datosVenta.sell.total) - parseFloat(datosVenta.pagoParcial.importepp)).toFixed(2), 2, finalY2+10);
+            doc.text("PAGO EFECTIVO: " + (datosVenta.pagoParcial.importepp), 2, finalY2+13); 
          }
 
          // Generar el PDF como una URL de datos
@@ -239,7 +239,7 @@ function calcularAlturaDinamica(datosVenta) {
 
          // Abrir el modal;
         Swal.fire({
-            title: '<h5>Comprobante: '+ dstosVenta.venta.SERIE + '-'+dstosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + fechaEmisionFormateada + ' ' + dstosVenta.comp_cab.horEmision + '</h5>', // Título de la ventana modal
+            title: '<h5>Comprobante: '+ datosVenta.venta.SERIE + '-'+datosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + fechaEmisionFormateada + ' ' + datosVenta.comp_cab.horEmision + '</h5>', // Título de la ventana modal
             html: `
                 <iframe 
                     src="${pdfData}" 

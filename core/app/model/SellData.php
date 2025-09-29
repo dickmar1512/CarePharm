@@ -92,6 +92,9 @@ class SellData {
 		Executor::doit($sql);
 	}
 	public function update_pagoParcial(){
+
+		$this->addPagoParcial();
+		$this->getImportePagoParcial($this->id);
 		$sql = "update pago_parcial set importe=$this->importepp where sellid=$this->id";
 		Executor::doit($sql);
 	}

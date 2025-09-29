@@ -83,7 +83,6 @@ class PersonData
 		Executor::doit($sql);
 	}
 
-
 	public static function getById($id)
 	{
 		$sql = "select * from " . self::$tablename . " where id=$id";
@@ -160,7 +159,6 @@ class PersonData
 		}
 		return $array;
 	}
-
 
 	public static function getProviders()
 	{

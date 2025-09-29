@@ -130,7 +130,7 @@
 														<?php
 													}
 												} else { ?>
-													<a href="./?view=ordenventa3&id=<?php echo $sell->id; ?>"
+													<a href="./?view=notaventa&id=<?php echo $sell->id; ?>"
 														class="btn btn-xs btn-default"><i class="fas fa-eye"></i></a>
 												<?php }
 											}

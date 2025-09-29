@@ -1,61 +1,20 @@
-<?php
-if ($_GET["tipodoc"] == 3):
-	$venta = Boleta2Data::getByExtra($_GET["id"]);
-	//$img = "img/bol.png";
-    $desComprobante = "BOLETA ELECTRÓNICA";
+<?php 
+$orden_id = $_GET["id"];
+$orden = SellData::getById($orden_id);
+$detalle = OperationData::getAllProductsBySellId($orden->id);
+$cliente = PersonData::getById($orden->person_id);
+$empresa = EmpresaData::getDatos();
+
+$cajero = null;
+$cajero = UserData::getById($orden->user_id)->username;
+
+if (strlen($cliente->numero_documento) == 8):
 	$docLabel = "DNI";
 	$nomLabel = "SEÑOR(ES)";
 else:
-	$venta = Factura2Data::getByExtra($_GET["id"]);
-	//$img = "img/fac.png";
-    $desComprobante = "FACTURA ELECTRÓNICA";
 	$docLabel = "RUC";
 	$nomLabel = "RAZON SOCIAL";
 endif;
-
-$comp_cab = Cab_1_2Data::getById($venta->id, $_GET["tipodoc"]);
-$comp_aca = Aca_1_2Data::getById($venta->id, $_GET["tipodoc"]);
-$detalles = Det_1_2Data::getById($venta->id, $_GET["tipodoc"]);
-$comp_tri = Tri_1_2Data::getById($venta->id, $_GET["tipodoc"]);
-$comp_ley = Ley_1_2Data::getById($venta->id, $_GET["tipodoc"]);
-$sellTemp = SellData::getById($venta->EXTRA1);
-
-$sell = (object)[
-	'id'=> $sellTemp->id,
-	'person_id'=> $sellTemp->person_id,
-	'user_id'=> $sellTemp->user_id,
-	'total'=> $sellTemp->total,
-	'cash'=> $sellTemp->cash,
-	'discount'=> $sellTemp->discount,
-	'created_at'=> $sellTemp->created_at,
-	'tipo_comprobante'=> $sellTemp->tipo_comprobante,
-	'serie'=> $sellTemp->serie,
-	'comprobante'=> $sellTemp->comprobante,
-	'estado'=> $sellTemp->estado,
-	'tipo_pago'=> $sellTemp->tipo_pago,
-	'box_id'=> $sellTemp->box_id,
-	'operation_type_id'=> $sellTemp->operation_type_id,
-	'observacion'=> $sellTemp->observacion,
-	'forma_pago'=> $sellTemp->forma_pago
-];
-
-$pagoParcial = SellData::getImportePagoParcial($venta->EXTRA1);
-
-$datoPagoParcial = [
-    'id' => $pagoParcial[0]->id ?? 0,
-    'importepp' => $pagoParcial[0]->importepp ?? 0
-];
-
-$operations = OperationData::getAllProductsBySellId($_GET["id"]);
-
-$cajero = null;
-$cajero = UserData::getById($sell->user_id)->username;
-$empresa = EmpresaData::getDatos();
-
-$fechaObj = new DateTime($comp_cab->fecEmision);
-$fechaFormateada = $fechaObj->format('d/m/Y');
-
-$selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -85,29 +44,8 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                     <i class="fas fa-arrow-left"></i> Volver
                 </button>
 
-                <button class="btn btn-primary" id="imprimir80mm">
+                <button class="btn btn-primary" id="imprimirNV80mm">
                     <i class="fas fa-print"></i> Imprimir
-                </button>
-
-                <div class="form-group">
-                    <label class="form-label" for="selTipoPago">Tipo de Pago</label>
-                    <select id="selTipoPago" class="form-control">
-                        <option value="1" <?= $selected == 1 ? 'selected' : '' ?>>💵 Efectivo</option>
-                        <option value="2" <?= $selected == 2 ? 'selected' : '' ?>>📱 Plin</option>
-                        <option value="3" <?= $selected == 3 ? 'selected' : '' ?>>📱 Yape</option>
-                        <option value="4" <?= $selected == 4 ? 'selected' : '' ?>>💳 T. Débito</option>
-                        <option value="5" <?= $selected == 5 ? 'selected' : '' ?>>💳 T. Crédito</option>
-                    </select>
-                    <input type="hidden" id="sellid" name="sellid" value="<?=$venta->EXTRA1?>">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="importeParcial">Pago Parcial</label>
-                    <input type="text" id="importeParcial" name="importeParcial" class="form-control" placeholder="0.00" value="<?= number_format($datoPagoParcial['importepp'], 2, '.', ',') ?>">
-                </div>
-
-                <button class="btn btn-primary" id="actualizarTipoPago">
-                    <i class="fas fa-sync-alt"></i> Actualizar
                 </button>
             </div>
         </div>
@@ -128,9 +66,9 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                 <div class="document-info">
                     <div style="font-size: 0.85rem;"><strong>RUC: <?php echo $empresa->Emp_Ruc ?></strong></div>
                     <div style="margin: 6px 0;">
-                        <label for="numeroComprobante" style="font-size: 0.9rem;"><?php echo $desComprobante;?></label>
+                        <label for="numeroComprobante" style="font-size: 0.9rem;">NOTA DE VENTA</label>
                     </div>
-                    <div class="document-number" id="numeroComprobante" name="numeroComprobante"><?php echo $venta->SERIE . "-" . $venta->COMPROBANTE; ?></div>
+                    <div class="document-number" id="numeroComprobante" name="numeroComprobante"><?php echo $orden->serie . "-" . $orden->comprobante; ?></div>
                 </div>
             </div>
 
@@ -138,19 +76,19 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
             <div class="customer-info">
                 <div class="info-row">
                     <span class="info-label"><?= $docLabel ?></span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->numDocUsuario; ?></span>
+                    <span class="info-value"><?php echo ": " . $cliente->numero_documento; ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label"><?= $nomLabel ?></span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->rznSocialUsuario; ?></span>
+                    <span class="info-value"><?php echo ": " . $cliente->lastname . ' ' . $cliente->name; ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">DIRECCIÓN</span>
-                    <span class="info-value"><?php echo ": " . $comp_aca->desDireccionCliente; ?></span>
+                    <span class="info-value"><?php echo ": " . $cliente->address1; ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">FECHA:</span>
-                    <span class="info-value"><?php echo ": " . $fechaFormateada . "  " . $comp_cab->horEmision; ?></span>
+                    <span class="info-value"><?php echo ": " . $orden->created_at; ?></span>
                 </div>
             </div>
 
@@ -160,16 +98,18 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                     <tr>
                         <th>CANT</th>
                         <th>DESCRIPCIÓN</th>
-                        <th>P.U.</th>
+                        <th>P. UNIT.</th>
                         <th>TOTAL</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
 						$total = 0;
-						foreach ($operations as $ope) {
+						$productos = [];
+						foreach ($detalle as $ope) {
                             $product = ProductData::getById($ope->product_id);
-                            $subtotal = $ope->q * $ope->prec_alt;
+                            $subtotal = $ope->q * $ope->prec_alt;                            
+							$productos[] = array("id" => $ope->id, "ctdUnidadItem" => $ope->q, "desItem" =>$product->name, "mtoValorUnitario" => $ope->prec_alt, "mtoValorVentaItem" =>  $subtotal);
 					?>
                     <tr>
                         <td class="quantity-cell"><?php echo $ope->q; ?></td>
@@ -186,22 +126,17 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                     </tr>
                     <?php
 						    $total = $subtotal + $total;
-                            $totalConDesc = $total - $comp_cab->sumDescTotal;
+                            $totalConDesc = $total - $orden->discount;
                             $numLetra = NumeroLetras::convertir(number_format($totalConDesc, 2, '.', ','));
 						}
                         
                         $datosComprobante = array(
-                            "venta"       => $venta,
-                            "detalles"    => $detalles,
-                            "comp_cab"    => $comp_cab,
-                            "comp_aca"    => $comp_aca,
-                            "comp_tri"    => $comp_tri,
-                            "comp_ley"    => $comp_ley,
+							"cliente"      => $cliente,
+                            "venta"       => $orden,
+                            "detalles"    => $productos,
                             "empresa"     => $empresa,
                             "cajero"      => $cajero,
-                            "numLetra"    => $numLetra,
-                            "sell"        => $sell,
-                            "pagoParcial" => $datoPagoParcial
+                            "numLetra"    => $numLetra
                         );
 					?>
                 </tbody>
@@ -233,7 +168,7 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                         SON: <?php echo $numLetra; ?>
                     </div>
                     <?php
-						echo "<input type='hidden' id='datosComprobante' name='datosComprobante' value='" . json_encode($datosComprobante) . "'>";
+						echo "<input type='hiddenxx' id='datosComprobante' name='datosComprobante' value='" . json_encode($datosComprobante) . "'>";
 					?>
                 </div>
             </div>

@@ -124,7 +124,7 @@
 				setcookie("selled","selled");
 
 
-				print "<script>window.location='?view=ordenventa&id=$s[1]';</script>";
+				print "<script>window.location='?view=notaventa&id=$s[1]';</script>";
 			}
 		}
 	}

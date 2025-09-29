@@ -15,7 +15,7 @@
         icon: 'info', // Puede ser 'success', 'error', 'warning', 'info', 'question'
         confirmButtonText: 'Aceptar'
     });*/
-    var dstosVenta = JSON.parse($("#datosComprobante").val());      
+    var datosVenta = JSON.parse($("#datosComprobante").val());      
     // Crear un nuevo documento PDF
     const doc = new jsPDF({
         orientation: 'portrait', // Orientación vertical
@@ -34,12 +34,12 @@
     // doc.addImage(imgLogo, 'PNG', 50, 5, 50, 15); // Imagen centrada y más grande
 
     // // Agregar datos empresa (centrados y con más espacio)
-    // doc.text(dstosVenta.empresa.Emp_RazonSocial, 74, 25, {align: 'center', fontStyle: 'bold'});
-    // doc.text(dstosVenta.empresa.Emp_Direccion+" | Cel.: "+dstosVenta.empresa.Emp_Telefono, 74, 30, {align: 'center', fontStyle: 'bold'});
-    // doc.text("Correo: "+dstosVenta.empresa.Emp_Celular, 74, 35, {align: 'center'});
+    // doc.text(datosVenta.empresa.Emp_RazonSocial, 74, 25, {align: 'center', fontStyle: 'bold'});
+    // doc.text(datosVenta.empresa.Emp_Direccion+" | Cel.: "+datosVenta.empresa.Emp_Telefono, 74, 30, {align: 'center', fontStyle: 'bold'});
+    // doc.text("Correo: "+datosVenta.empresa.Emp_Celular, 74, 35, {align: 'center'});
 
     // // Tipo documento
-    // var docLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "BOLETA ELECTRONICA" : "FACTURA ELECTRONICA";
+    // var docLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "BOLETA ELECTRONICA" : "FACTURA ELECTRONICA";
 
     // // Crear una tabla con 3 filas (más ancha)
     // doc.autoTable({
@@ -47,9 +47,9 @@
     //     startX: 20,
     //     head: [],
     //     body: [
-    //         ["RUC: "+dstosVenta.empresa.Emp_Ruc],
+    //         ["RUC: "+datosVenta.empresa.Emp_Ruc],
     //         [docLabel],
-    //         [dstosVenta.venta.SERIE+" - "+dstosVenta.venta.COMPROBANTE]
+    //         [datosVenta.venta.SERIE+" - "+datosVenta.venta.COMPROBANTE]
     //     ],
     //     theme: 'grid',
     //     styles: { 
@@ -79,11 +79,11 @@
     const imgLogo = 'dist/img/logo2.jpg';
 
     // Datos para la tercera columna (documento)
-    const docType = (dstosVenta.comp_cab.TIPO_DOC == 3) ? 'BOLETA ELECTRONICA' : 'FACTURA ELECTRONICA';
+    const docType = (datosVenta.comp_cab.TIPO_DOC == 3) ? 'BOLETA ELECTRONICA' : 'FACTURA ELECTRONICA';
     const docInfo = [
-        'RUC: ' + dstosVenta.empresa.Emp_Ruc,
+        'RUC: ' + datosVenta.empresa.Emp_Ruc,
         docType,
-        dstosVenta.venta.SERIE + ' - ' + dstosVenta.venta.COMPROBANTE
+        datosVenta.venta.SERIE + ' - ' + datosVenta.venta.COMPROBANTE
     ];
 
     // Crear una tabla con 1 fila y 3 columnas
@@ -96,9 +96,9 @@
                 { content: '', rowSpan: 3 }, // Celda para el logo
                 { 
                     content: [
-                        { content: dstosVenta.empresa.Emp_RazonSocial, styles: { fontStyle: 'bold' } },
-                        dstosVenta.empresa.Emp_Direccion + ' | Cel.: ' + dstosVenta.empresa.Emp_Telefono,
-                        'Correo: ' + dstosVenta.empresa.Emp_Celular
+                        { content: datosVenta.empresa.Emp_RazonSocial, styles: { fontStyle: 'bold' } },
+                        datosVenta.empresa.Emp_Direccion + ' | Cel.: ' + datosVenta.empresa.Emp_Telefono,
+                        'Correo: ' + datosVenta.empresa.Emp_Celular
                     ],
                     styles: { halign: 'center' }
                 },
@@ -147,16 +147,16 @@
         tableWidth: 'wrap'
     });
 
-    var nomLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "SEÑOR(ES)        " : "RAZÓN SOCIAL  ";
-    var docLabel = (dstosVenta.comp_cab.TIPO_DOC== 3) ? "DNI N°                  " : "RUC";
+    var nomLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "SEÑOR(ES)        " : "RAZÓN SOCIAL  ";
+    var docLabel = (datosVenta.comp_cab.TIPO_DOC== 3) ? "DNI N°                  " : "RUC";
 
-    doc.text("FECHA EMISION: " + dstosVenta.comp_cab.fecEmision+" | "+dstosVenta.comp_cab.horEmision, 15, 70);
-    doc.text(nomLabel + ": " + dstosVenta.comp_cab.rznSocialUsuario, 15, 75);
-    doc.text(docLabel + "                     : " + dstosVenta.comp_cab.numDocUsuario, 15, 80);
-    doc.text("DIRECCIÓN        : " + dstosVenta.comp_aca.desDireccionCliente, 15, 85);
+    doc.text("FECHA EMISION: " + datosVenta.comp_cab.fecEmision+" | "+datosVenta.comp_cab.horEmision, 15, 70);
+    doc.text(nomLabel + ": " + datosVenta.comp_cab.rznSocialUsuario, 15, 75);
+    doc.text(docLabel + "                     : " + datosVenta.comp_cab.numDocUsuario, 15, 80);
+    doc.text("DIRECCIÓN        : " + datosVenta.comp_aca.desDireccionCliente, 15, 85);
 
     // Datos de la tabla
-    const datosTabla = dstosVenta.detalles;
+    const datosTabla = datosVenta.detalles;
 
     // Crear la tabla con jspdf-autotable (más ancha)
     doc.autoTable({
@@ -180,7 +180,7 @@
     const finalY = doc.lastAutoTable.finalY + 10; // Más espacio después de la tabla
 
     // Generar el código QR (más grande)
-    const qrData = dstosVenta.empresa.Emp_Ruc + "|" + dstosVenta.venta.TIPO + "|" + dstosVenta.venta.SERIE + "-"+dstosVenta.venta.COMPROBANTE + "|0.00|" + dstosVenta.comp_cab.sumImpVenta + "|" + dstosVenta.comp_cab.fecEmision+" "+ dstosVenta.comp_cab.fecEmision + "|";
+    const qrData = datosVenta.empresa.Emp_Ruc + "|" + datosVenta.venta.TIPO + "|" + datosVenta.venta.SERIE + "-"+datosVenta.venta.COMPROBANTE + "|0.00|" + datosVenta.comp_cab.sumImpVenta + "|" + datosVenta.comp_cab.fecEmision+" "+ datosVenta.comp_cab.fecEmision + "|";
     const qrCanvas = document.createElement('canvas');
 
     QRCode.toCanvas(qrCanvas, qrData, { width: 80, margin: 1 }, (error) => {
@@ -193,11 +193,11 @@
         
         // Totales
         const datosTablaTotales = [                
-            {desc:"OPE.EXONERADA", imp: dstosVenta.comp_cab.sumTotValVenta},
+            {desc:"OPE.EXONERADA", imp: datosVenta.comp_cab.sumTotValVenta},
             {desc:"OPE.INAFECTA", imp:0.00},
             {desc:"OPE.GRAVADA", imp:0.00},
             {desc:"IGV", imp:0.00},
-            {desc:"IMPORTE TOTAL",imp: dstosVenta.comp_cab.sumImpVenta}
+            {desc:"IMPORTE TOTAL",imp: datosVenta.comp_cab.sumImpVenta}
         ];
 
         // Tabla resumen más ancha
@@ -210,7 +210,7 @@
             ["OPE.GRAVADA", datosTablaTotales[2].imp.toFixed(2)],
             ["IGV", datosTablaTotales[3].imp.toFixed(2)],
             ["IMPORTE TOTAL", datosTablaTotales[4].imp],
-            [{ content: "SON: " + dstosVenta.numLetra, colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }]
+            [{ content: "SON: " + datosVenta.numLetra, colSpan: 3, styles: { halign: 'left', fontStyle: 'bold' } }]
         ];
 
         doc.autoTable({
@@ -245,14 +245,14 @@
         const finalY2 = doc.lastAutoTable.finalY + 10;
         doc.text("Consulte y/o descargue su comprobante electrónico en \n www.sunat.gob.pe, utilizando su clave SOL", 
                 74, finalY2, {align: 'center', fontStyle: 'bold', lineHeightFactor: 1.5, fontSize: 9});
-        doc.text("CAJERO: " + dstosVenta.cajero, 15, finalY2+15, {align: 'left', fontStyle: 'bold', fontSize: 12});    
+        doc.text("CAJERO: " + datosVenta.cajero, 15, finalY2+15, {align: 'left', fontStyle: 'bold', fontSize: 12});    
 
         // Generar el PDF
         const pdfData = doc.output('datauristring');
 
         // Abrir el modal (ajustado para A5)
         Swal.fire({
-            title: '<h3>Comprobante: '+ dstosVenta.venta.SERIE + '-'+dstosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + dstosVenta.comp_cab.fecEmision + ' ' + dstosVenta.comp_cab.horEmision + '</h3>',
+            title: '<h3>Comprobante: '+ datosVenta.venta.SERIE + '-'+datosVenta.venta.COMPROBANTE + '  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha de Emisión: ' + datosVenta.comp_cab.fecEmision + ' ' + datosVenta.comp_cab.horEmision + '</h3>',
             html: `
                 <iframe 
                     src="${pdfData}" 

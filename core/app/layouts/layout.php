@@ -813,6 +813,7 @@
     <script src="dist/js/imprimir80.js" type="text/javascript"></script>
     <script src="dist/js/imprimirA5.js" type="text/javascript"></script>
     <script src="dist/js/imprimirA4.js" type="text/javascript"></script>
+    <script src="dist/js/imprimirNV80.js" type="text/javascript"></script>
 
     <script type="text/javascript">
          $(function () {
