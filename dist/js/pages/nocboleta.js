@@ -21,7 +21,7 @@ $("#buscarb").click(function () {
 			success: function (data) {
 				if (data)
 					console.log(data);
-				window.location.href = "./?view=notacreditoboletat&num=" + serieb + '-' + compb;
+				window.location.href = "./?view=notacredito&num=" + serieb + '-' + compb + '&tipodoc=3';
 			},
 		});
 	}

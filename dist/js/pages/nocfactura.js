@@ -21,7 +21,7 @@ $("#buscar").click(function () {
 
 			success: function (data) {
 				if (data)
-					window.location.href = "./?view=notacreditot&num=" + serie + '-' + comp;
+					window.location.href = "./?view=notacreditot&num=" + serie + '-' + comp + '&tipodoc=1';
 			},
 		});
 	}

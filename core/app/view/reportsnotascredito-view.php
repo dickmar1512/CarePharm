@@ -86,7 +86,7 @@
 								 ?>
 
 								<!-- <a href="SFS_v1.1/sunat_archivos/sfs/REPO/<?php echo $fac->RUC ?>-01-<?php echo $fac->SERIE ?>-<?php echo $fac->COMPROBANTE ?>.pdf" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-file-pdf">Ver</i> PDF</a> -->
-								<a href="./?view=notacreditot&num=<?php echo $nota_credito->SERIE . '-' . $nota_credito->COMPROBANTE ?>" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
+								<a href="./?view=notacreditot&num=<?php echo $nota_credito->SERIE . '-' . $nota_credito->COMPROBANTE ?>tipodoc=1" class="btn btn-info btn-xs"><i class="fa fa-file-pdf">Ver</i></a>
 							</td>
 						</tr>
 					<?php
