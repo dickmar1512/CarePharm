@@ -208,5 +208,25 @@ class PersonData
 		}
 		return $array;
 	}
+
+	public static function datosbyDocumento($numDocUsuario, $tipo)
+	{
+		$sql = "SELECT id, CONCAT(name,' ', lastname) as name, address1, ubigeo
+				FROM person
+				WHERE numero_documento = '".$numDocUsuario."' AND kind = 1 AND tipo_persona = $tipo LIMIT 1";
+		$query = Executor::doit($sql);
+		$found = null;
+		$data = new PersonData();
+		while ($r = $query[0]->fetch_array()) {
+			$data->id = $r['id'];
+			$data->name = $r['name'];
+			$data->address1 = $r['address1'];
+			$data->ubigeo = $r['ubigeo'];
+			$found = $data;
+			break;
+		}
+
+		return $found;
+	}
 }
 ?>

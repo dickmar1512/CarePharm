@@ -24,7 +24,7 @@ $(document).ready(function() {
     // Función para cargar un script dinámicamente con jQuery
     function loadScript(scriptName) {
         return $.ajax({
-            url: `dist/js/pages/${scriptName}`,
+            url: `dist/js/pages/${scriptName}?v=${Math.random()}`,
             dataType: "script",
             cache: true // Opcional: permite caché para mejorar rendimiento
         });
