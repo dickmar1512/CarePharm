@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class Not_1_2Data {
 	public static $tablename = "nota";
 	public $serieDocModifica;

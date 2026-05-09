@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class UserData {
 	public static $tablename = "user";
 	public $id;
@@ -13,6 +14,7 @@ class UserData {
 	public $is_caja;
 	public $is_dirtec;
 	public $is_desc;
+	public $image;
 	public $created_at;
 
 	public function Userdata(){

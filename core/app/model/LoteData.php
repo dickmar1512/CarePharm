@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class LoteData{
 	public static $tablename = "lote";
 

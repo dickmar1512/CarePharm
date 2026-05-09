@@ -1,7 +1,18 @@
 <?php
+#[AllowDynamicProperties]
 class ConfigurationData {
 	public static $tablename = "configuration";
-
+	public $id;
+	public $name;
+	public $lastname;
+	public $email;
+	public $image;
+	public $password;
+	public $created_at;
+	public $val;
+	public $short;
+	public $kind;
+	public $mail;
 
 	public function ConfigurationData(){
 		$this->name = "";

@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class ProductData {
 	public static $tablename = "product";
 	public $id;	
@@ -24,6 +25,9 @@ class ProductData {
 	public $price_may;
 	public $anaquel;
 	public $is_may;
+	public $cod_dig;
+	public $cod_digemid;
+    public $is_oficial;
 	
 	public function ProductData(){
 		$this->id = "";

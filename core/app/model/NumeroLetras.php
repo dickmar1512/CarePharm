@@ -10,6 +10,7 @@
  * @author AxiaCore S.A.S
  *
  */
+#[AllowDynamicProperties]
 class NumeroLetras
 {
     private static $UNIDADES = [

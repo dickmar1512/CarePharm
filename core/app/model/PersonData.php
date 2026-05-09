@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class PersonData
 {
 	public static $tablename = "person";
@@ -14,6 +15,11 @@ class PersonData
 	public $company;
 	public $password;
 	public $status;
+	public $image;
+	public $kind;
+	public $email;
+	public $username;
+	public $mail;
 	public $id;
 
 	public function PersonData()
@@ -82,6 +88,7 @@ class PersonData
 		$sql = "update " . self::$tablename . " set password=\"$this->password\" where id=$this->id";
 		Executor::doit($sql);
 	}
+
 
 	public static function getById($id)
 	{
@@ -159,6 +166,7 @@ class PersonData
 		}
 		return $array;
 	}
+
 
 	public static function getProviders()
 	{

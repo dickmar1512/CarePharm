@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class PostData {
 	public static $tablename = "slide";
 

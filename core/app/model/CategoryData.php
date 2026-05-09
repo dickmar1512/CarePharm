@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class CategoryData {
 	public static $tablename = "category";
 	public $id;
@@ -6,6 +7,8 @@ class CategoryData {
 	public $description;
 	public $created_at;
 	public $status;
+	public $image;
+	public $email;
 	
 	public function CategoryData(){
 		$this->name = "";

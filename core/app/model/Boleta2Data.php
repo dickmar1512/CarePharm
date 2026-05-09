@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class Boleta2Data {
 	public static $tablename = "boleta";
 	public $id;

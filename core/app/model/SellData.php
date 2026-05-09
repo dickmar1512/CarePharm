@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class SellData {
 	public static $tablename = "sell";
 	public $id;
@@ -17,6 +18,13 @@ class SellData {
 	public $box_id;
 	public $descuento;
 	public $importepp; //importe pago parcial
+	public $numero_documento;
+	public $name;
+	public $address1;
+	public $prod;
+	public $vendedor;
+	public $comp;
+	public $tipo;
 
 	public function SellData(){
 		$this->created_at = "NOW()";
@@ -92,9 +100,6 @@ class SellData {
 		Executor::doit($sql);
 	}
 	public function update_pagoParcial(){
-
-		$this->addPagoParcial();
-		$this->getImportePagoParcial($this->id);
 		$sql = "update pago_parcial set importe=$this->importepp where sellid=$this->id";
 		Executor::doit($sql);
 	}

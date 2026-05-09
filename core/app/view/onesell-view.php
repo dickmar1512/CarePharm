@@ -219,10 +219,10 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
 
                 <div class="totals-table">
                     <table>
-                        <tr><td>Operación Gratuita</td><td>0.00</td></tr>
-                        <tr><td>Operación Exonerada</td><td><?php echo number_format($total, 2, '.', ','); ?></td></tr>
-                        <tr><td>Operación Inafecta</td><td>0.00</td></tr>
-                        <tr><td>Operación Gravada</td><td>0.00</td></tr>
+                        <tr><td>Op. Gratuita</td><td>0.00</td></tr>
+                        <tr><td>Op. Exonerada</td><td><?php echo number_format($total, 2, '.', ','); ?></td></tr>
+                        <tr><td>Op. Inafecta</td><td>0.00</td></tr>
+                        <tr><td>Op. Gravada</td><td>0.00</td></tr>
                         <tr><td>IGV (18%)</td><td>0.00</td></tr>
                         <tr class="total-row">
                             <td>TOTAL</td>
@@ -232,6 +232,7 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                     <div class="amount-in-words">
                         SON: <?php echo $numLetra; ?>
                     </div>
+                    <!-- <input type=hiddenxx" id="datosComprobante" name="datosComprobante" value="'<?=json_encode($datosComprobante)?>'"> -->
                     <?php
 						echo "<input type='hidden' id='datosComprobante' name='datosComprobante' value='" . json_encode($datosComprobante) . "'>";
 					?>

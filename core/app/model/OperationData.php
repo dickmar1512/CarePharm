@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class OperationData {
 	public static $tablename = "operation";
 	public $id;
@@ -12,6 +13,18 @@ class OperationData {
 	public $idpaquete;
 	public $created_at;
 	public $cu;
+	public $name;
+	public $cut_id;
+	public $VENTAS;
+	public $stock_in;
+	public $importe_in;
+	public $stock_out;
+	public $importe_out;
+	public $stock_inv;
+	public $importe_inv;
+	public $Paquete;
+	public $barcode;
+	public $is_oficial;
 
 	public function OperationData(){
 		$this->name              = "";
@@ -347,9 +360,55 @@ class OperationData {
 		Executor::doit($sql);
 	}
 
+
 ////////////////////////////////////////////////////////////////////////////
 
+	public static function getMonthlySalesSummary($sd=null, $ed=null){
+		$sql = "SELECT 
+					p.id,
+					p.name,
+					p.stock,
+					IFNULL(SUM(o.q), 0) as total_qty,
+					IFNULL(SUM(o.q * o.prec_alt), 0) as total_amount,
+					GROUP_CONCAT(DISTINCT LPAD(MONTH(o.created_at), 2, '0') ORDER BY MONTH(o.created_at) SEPARATOR ', ') as months_list,
+					COUNT(DISTINCT YEAR(o.created_at), MONTH(o.created_at)) as total_months,
+					IFNULL(SUM(o.q) / NULLIF(COUNT(DISTINCT YEAR(o.created_at), MONTH(o.created_at)), 0), 0) as avg_qty_month
+				FROM product p
+				INNER JOIN operation o ON p.id = o.product_id AND o.operation_type_id = 2";
+		
+		if($sd && $ed){
+			$sql .= " AND DATE(o.created_at) BETWEEN '$sd' AND '$ed' ";
+		}
 
+		$sql .= " WHERE p.is_active = 1
+				GROUP BY p.id
+				ORDER BY total_months DESC, total_qty DESC";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new OperationData());
+	}
+
+	public static function getMonthlySalesDetails($sd = null, $ed = null){
+		$sql = "SELECT 
+					YEAR(o.created_at) as anio, 
+					MONTH(o.created_at) as mes, 
+					p.id as product_id,
+					p.name as producto, 
+					SUM(o.q) as cantidad_total, 
+					SUM(o.q * o.prec_alt) as total_venta
+				FROM operation o
+				INNER JOIN product p ON o.product_id = p.id
+				WHERE o.operation_type_id = 2 
+				AND p.is_active = 1";
+		
+		if($sd && $ed){
+			$sql .= " AND DATE(o.created_at) BETWEEN '$sd' AND '$ed' ";
+		}
+
+		$sql .= " GROUP BY YEAR(o.created_at), MONTH(o.created_at), p.id
+				ORDER BY anio DESC, mes DESC, cantidad_total DESC";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new OperationData());
+	}
 }
 
 ?>

@@ -1,215 +1,227 @@
 <?php
-	// Determinar el tipo de documento (Boleta o Factura)
-	$tipodoc = isset($_GET["tipodoc"]) ? $_GET["tipodoc"] : 3; // 3=Boleta, 1=Factura
 	
-	if ($tipodoc == 3) {
-		// BOLETA
-		$product = Boleta2Data::getByNumDoc($_GET["num"]);
-		$desComprobante = "NOTA DE CRÉDITO ELECTRÓNICA";
-		$docLabel = "DNI";
-		$nomLabel = "NOMBRE";
-		$docModifica = "BOLETA ELECTRÓNICA";
-	} else {
-		// FACTURA
-		$product = Factura2Data::getByNumDoc($_GET["num"]);
-		$desComprobante = "NOTA DE CRÉDITO ELECTRÓNICA";
-		$docLabel = "RUC";
-		$nomLabel = "RAZÓN SOCIAL";
-		$docModifica = "FACTURA ELECTRÓNICA";
-	}
-
+	$product = Factura2Data::getByNumDoc($_GET["num"]);
 	$comp_cab = Not_1_2Data::getById($product->id, 7);
+	// $comp_aca = Aca_1_2Data::getById($product->id, 1);
 	$detalles = Det_1_2Data::getById($product->id, 7);
 	$comp_tri = Tri_1_2Data::getById($product->id, 7);
 	$comp_ley = Ley_1_2Data::getById($product->id, 7);
 
 	$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
-    $cajero = null;
-    $cajero = UserData::getById($sell->user_id);
+    $cajero= '';
+    $cajero = UserData::getById($sell->user_id)->username;
     $empresa = EmpresaData::getDatos();
-    
-    // Obtener el tipo de nota
-    $tiposNota = [
-        1 => "Anulación en la Operación",
-        2 => "Anulación por error en el RUC",
-        3 => "Corrección por error en la descripción",
-        4 => "Descuento global",
-        5 => "Descuento por item",
-        6 => "Devolución total",
-        7 => "Devolución por item"
-    ];
-    $tipoNota = $tiposNota[$comp_cab->codTipoNota] ?? "";
-    
-    // Calcular vuelto
-    $total = 0;
-    foreach ($detalles as $det) {
-        $total += $det->mtoValorVentaItem;
-    }
-    $vuelto = $sell->cash - $total;
+
+	$fechaObj = new DateTime($comp_cab->fecEmision);
+	$fechaFormateada = $fechaObj->format('d/m/Y');
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="dist/css/style.onesell.css">
-</head>
-<body>
-    <div class="main-container">
-        <!-- Header Section Compacto -->
-        <div class="header-section fade-in">
-            <div class="header-title">
-                <div class="title-group">
-                    <i class="fas fa-file-invoice"></i>
-                    <h1>Nota de Crédito</h1>
-                </div>
-                <div class="breadcrumb">
-                    <i class="fas fa-home"></i> Ventas > Nota de Crédito > <?php echo ($tipodoc == 3) ? 'Boleta' : 'Factura'; ?>
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0"><i class='fas fa-file-invoice'></i> Nota de credito</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Vista de Impresión</a></li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-default">
+            <div class="card-header">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="row">
+                            <h4>Imprimir Nota de Crédito</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="float">
+                                    <button id="imprimir80mm" class="btn btn-md btn-info">
+                                        <i class="fa fa-print"></i>
+                                        IMPRIMIR 80mm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="controls-section">
-                <button class="btn btn-back" onclick="goBack()">
-                    <i class="fas fa-arrow-left"></i> Volver
-                </button>
-
-                <button class="btn btn-primary" id="imprimir">
-                    <i class="fas fa-print"></i> Imprimir
-                </button>
+            <div class="card-body">
+                <div class="row" style="margin-top: 0px; padding-top: 0px; background: #fff">
+                    <div class="col-md-10" style="display: flex; justify-content: center;">
+                        <div class="row" style="display: flex; justify-content: center;">
+							<div class="col-sm-10">
+								<!-- card -->
+								<div class="card col-sm-10">
+									<div class="row" style="display: flex; justify-content: center;">
+										<table class="table table-bordered">
+											<tr>
+												<td style="text-align: center; width: 100px">
+													<img src="dist/img/logo.jpg" style="height: 80px; width: 100%"><br>
+												</td>
+												<td	style="text-align: center; font-family: courier new; font-size: 0.9em; width: 250px">
+													<center>
+														<b>
+															<?php echo $empresa->Emp_RazonSocial ?><br>
+															<?php echo $empresa->Emp_Direccion ?><br>
+															CELULAR <?php echo ": ".$empresa->Emp_Telefono?><br>
+															EMAIL <?php echo ": ".$empresa->Emp_Celular?>
+														</b>
+													</center>
+												</td>
+												<td	style="text-align: center; font-family: courier new; font-size: 0.9em; width: 150px">
+														<b>RUC: <?php echo $empresa->Emp_Ruc ?></b>
+														<div style="background-color: black; color: #fff;">
+															<b>NOTA DE CRÉDITO</b>
+														</div>
+														<b><?php echo $product->SERIE."-".$product->COMPROBANTE; ?></b>
+														<div style=" color: red">
+																<b>
+																	<?php 	if($comp_cab->codTipoNota==1){ echo("Anulación en la Operación");} 
+																				else if($comp_cab->codTipoNota==2){ echo("Anulación por error en el RUC");}  
+																				else if($comp_cab->codTipoNota==3){ echo("Correción por error en la descripción");} 
+																				else if($comp_cab->codTipoNota==4){ echo("Descuento global");} 
+																				else if($comp_cab->codTipoNota==5){ echo("Descuento por item");} 
+																				else if($comp_cab->codTipoNota==6){ echo("Devolución total");} 
+																				else if($comp_cab->codTipoNota==7){ echo("Devolución por item");} ?>
+																</b>
+														</div>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="row">
+										<table class="table table-bordered" style="font-family: courier new; font-size: 0.9em">
+											<tr>
+												<td class="col-sm-3">
+													<b>FECHA EMISIÓN</b>
+												</td>												
+												<td>	
+													 <b><?php echo ": ".$fechaFormateada."  ".$comp_cab->horEmision; ?></b>
+												</td>
+											</tr>
+										</table>	
+										<label>Documento que modifica:</label>
+										<table class="table table-bordered" style="font-family: courier new; font-size: 0.9em">
+											<tr>
+												<td class="col-sm-3">
+														<b>Factura Electrónica</b>
+												</td>
+												<td>
+													<b><?php echo ": ". $comp_cab->serieDocModifica; ?></b>
+												</td>
+											</tr>
+											<tr>	
+												<td class="col-sm-3">
+														<b>RUC</b>
+												</td>
+												<td>
+													<b><?php echo ": ".$comp_cab->numDocUsuario; ?></b>
+												</td>
+											</tr>
+											<tr>
+												<td class="col-sm-3">
+														<b>Razón Social</b>
+												</td>
+												<td>
+													<b><?php echo ": ".$comp_cab->rznSocialUsuario; ?></b>
+												</td>
+											</tr>
+										</table>
+										<table class="table table-bordered">
+											<tr>
+												<td class="col-sm-3">
+														<b>Motivo</b>
+												</td>
+												<td>
+													<b><?php echo ": ".$comp_cab->descMotivo; ?></b>
+												</td>
+											</tr>
+										</table>
+										<table class="table table-bordered" style="font-family: courier new; font-size: 0.9em">
+											<thead style="background-color: #000; color:#fff">
+												<th scope="col">CANTIDAD</th>
+												<th scope="col">DESCRIPCION</th>
+												<th scope="col">P. UNIT.</th>
+												<th scope="col">TOTAL</th>
+											</thead>
+											<tbody>
+												<?php
+														$total = 0;
+														foreach ($detalles as $det) {
+															?>
+												<tr>
+													<td align="center"><?php echo $det->ctdUnidadItem; ?></td>
+													<td><?php echo $det->desItem; ?></td>
+													<td><?php echo $det->mtoValorUnitario; ?></td>
+													<td><?php echo $det->mtoValorVentaItem; ?></td>
+												</tr>
+												<?php
+															$total = $det->mtoValorVentaItem + $total;
+														}
+													?>
+											</tbody>
+										</table>
+										<table class="table table-bordered" style="font-family: courier new; font-size: 0.9em ">
+											<thead>
+												<th style="width: 50%">
+													<table class="table table-bordered">
+															<tr>
+																<td>
+																	<?php echo "Usuario:" . $cajero; ?>
+																</td>
+															</tr>
+														</table>
+												</th>
+												<th>
+													<table class="table table-bordered">
+														<tr>
+															<td>OPERACIÓN GRATUITA</td>
+															<td>0.00</td>
+														</tr>
+														<tr>
+															<td>OPERACIÓN EXONERADA</td>
+															<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6|| $comp_cab->codTipoNota==7){  echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?>
+															</td>
+														</tr>
+														<tr>
+															<td>OPERACIÓN INAFECTA</td>
+															<td>0.00</td>
+														</tr>
+														<tr>
+															<td>OPERACIÓN GRAVADA</td>
+															<td>0.00</td>
+														</tr>
+														<tr>
+															<td>IGV</td>
+															<td>0.00</td>
+														</tr>
+														<tr>
+															<td>MONTO TOTAL</td>
+															<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6 || $comp_cab->codTipoNota==7){  echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?>
+															</td>
+														</tr>
+													</table>
+												</th>
+											</thead>
+										</table>
+									</div>
+								</div>
+								<!-- end card  -->
+							</div>	 						
+                        </div>
+                    </div>
+                </div><!--  fin col-md-6 -->
             </div>
         </div>
-
-        <!-- Receipt Container Compacto -->
-        <div class="receipt-container fade-in" id="receiptArea">
-            <!-- Company Header Compacto -->
-            <div class="company-info">
-                <div class="company-logo">
-                    <i class="fas fa-building" style="font-size: 1.5rem;"></i>
-                </div>
-                <div class="company-details">
-                    <h3><?php echo $empresa->Emp_RazonSocial ?></h3>
-                    <p><?php echo $empresa->Emp_Direccion ?></p>
-                    <p>📞 <?php echo $empresa->Emp_Telefono ?></p>
-                    <p>✉ <?php echo $empresa->Emp_Celular ?></p>
-                </div>
-                <div class="document-info">
-                    <div style="font-size: 0.85rem;"><strong>RUC: <?php echo $empresa->Emp_Ruc ?></strong></div>
-                    <div style="margin: 6px 0;">
-                        <label for="numeroComprobante" style="font-size: 0.9rem;"><?php echo $desComprobante; ?></label>
-                    </div>
-                    <div class="document-number" id="numeroComprobante" name="numeroComprobante"><?php echo $product->SERIE . "-" . $product->COMPROBANTE; ?></div>
-                </div>
-            </div>
-
-            <!-- Tipo de Nota (destacado en rojo) -->
-            <div style="background: #fee; border: 2px solid #f44; padding: 12px; margin: 15px 0; border-radius: 8px; text-align: center;">
-                <h3 style="color: #c00; margin: 0; font-size: 1rem;">
-                    <i class="fas fa-exclamation-triangle"></i> <?php echo $tipoNota; ?>
-                </h3>
-            </div>
-
-            <!-- Document Information -->
-            <div class="customer-info">
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
-                    <strong style="color: #667eea;">📄 DOCUMENTO QUE MODIFICA</strong>
-                </div>
-                <div class="info-row">
-                    <span class="info-label"><?php echo $docModifica; ?></span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->serieDocModifica; ?></span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label"><?php echo $docLabel; ?></span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->numDocUsuario; ?></span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label"><?php echo $nomLabel; ?></span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->rznSocialUsuario; ?></span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">MOTIVO</span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->descMotivo; ?></span>
-                </div>
-            </div>
-
-            <!-- Products Table Compacto -->
-            <table class="products-table">
-                <thead>
-                    <tr>
-                        <th>CANT</th>
-                        <th>DESCRIPCIÓN</th>
-                        <th>P.U.</th>
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $total = 0;
-                        foreach ($detalles as $det) {
-                    ?>
-                    <tr>
-                        <td class="quantity-cell"><?php echo $det->ctdUnidadItem; ?></td>
-                        <td class="description-cell">
-                            <div class="product-name"><?php echo $det->desItem; ?></div>
-                        </td>
-                        <td class="price-cell"><?php echo number_format($det->mtoValorUnitario, 2, '.', ','); ?></td>
-                        <td class="price-cell"><?php echo number_format($det->mtoValorVentaItem, 2, '.', ','); ?></td>
-                    </tr>
-                    <?php
-                            $total += $det->mtoValorVentaItem;
-                            $numLetra = NumeroLetras::convertir(number_format($total, 2, '.', ','));
-                        }
-                        $vuelto = $sell->cash - $total;
-
-                        $datosComprobante = array(
-                            "venta"       => $venta,
-                            "detalles"    => $detalles,
-                            "comp_cab"    => $comp_cab,
-                            "comp_aca"    => $comp_aca,
-                            "comp_tri"    => $comp_tri,
-                            "comp_ley"    => $comp_ley,
-                            "empresa"     => $empresa,
-                            "cajero"      => $cajero,
-                            "numLetra"    => $numLetra,
-                            "sell"        => $sell
-                        );
-                    ?>
-                </tbody>
-            </table>
-
-            <!-- Totals Section Compacto -->
-            <div class="totals-section">
-                <div class="user-info">
-                    <i class="fas fa-user-tie" style="color: #667eea;"></i>
-                    <div>
-                        <div><strong>Cajero:</strong> <?php echo $cajero->username; ?></div>
-                        <small style="color: #666;">Terminal: CAJA-01</small>
-                    </div>
-                </div>
-
-                <div class="totals-table">
-                    <table>
-                        <tr><td>Operación Gratuita</td><td>0.00</td></tr>
-                        <tr><td>Operación Exonerada</td><td><?php echo number_format($total, 2, '.', ','); ?></td></tr>
-                        <tr><td>Operación Inafecta</td><td>0.00</td></tr>
-                        <tr><td>Operación Gravada</td><td>0.00</td></tr>
-                        <tr><td>IGV (18%)</td><td>0.00</td></tr>
-                        <tr class="total-row">
-                            <td><strong>MONTO TOTAL</strong></td>
-                            <td><strong>S/ <?php echo number_format($total, 2, '.', ','); ?></strong></td>
-                        </tr>
-                    </table>
-                    <div class="amount-in-words">
-                        SON: <?php echo $numLetra; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function goBack() {
-            window.history.back();
-        }        
-    </script>
-</body>
-</html>
+    </div><!-- /.container-fluid -->
+</section>

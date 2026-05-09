@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class CutData {
 	public static $tablename = "cut";
 

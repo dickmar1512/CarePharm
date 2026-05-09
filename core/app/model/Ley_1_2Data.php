@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class Ley_1_2Data {
 	public static $tablename = "ley";
 	public $codLeyenda;

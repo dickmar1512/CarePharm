@@ -1,5 +1,6 @@
 <?php
-	class EmpresaData
+	#[AllowDynamicProperties]
+class EmpresaData
 	{
 		public static $tablename = "empresa";
 		public $Emp_Ruc;

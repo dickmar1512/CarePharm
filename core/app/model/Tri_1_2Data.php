@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class Tri_1_2Data {
 	public static $tablename = "tri";	
 	public $ideTributo;

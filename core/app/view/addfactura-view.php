@@ -10,23 +10,22 @@
 	if(count($_POST) > 0)
 	{
 		//BOLETA / FACTURA
-		$RUC = $_POST["RUC"];
-		$TIPO = $_POST["TIPO"];
-		$SERIE = $_POST["SERIE"];
-		$COMPROBANTE = $_POST["COMPROBANTE"];
-		//$estado = $_POST["selEstado"];
-
+		$RUC              = $_POST["RUC"] ?? "";
+		$TIPO             = $_POST["TIPO"] ?? "";
+		$SERIE            = $_POST["SERIE"] ?? "";
+		$COMPROBANTE      = $_POST["COMPROBANTE"] ?? "";
+		
 		//ARCHIVO CAB
-		$tipOperacion = $_POST["tipOperacion"];
-		$fecEmision = $_POST["fecEmision"];
-		$horEmision = $_POST["horEmision"];
-		$fecVencimiento = $_POST["fecVencimiento"];
-		$codLocalEmisor = $_POST["codLocalEmisor"];
-		$tipDocUsuario = $_POST["tipDocUsuario"];
-		$numDocUsuario = $_POST["numDocUsuario"];
-		$rznSocialUsuario = $_POST["rznSocialUsuario"];
-		$tipMoneda = $_POST["tipMoneda"];
-		$sumTotTributos = $_POST["sumTotTributos"];
+		$tipOperacion     = $_POST["tipOperacion"] ?? "0101";
+		$fecEmision       = $_POST["fecEmision"] ?? date("Y-m-d");
+		$horEmision       = $_POST["horEmision"] ?? date("H:i:s");
+		$fecVencimiento   = $_POST["fecVencimiento"] ?? "-";
+		$codLocalEmisor   = $_POST["codLocalEmisor"] ?? "0000";
+		$tipDocUsuario    = $_POST["tipDocUsuario"] ?? "";
+		$numDocUsuario    = $_POST["numDocUsuario"] ?? "";
+		$rznSocialUsuario = $_POST["rznSocialUsuario"] ?? "";
+		$tipMoneda        = $_POST["tipMoneda"] ?? "PEN";
+		$sumTotTributos   = !empty($_POST["sumTotTributos"]) ? $_POST["sumTotTributos"] : "0.00";
 		//precio total
 		$sumTotValVenta = 0;
 		$sumPrecioVenta = 0;
@@ -206,7 +205,7 @@
 					if($_POST["pagoParcial"] != 0)
 					{						
 						$pagpar = new SellData();
-						$pagpar->sellid = $s[1];
+						$pagpar->id = $s[1];
 						$pagpar->importepp = $_POST["pagoParcial"];
 						$pagpar->addPagoParcial();
 					}
@@ -404,9 +403,9 @@
 
 			$mtoBaseImponible = $sumTotValVenta;
 
-			$sumDescTotal = $_POST["sumDescTotal"];
-			$sumOtrosCargos = $_POST["sumOtrosCargos"];
-			$sumTotalAnticipos = $_POST["sumTotalAnticipos"];
+			$sumDescTotal = $_POST["sumDescTotal"] ?? "0.00";
+			$sumOtrosCargos = $_POST["sumOtrosCargos"] ?? "0.00";
+			$sumTotalAnticipos = $_POST["sumTotalAnticipos"] ?? "0.00";
 			$sumImpVenta = $sumPrecioVenta-$sumDescTotal+$sumOtrosCargos-$sumTotalAnticipos;//$_POST["sumImpVenta"];  UNID * PREC. UNIT
 			$ublVersionId = $_POST["ublVersionId"];
 			$customizationId = $_POST["customizationId"];

@@ -1,4 +1,5 @@
 <?
+#[AllowDynamicProperties]
 class NumLetras
 {
     function convertirNumeroLetra($numero){

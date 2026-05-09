@@ -23,7 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sell->id = $paymentId;
         $sell->update_pagoParcial();
         echo json_encode(['success' => true, 'message' => 'El tipo de pago ha sido actualizado correctamente']);
-        exit;        
+        exit;
+        // Verificar si se actualizó correctamente
+        // if ($stmt->rowCount() > 0) {
+        //     echo json_encode(['success' => true, 'message' => 'Tipo de pago actualizado']);
+        // } else {
+        //     echo json_encode(['success' => false, 'message' => 'No se encontró la venta o no hubo cambios']);
+        // }
     } catch (PDOException $e) {
         echo json_encode(['success' => false, 'message' => 'Error en la base de datos: ' . $e->getMessage()]);
         exit;

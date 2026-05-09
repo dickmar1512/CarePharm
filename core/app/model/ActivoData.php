@@ -1,5 +1,6 @@
 <?php
-	class ActivoData
+	#[AllowDynamicProperties]
+class ActivoData
 	{
 		public static $tablename = "activo";
 

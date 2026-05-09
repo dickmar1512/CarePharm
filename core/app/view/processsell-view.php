@@ -90,13 +90,13 @@
 				{
 						$s = $sell->add2();
 				}
-				echo json_encode($cart);
+				
 				foreach($cart as  $c)
 				{
 					$op = new OperationData();
+					$product = ProductData::getById($c["product_id"]);
 					$op->product_id = $c["product_id"] ;
 					$op->operation_type_id=OperationTypeData::getByName("salida")->id;
-					$product = ProductData::getById($c["product_id"]);
 					$op->sell_id=$s[1];					
 					$op->descripcion = $c["descripcion"];
 					$op->cu = $product->price_in;
@@ -124,7 +124,7 @@
 				setcookie("selled","selled");
 
 
-				print "<script>window.location='?view=notaventa&id=$s[1]';</script>";
+				print "<script>window.location='?view=ordenventa&id=$s[1]';</script>";
 			}
 		}
 	}

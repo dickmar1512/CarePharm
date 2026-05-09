@@ -523,6 +523,12 @@
                                                 Factura
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                Ventas Mensuales
+                                            </a>
+                                        </li>
                                         <?php }?>
                                         <li class="nav-item">
                                             <a href="./?view=reportsnotascredito" class="nav-link" data-view="reportsnotascredito">
@@ -813,7 +819,6 @@
     <script src="dist/js/imprimir80.js" type="text/javascript"></script>
     <script src="dist/js/imprimirA5.js" type="text/javascript"></script>
     <script src="dist/js/imprimirA4.js" type="text/javascript"></script>
-    <script src="dist/js/imprimirNV80.js" type="text/javascript"></script>
 
     <script type="text/javascript">
          $(function () {

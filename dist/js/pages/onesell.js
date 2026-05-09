@@ -11,15 +11,27 @@ $(document).ready(function() {
             type: 'POST',
             data: {
                 paymentId: $('#sellid').val(),
-                paymentType: $('#selTipoPago').val()
+                paymentType: $('#selTipoPago').val(),
+                importepp : $('#importeParcial').val()
             },
             success: function(response) {
-                console.log('Tipo de pago actualizado:', response);
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: 'El tipo de pago ha sido actualizado correctamente.'
-                });
+                response = JSON.parse(response);
+                if(response.success === false){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                    return;
+                }else   if(response.success === true){
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: response.message
+                    }).then(() => {
+                        location.reload(); // Recargar la página después de cerrar la alerta    
+                    });
+                }
             },
             error: function(xhr, status, error) {
                 console.error('Error al actualizar tipo de pago:', error);
@@ -31,4 +43,4 @@ $(document).ready(function() {
             }
         });
     });
-})
+});

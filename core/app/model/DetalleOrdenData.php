@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class DetalleOrdenData {
 	public static $tablename = "detalle_orden";
 

@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class Aca_1_2Data {
 	public static $tablename = "aca";
 	public $desDireccionCliente;

@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class UnidadMedidaData {
 	public static $tablename = "unidad_medida";
 	public $id;

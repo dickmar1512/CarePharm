@@ -225,7 +225,6 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                     <tr class="desktop-header">
                         <th style="width: 35%;">PRODUCTO</th>
                         <th style="width: 10%;">STOCK</th>
-                        <th>LABORATORIO</th>
                         <th style="width: 55%;">
                             <div style="display: flex; gap: 4px; font-size: 0.8em;">
                                 <label style="flex: 1; margin: 0; font-weight: 500;">DESCRIPCIÓN</label>
@@ -257,9 +256,8 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                                     } ?>
                                 </span>
                             </td>
-                            <td class="text-responsive"><?php echo $product->laboratorio;?></td>
                             <td>
-                                <form method="post" action="./?view=addtocart">
+                                <form method="post" action="./?action=addtocart_ajax" class="form-add-to-cart">
                                     <input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
                                     <input type="hidden" name="idpaquete" value="X">
                                     <input type="hidden" name="f_price_in" value="<?php echo $product->price_in; ?>">
@@ -334,7 +332,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                             </span>
                         </div>
                         
-                        <form method="post" action="./?view=addtocart">
+                        <form method="post" action="./?action=addtocart_ajax" class="form-add-to-cart">
                             <input type="hidden" name="product_id" value="<?php echo $product->id; ?>">
                             <input type="hidden" name="idpaquete" value="X">
                             <input type="hidden" name="f_price_in" value="<?php echo $product->price_in; ?>">

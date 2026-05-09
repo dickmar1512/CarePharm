@@ -1,4 +1,5 @@
 <?php
+#[AllowDynamicProperties]
 class BoxData {
 	public static $tablename = "box";
 	public $id;
@@ -18,6 +19,10 @@ class BoxData {
 	public $c50;
 	public $c20;
 	public $c10;
+	public $lastname;
+	public $email;
+	public $image;
+	public $password;
 
 	public function BoxData(){
 		$this->name = "";

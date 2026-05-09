@@ -1,5 +1,6 @@
 <?php
-	class PermisoData
+	#[AllowDynamicProperties]
+class PermisoData
 	{
 		public static $tablename = "permiso";
 		public $Emp_Ruc;
