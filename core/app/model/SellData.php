@@ -600,6 +600,21 @@ class SellData
 		return array_reverse($cuadro);
 	}
 
+	public static function getSystemLog()
+	{
+		$sql = "SELECT s.id, s.created_at, u.name, u.lastname, s.operation_type_id, s.estado, s.total, s.tipo_comprobante 
+				FROM " . self::$tablename . " s
+				LEFT JOIN user u ON s.user_id = u.id
+				ORDER BY s.created_at DESC LIMIT 1000";
+		$query = Executor::doit($sql);
+		
+		$data = [];
+		while($r = $query[0]->fetch_array()){
+			$data[] = $r;
+		}
+		return $data;
+	}
+
 	// ============================================
 	// FUNCIÓN PRINCIPAL DE PROCESAMIENTO
 	// ============================================

@@ -511,6 +511,12 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="./?view=systemlog" class="nav-link" data-view="systemlog">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>Bitácora de Acciones</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
                                                 <p>VENTA DETAL. PROD.</p>

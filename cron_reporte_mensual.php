@@ -1,6 +1,6 @@
 <?php
 /**
- * CRON: Reporte Mensual de Ventas (12 Meses + Gráfico)
+ * CRON: Reporte Mensual de Ventas (12 Meses + Gráfico + PDF)
  * Ejecutar: Todos los 1ro de cada mes a las 11:00 AM
  */
 
@@ -13,6 +13,7 @@ include_once "core/app/model/OperationData.php";
 include_once "core/app/model/SellData.php";
 include_once "core/app/model/UserData.php";
 include_once "core/app/model/CLSPHPMailer.php";
+require_once "plugins/fpdf/fpdf.php";
 
 Core::$root = "";
 
@@ -120,7 +121,52 @@ $chartConfig = [
 ];
 $chartUrl = "https://quickchart.io/chart?w=600&h=300&c=" . urlencode(json_encode($chartConfig));
 
-// 3. Preparar el HTML del correo
+// 3. Generar PDF
+$pdf = new FPDF();
+$pdf->AddPage();
+$pdf->SetFont('Arial', 'B', 16);
+$pdf->Cell(0, 10, iconv('UTF-8', 'windows-1252', "Reporte de Ventas Mensuales"), 0, 1, 'C');
+$pdf->SetFont('Arial', '', 12);
+$pdf->Cell(0, 10, iconv('UTF-8', 'windows-1252', "Periodo: últimos 12 meses móviles"), 0, 1, 'C');
+$pdf->Ln(5);
+
+// Descargar imagen del gráfico para el PDF
+$chartImgPath = "storage/chart_temp_mensual.png";
+$chartImgData = file_get_contents($chartUrl);
+if ($chartImgData) {
+    file_put_contents($chartImgPath, $chartImgData);
+    $pdf->Image($chartImgPath, 10, $pdf->GetY(), 190);
+    $pdf->Ln(100);
+}
+
+$pdf->SetFillColor(52, 58, 64);
+$pdf->SetTextColor(255, 255, 255);
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(45, 8, "MES", 1, 0, 'C', true);
+$pdf->Cell(45, 8, "VENTAS (S/)", 1, 0, 'R', true);
+$pdf->Cell(50, 8, "CREC. (S/)", 1, 0, 'R', true);
+$pdf->Cell(50, 8, "CREC. (%)", 1, 1, 'R', true);
+
+$pdf->SetTextColor(0, 0, 0);
+$pdf->SetFont('Arial', '', 10);
+$cuadro_descendente = array_reverse($cuadro);
+foreach ($cuadro_descendente as $m) {
+    $pdf->Cell(45, 7, iconv('UTF-8', 'windows-1252', $m['mes']), 1, 0, 'L');
+    $pdf->Cell(45, 7, number_format($m['venta'], 2), 1, 0, 'R');
+    $pdf->Cell(50, 7, number_format($m['crec_soles'], 2), 1, 0, 'R');
+    $pdf->Cell(50, 7, round($m['crec_porc'], 2) . "%", 1, 1, 'R');
+}
+
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->Cell(45, 8, "TOTAL / PROMEDIO", 1, 0, 'L');
+$pdf->Cell(45, 8, number_format($totalVentas, 2), 1, 0, 'R');
+$pdf->Cell(50, 8, number_format($totalCrecimiento, 2), 1, 0, 'R');
+$pdf->Cell(50, 8, round($promedioPorc, 2) . "%", 1, 1, 'R');
+
+$pdfPath = "storage/Reporte_Mensual_Ventas.pdf";
+$pdf->Output('F', $pdfPath);
+
+// 4. Preparar el HTML del correo
 $arraddress = array('juan.irene@kalpg.com');
 $arrAddcc = array('sagitatario.1982@gmail.com', 'mayaya.ocampo@gmail.com');
 $asunto = "REPORTE DE VENTAS MENSUALES COMPARATIVO (Ultimos 12 Meses)";
@@ -138,14 +184,12 @@ $cuerpo = "<head><style>
     </style></head>";
 
 $cuerpo .= "<h3>Reporte Comparativo de Ingresos</h3>";
-$cuerpo .= "<p>Análisis de crecimiento mensual de ventas (12 meses móviles).</p>";
+$cuerpo .= "<p>Análisis de crecimiento mensual de ventas (12 meses móviles). Se adjunta PDF detallado.</p>";
 
-// Gráfico
 $cuerpo .= "<div style='text-align: center; margin-bottom: 20px;'>";
 $cuerpo .= "<img src='{$chartUrl}' alt='Gráfico de Ventas' style='max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; padding: 5px;'>";
 $cuerpo .= "</div>";
 
-// Tabla
 $cuerpo .= "<table class='mi-tabla'>
     <thead>
         <tr>
@@ -156,14 +200,9 @@ $cuerpo .= "<table class='mi-tabla'>
         </tr>
     </thead>
     <tbody>";
-// Invertimos el orden para que el mes más actual aparezca primero en la tabla
-$cuadro_descendente = array_reverse($cuadro);
 
 foreach ($cuadro_descendente as $m) {
-    // Formato de venta
     $venta_str = "S/ " . number_format($m['venta'], 2);
-    
-    // Formato Crecimiento Soles
     $crec_soles_str = "S/ -";
     if ($m['venta_ant'] > 0) {
         if ($m['crec_soles'] > 0) {
@@ -174,8 +213,6 @@ foreach ($cuadro_descendente as $m) {
             $crec_soles_str = "<span class='text-muted'>S/ 0.00</span>";
         }
     }
-
-    // Formato Crecimiento Porcentaje
     $crec_porc_str = "0 %";
     if ($m['venta_ant'] > 0) {
         if ($m['crec_porc'] > 0) {
@@ -184,7 +221,6 @@ foreach ($cuadro_descendente as $m) {
             $crec_porc_str = "<span class='text-danger'>" . round($m['crec_porc'], 2) . "% ▼</span>";
         }
     }
-
     $cuerpo .= "<tr>
         <td class='font-weight-bold'>{$m['mes']}</td>
         <td class='text-success text-right'>{$venta_str}</td>
@@ -193,14 +229,12 @@ foreach ($cuadro_descendente as $m) {
     </tr>";
 }
 
-// Totales Footer
 $cuerpo .= "</tbody>
     <tfoot>
         <tr style='background-color: #e9ecef;'>
             <td class='font-weight-bold'>TOTALES / PROMEDIO</td>
             <td class='font-weight-bold text-success text-right'>S/ " . number_format($totalVentas, 2) . "</td>
             <td class='font-weight-bold text-right'>";
-
 if ($totalCrecimiento > 0) {
     $cuerpo .= "<span class='text-success'>S/ " . number_format($totalCrecimiento, 2) . " ▲</span>";
 } else if ($totalCrecimiento < 0) {
@@ -208,9 +242,7 @@ if ($totalCrecimiento > 0) {
 } else {
     $cuerpo .= "<span class='text-muted'>S/ -</span>";
 }
-
 $cuerpo .= "</td><td class='font-weight-bold text-right'>";
-
 if ($promedioPorc > 0) {
     $cuerpo .= "<span class='text-success'>" . round($promedioPorc, 2) . "% ▲</span>";
 } else if ($promedioPorc < 0) {
@@ -218,7 +250,6 @@ if ($promedioPorc > 0) {
 } else {
     $cuerpo .= "<span class='text-muted'>0%</span>";
 }
-
 $cuerpo .= "</td>
         </tr>
     </tfoot>
@@ -228,11 +259,16 @@ $firma = '<tr><td class="sub_pie">BOTICA ALFONZO UGARTE</td></tr>';
 $firma .= '<tr><td class="sub_pie">botica.au@gmail.com</td></tr>';            
 
 $mailer = new CLSPHPMailer();
-$res = $mailer->fnMail($arraddress, $arrAddcc, $asunto, $cuerpo, 'pie', $firma, null);
+$atachar = [$pdfPath => "Reporte_Mensual_Ventas.pdf"];
+$res = $mailer->fnMail($arraddress, $arrAddcc, $asunto, $cuerpo, 'pie', $firma, $atachar);
 
 if ($res) {
-    echo "Reporte comparativo enviado correctamente a las " . date('Y-m-d H:i:s') . "\n";
+    echo "Reporte enviado correctamente con PDF adjunto.\n";
 } else {
-    echo "Fallo al enviar el reporte comparativo a las " . date('Y-m-d H:i:s') . "\n";
+    echo "Fallo al enviar el reporte.\n";
 }
+
+// Limpiar temporales
+if(file_exists($chartImgPath)) unlink($chartImgPath);
+// unlink($pdfPath); // Opcional borrar el PDF
 ?>
