@@ -65,7 +65,7 @@ if($found) {
     $firma .= '<tr><td class="sub_pie">botica.au@gmail.com</td></tr>';            
 
     // Enviar el correo (puedes comentar esto si no siempre quieres enviar el correo)
-   // $mailer->fnMail($arraddress, $arrAddcc, $asunto, $cuerpo, 'pie', $firma, null);
+    $mailer->fnMail($arraddress, $arrAddcc, $asunto, $cuerpo, 'pie', $firma, null);
     
     echo json_encode(['success' => true]);
 	exit(0);

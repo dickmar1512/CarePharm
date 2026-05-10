@@ -355,12 +355,6 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="./?view=sellsnew" class="nav-link" data-view="sellsnew">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Registro Venta NEW</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
                                             <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
                                                 Ventas x Producto
@@ -775,46 +769,6 @@
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.js"></script>
     <script src="dist/js/demo.js"></script>
-
-    <!-- Scripts home -->
-    <!-- <script src="dist/js/pages/home.js"></script> -->
-
-    <!-- Scripts sell -->
-    <!-- <script src="dist/js/pages/sell.js"></script> -->
-
-    <!-- Scripts sells -->
-   <!-- <script src="dist/js/pages/sells.js"></script> -->
-
-    <!-- Scripts products -->
-    <!-- <script src="dist/js/pages/products.js"></script> -->
-
-    <!-- Scripts providers -->
-    <!-- <script src="dist/js/pages/providers.js"></script> -->
-    
-    <!-- Scripts providers -->
-    <!-- <script src="dist/js/pages/clients.js"></script> -->
-
-    <!-- Scripts registro de compra-->
-    <!-- <script src="dist/js/pages/res.js"></script> -->
-
-    <!-- Scripts reabastecer compra-->
-    <!-- <script src="dist/js/pages/re.js"></script> -->
-
-     <!-- Scripts nota de credito factura-->
-    <!-- <script src="dist/js/pages/nocfactura.js"></script> -->
-
-    <!-- Scripts nota de credito boleta-->
-    <!-- <script src="dist/js/pages/nocboleta.js"></script> -->
-
-    <!-- Scripts unidades-->
-    <!-- <script src="dist/js/pages/unidades.js"></script> -->
-
-    <!-- Scripts categorias-->
-    <!-- <script src="dist/js/pages/categories.js"></script> -->
-
-    <!-- Scripts Box-->
-    <!-- <script src="dist/js/pages/box.js"></script> -->
-
     <!-- Scripts gastos-->
     <!-- <script src="dist/js/pages/expenseentry.js"></script> -->
      

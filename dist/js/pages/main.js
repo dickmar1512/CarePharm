@@ -3,7 +3,7 @@ $(document).ready(function() {
     const viewScripts = {
         'home':'home.js',
         'sell':'sell.js',
-        'sellsnew':'sellsnew.js',
+        'sells':'sells.js',
         'products':'products.js',
         'providers':'providers.js',    
         'clients':'clients.js',
