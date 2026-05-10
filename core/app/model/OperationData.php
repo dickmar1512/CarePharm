@@ -477,6 +477,68 @@ class OperationData
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
 	}
+
+	public static function getStockBeforeDate($date)
+	{
+		$sql = "SELECT product_id, 
+					   SUM(CASE WHEN operation_type_id = 1 THEN q 
+								WHEN operation_type_id = 2 THEN -q 
+								ELSE 0 END) as stock
+				FROM operation
+				WHERE DATE(created_at) < '$date' AND estado = 1
+				GROUP BY product_id";
+		$query = Executor::doit($sql);
+		$stocks = [];
+		while($r = $query[0]->fetch_array()){
+			$stocks[$r['product_id']] = $r['stock'];
+		}
+		return $stocks;
+	}
+
+	public static function getMonthlyMovementsBetweenDates($sd, $ed)
+	{
+		$sql = "SELECT product_id,
+					   DATE_FORMAT(created_at, '%Y-%m') as mes,
+					   SUM(CASE WHEN operation_type_id = 1 THEN q ELSE 0 END) as purchase_qty,
+					   SUM(CASE WHEN operation_type_id = 2 THEN q ELSE 0 END) as sales_qty,
+					   SUM(CASE WHEN operation_type_id = 2 THEN q * prec_alt ELSE 0 END) as sales_amount
+				FROM operation
+				WHERE DATE(created_at) BETWEEN '$sd' AND '$ed' AND estado = 1
+				GROUP BY product_id, DATE_FORMAT(created_at, '%Y-%m')";
+		$query = Executor::doit($sql);
+		$movements = [];
+		while($r = $query[0]->fetch_array()){
+			$movements[$r['product_id']][$r['mes']] = [
+				'purchase_qty' => $r['purchase_qty'],
+				'sales_qty' => $r['sales_qty'],
+				'sales_amount' => $r['sales_amount']
+			];
+		}
+		return $movements;
+	}
+
+	public static function getSalesAndStockByProductReport($sd, $ed)
+	{
+		$sql = "SELECT 
+					p.id as product_id,
+					p.name as producto,
+					SUM(CASE WHEN op.operation_type_id = 2 AND DATE(op.created_at) BETWEEN '$sd' AND '$ed' THEN op.q ELSE 0 END) as cantidad_vendida,
+					SUM(CASE WHEN DATE(op.created_at) <= '$ed' THEN 
+							 CASE WHEN op.operation_type_id = 1 THEN op.q 
+								  WHEN op.operation_type_id = 2 THEN -op.q 
+								  ELSE 0 END 
+						 ELSE 0 END) as stock_final
+				FROM product p
+				LEFT JOIN operation op ON p.id = op.product_id AND op.estado = 1
+				WHERE p.is_active = 1
+				GROUP BY p.id
+				HAVING cantidad_vendida > 0 OR stock_final > 0
+				ORDER BY cantidad_vendida DESC, p.name ASC";
+		
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new OperationData());
+	}
+
 	public static function getBincartReport($sd, $ed, $user_id = 0)
 	{
 		$sql = "SELECT 

@@ -501,19 +501,25 @@
                                         <li class="nav-item">
                                             <a href="./?view=bincartreport" class="nav-link" data-view="bincartreport">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Bincart</p>
+                                                <p>REPORTE BINCART</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="./?view=reportecomparativoingresos" class="nav-link" data-view="reportecomparativoingresos">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Comparativo Ingr.</p>
+                                                <p>REP. VENTA GENERAL</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
-                                                Venta x Producto
+                                                <p>VENTA DETAL. PROD.</p>
+                                            </a>
+                                        </li> 
+                                        <li class="nav-item">
+                                            <a href="./?view=salesbyproductstock" class="nav-link" data-view="salesbyproductstock">
+                                                <i class="nav-icon far fa-circle text-info"></i> 
+                                                <p>REP. VENTA PRODUC.</p>
                                             </a>
                                         </li> 
                                         <li class="nav-item">
