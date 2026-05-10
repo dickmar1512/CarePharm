@@ -370,7 +370,13 @@
                                             <li class="nav-item">
                                                 <a href="./?view=re" class="nav-link" data-view="re">
                                                     <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Reabastecer</p>
+                                                    <p>Nueva Compra</p>
+                                                </a>
+                                            </li>                                            
+                                            <li>
+                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
+                                                    <i class="nav-icon far fa-circle text-info"></i>
+                                                    <p>Nueva Compra Excel</p>
                                                 </a>
                                             </li>                                            
                                             <li class="nav-item">
@@ -421,12 +427,6 @@
                                                 <a href="./?view=products" class="nav-link" data-view="products">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Listado Producto</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Importar Excel</p>
                                                 </a>
                                             </li>
                                             <li>
@@ -516,7 +516,7 @@
                                         <li class="nav-item">
                                             <a href="./?view=systemlog" class="nav-link" data-view="systemlog">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Bitácora de Acciones</p>
+                                                <p>LOGS DE ACCIONES</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">

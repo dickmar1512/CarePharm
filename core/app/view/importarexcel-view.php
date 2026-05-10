@@ -3,13 +3,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark"><i class='fas fa-file-excel text-success mr-2'></i> Importar Productos vía Excel</h1>
+                <h1 class="m-0 text-dark"><i class='fas fa-file-excel text-success mr-2'></i> Importar Nueva compra vía Excel</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="./">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="./?view=products">Productos</a></li>
-                    <li class="breadcrumb-item active">Importación Masiva</li>
+                    <li class="breadcrumb-item"><a href="./?view=importarexcel">Compras</a></li>
+                    <li class="breadcrumb-item active">Nueva Compra Excel</li>
                 </ol>
             </div>
         </div>

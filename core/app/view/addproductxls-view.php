@@ -67,9 +67,9 @@ try {
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
     $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (barcode <> '' AND barcode = ?) OR name = ?");
-    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, created_at, is_active) 
-                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ? 
+    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active) 
+                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ? 
                                          WHERE id = ?");
     
     $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE comprobante = ? AND serie = ?");
@@ -158,20 +158,21 @@ try {
         $productData = [
             'image' => 'medgen.png',
             'barcode' => $barcode,
-            'name' => trim($fields[1]),
-            'description' => '-',
+            'name' => trim($fields[0]),
+            'description' => trim($fields[1]),
             'stock' => !empty($fields[7]) ? (int)$fields[7] : 0,
             'is_stock' => 1,
             'inventary_min' => 10,
-            'price_in' => !empty($fields[10]) ? (float)$fields[10] : 0,
-            'price_out' => !empty($fields[13]) ? (float)$fields[13] : 0,
-            'price_may' => !empty($fields[14]) ? (float)$fields[14] : 0,
+            'price_in' => !empty($fields[10]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[10]) : 0,
+            'price_out' => !empty($fields[13]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[13]) : 0,
+            'price_may' => !empty($fields[14]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[14]) : 0,
             'unit' => $idunidad,
-            'presentation' => $nombreUnidad,
+            'presentation' => trim($fields[2]),
             'user_id' => $_SESSION["user_id"],
             'category_id' => 1,
             'fecha_venc' => !empty($fields[5]) ? $fields[5] : null,
             'laboratorio' => !empty($fields[4]) ? trim($fields[4]) : '-',
+            'reg_san' => !empty($fields[20]) ? trim($fields[20]) : '-',
             'created_at' => date('Y-m-d H:i:s'),
             'is_active' => 1
         ];
@@ -187,6 +188,7 @@ try {
                 $productData['price_may'],
                 $productData['fecha_venc'],
                 $productData['user_id'],
+                $productData['reg_san'],
                 $productoExistente['id']
             ]);
             $idproducto = $productoExistente['id'];
@@ -197,7 +199,7 @@ try {
                 $productData['inventary_min'], $productData['price_in'], $productData['price_out'], 
                 $productData['price_may'], $productData['unit'], $productData['presentation'], 
                 $productData['user_id'], $productData['category_id'], $productData['fecha_venc'],
-                $productData['laboratorio'], $productData['created_at'], $productData['is_active']
+                $productData['laboratorio'], $productData['reg_san'], $productData['created_at'], $productData['is_active']
             ]);
             $idproducto = $conn->lastInsertId();
         }

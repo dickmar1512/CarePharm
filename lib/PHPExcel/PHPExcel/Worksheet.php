@@ -393,7 +393,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      *
      * @return PHPExcel_CachedObjectStorage
      */
-    public function getCellCacheController(): PHPExcel_CachedObjectStorage
+    public function getCellCacheController()
     {
         return $this->cellCollection;
     }
