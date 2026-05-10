@@ -10,15 +10,12 @@
 define("ROOT", dirname(__FILE__));
 date_default_timezone_set("America/Lima");
 
-include "core/autoload.php";
-include "core/app/model/ProductData.php";
-include "core/app/model/OperationData.php";
-include "core/app/model/SellData.php";
-include "core/app/model/UserData.php";
-include "core/controller/Database.php";
-include "core/controller/Executor.php";
-include "core/controller/Model.php";
-include "core/app/model/CLSPHPMailer.php";
+include_once "core/autoload.php";
+include_once "core/app/model/ProductData.php";
+include_once "core/app/model/OperationData.php";
+include_once "core/app/model/SellData.php";
+include_once "core/app/model/UserData.php";
+include_once "core/app/model/CLSPHPMailer.php";
 
 Core::$root = "";
 
