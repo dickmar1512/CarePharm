@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class ComprobanteData
 {
 	public static $tablename = "operation";

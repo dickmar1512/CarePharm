@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class ConfigurationData
 {
 	public static $tablename = "configuration";

@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class BoxData
 {
 	public static $tablename = "box";

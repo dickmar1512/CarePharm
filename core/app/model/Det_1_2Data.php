@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class Det_1_2Data
 {
 	public static $tablename = "det";

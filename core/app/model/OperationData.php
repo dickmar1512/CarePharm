@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class OperationData
 {
 	public static $tablename = "operation";
@@ -27,6 +28,13 @@ class OperationData
 	public $barcode;
 	public $is_oficial;
 	public $estado;
+	public $fecha;
+	public $producto;
+	public $estado_op;
+	public $tipo_comprobante_id;
+	public $serie;
+	public $comprobante;
+	public $usuario;
 
 	public function OperationData()
 	{
@@ -468,6 +476,86 @@ class OperationData
 				ORDER BY anio DESC, mes DESC, cantidad_total DESC";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
+	}
+	public static function getBincartReport($sd, $ed, $user_id = 0)
+	{
+		$sql = "SELECT 
+					op.created_at as fecha,
+					p.name as producto,
+					op.estado as estado_op,
+					s.tipo_comprobante as tipo_comprobante_id,
+					s.serie,
+					s.comprobante,
+					u.username as usuario,
+					u.name as user_name,
+					u.lastname as user_lastname,
+					op.operation_type_id,
+					op.q,
+					op.product_id
+				FROM operation op
+				INNER JOIN product p ON op.product_id = p.id
+				LEFT JOIN sell s ON op.sell_id = s.id
+				LEFT JOIN user u ON s.user_id = u.id
+				WHERE DATE(op.created_at) BETWEEN '$sd' AND '$ed' ";
+		
+		if ($user_id != 0) {
+			$sql .= " AND s.user_id = $user_id ";
+		}
+		
+		$sql .= " ORDER BY op.created_at ASC, op.id ASC ";
+
+		$query = Executor::doit($sql);
+		$operations = array();
+		while ($r = $query[0]->fetch_array()) {
+			$op = new OperationData();
+			$op->fecha = $r['fecha'];
+			$op->producto = $r['producto'];
+			$op->estado_op = $r['estado_op'];
+			$op->tipo_comprobante_id = $r['tipo_comprobante_id'];
+			$op->serie = $r['serie'];
+			$op->comprobante = $r['comprobante'];
+			
+			// Format user
+			$op->usuario = trim($r['user_name'].' '.$r['user_lastname']);
+			if(empty($op->usuario)) $op->usuario = $r['usuario'];
+			
+			$op->operation_type_id = $r['operation_type_id'];
+			$op->q = $r['q'];
+			$op->product_id = $r['product_id'];
+			$operations[] = $op;
+		}
+
+		// Calculate initial stock for products involved
+		$products_involved = array();
+		foreach ($operations as $op) {
+			$products_involved[$op->product_id] = 0;
+		}
+
+		if (count($products_involved) > 0) {
+			$prod_ids = implode(",", array_keys($products_involved));
+			$sql_stock = "SELECT product_id, SUM(CASE WHEN operation_type_id=1 THEN q ELSE -q END) as stock_inicial 
+						  FROM operation 
+						  WHERE DATE(created_at) < '$sd' AND estado=1 AND product_id IN ($prod_ids) 
+						  GROUP BY product_id";
+			$query_stock = Executor::doit($sql_stock);
+			while ($r = $query_stock[0]->fetch_array()) {
+				$products_involved[$r['product_id']] = $r['stock_inicial'];
+			}
+		}
+
+		// Calculate running balance
+		foreach ($operations as &$op) {
+			if ($op->estado_op == 1) {
+				if ($op->operation_type_id == 1) {
+					$products_involved[$op->product_id] += $op->q;
+				} else {
+					$products_involved[$op->product_id] -= $op->q;
+				}
+			}
+			$op->saldo = $products_involved[$op->product_id];
+		}
+
+		return array_reverse($operations);
 	}
 }
 

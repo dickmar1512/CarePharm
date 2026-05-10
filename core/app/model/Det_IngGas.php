@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class Det_IngGas
 {
 	public static $tablename = "ingresos_pagos";

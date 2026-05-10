@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class Det_kit
 {
 	public static $tablename = "detalle_paq";

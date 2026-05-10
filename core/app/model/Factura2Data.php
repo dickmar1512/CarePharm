@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class Factura2Data
 {
 	public static $tablename = "factura";

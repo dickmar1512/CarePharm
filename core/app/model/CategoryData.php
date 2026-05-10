@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class CategoryData
 {
 	public static $tablename = "category";

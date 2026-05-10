@@ -3,6 +3,7 @@
  * clase para realizar acciones en tabla paquete y detalle_paq 01/11/2020
  */
 
+#[AllowDynamicProperties]
 class KitData
 {
 	public static $tablename = "paquete";

@@ -499,6 +499,12 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="./?view=bincartreport" class="nav-link" data-view="bincartreport">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>Bincart</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="./?view=reportecomparativoingresos" class="nav-link" data-view="reportecomparativoingresos">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Comparativo Ingr.</p>

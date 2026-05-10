@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class SellData
 {
 	public static $tablename = "sell";

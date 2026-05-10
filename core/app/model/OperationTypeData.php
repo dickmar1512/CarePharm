@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class OperationTypeData
 {
 	public static $tablename = "operation_type";
