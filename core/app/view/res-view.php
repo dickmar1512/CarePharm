@@ -46,6 +46,7 @@
 									<?php } ?>
 								</thead>
 								<?php foreach ($products as $sell): 
+										$total = 0;
 										$fechaObj = new DateTime($sell->created_at);
 										$fechaFormateada = $fechaObj->format('d/m/Y H:i:s');
 									?>
