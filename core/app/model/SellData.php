@@ -396,6 +396,608 @@ class SellData {
 		}
 		return $array;
 	}
+
+	public static function getMonthlySalesGrowth($year = null, $user_id = 0) {
+		if ($year === null) {
+			$year = date('Y');
+		}
+		
+		// Obtener ventas mensuales del año actual y anterior
+		$sql = "SELECT 
+					YEAR(s.created_at) as year,
+					MONTH(s.created_at) as month,
+					SUM(s.total) as total_mes
+				FROM " . self::$tablename . " s
+				WHERE s.operation_type_id = 2 
+					AND s.tipo_comprobante != 70 
+					AND s.estado = 1
+					AND YEAR(s.created_at) IN (" . ($year - 1) . ", " . $year . ")";
+		
+		if ($user_id != 0) {
+			$sql .= " AND s.user_id = " . intval($user_id);
+		}
+		
+		$sql .= " GROUP BY YEAR(s.created_at), MONTH(s.created_at)
+				ORDER BY year DESC, month DESC";
+		
+		$query = Executor::doit($sql);
+		$results = Model::many($query[0], new SellData());
+		
+		// Procesar los datos para calcular crecimiento
+		$monthlyData = [];
+		$currentYearData = [];
+		$previousYearData = [];
+		
+		// Separar datos por año
+		foreach ($results as $row) {
+			if ($row->year == $year) {
+				$currentYearData[$row->month] = floatval($row->total_mes);
+			} elseif ($row->year == ($year - 1)) {
+				$previousYearData[$row->month] = floatval($row->total_mes);
+			}
+		}
+		
+		// Generar el cuadro mensual
+		$cuadro = [];
+		$meses = [
+			1 => 'ENERO', 2 => 'FEBRERO', 3 => 'MARZO', 4 => 'ABRIL',
+			5 => 'MAYO', 6 => 'JUNIO', 7 => 'JULIO', 8 => 'AGOSTO',
+			9 => 'SETIEMBRE', 10 => 'OCTUBRE', 11 => 'NOVIEMBRE', 12 => 'DICIEMBRE'
+		];
+		
+		for ($mes = 12; $mes >= 1; $mes--) {
+			$venta_actual = isset($currentYearData[$mes]) ? $currentYearData[$mes] : 0;
+			$venta_anterior = isset($previousYearData[$mes]) ? $previousYearData[$mes] : 0;
+			
+			// Calcular crecimiento en soles
+			$crecimiento_soles = $venta_anterior > 0 ? $venta_actual - $venta_anterior : 0;
+			
+			// Calcular crecimiento porcentual
+			$crecimiento_porcentaje = 0;
+			if ($venta_anterior > 0) {
+				$crecimiento_porcentaje = (($venta_actual - $venta_anterior) / $venta_anterior) * 100;
+			} elseif ($venta_actual > 0) {
+				$crecimiento_porcentaje = 100; // Si no había ventas el año anterior
+			}
+			
+			$cuadro[] = [
+				'mes' => $meses[$mes],
+				'ventas_soles' => number_format($venta_actual, 2),
+				'crecimiento_soles' => number_format($crecimiento_soles, 2),
+				'crecimiento_porcentaje' => round($crecimiento_porcentaje, 2) . '%'
+			];
+		}
+		
+		return array_reverse($cuadro); // Ordenar de enero a diciembre
+	}
+
+	public static function getMonthlySalesComparison($year = null, $user_id = 0) {
+		if ($year === null) {
+			$year = date('Y');
+		}
+		
+		// Obtener ventas mensuales del año especificado
+		$sql = "SELECT 
+					MONTH(s.created_at) as month,
+					SUM(s.total) as total_mes
+				FROM " . self::$tablename . " s
+				WHERE s.operation_type_id = 2 
+					AND s.tipo_comprobante != 70 
+					AND s.estado = 1
+					AND YEAR(s.created_at) = " . intval($year);
+		
+		if ($user_id != 0) {
+			$sql .= " AND s.user_id = " . intval($user_id);
+		}
+		
+		$sql .= " GROUP BY MONTH(s.created_at)
+				ORDER BY month DESC";
+		
+		$query = Executor::doit($sql);
+		$results = Model::many($query[0], new SellData());
+		
+		// Organizar datos por mes
+		$monthlyData = [];
+		foreach ($results as $row) {
+			$monthlyData[$row->month] = floatval($row->total_mes);
+		}
+		
+		// Generar el cuadro con comparación mes anterior
+		$cuadro = [];
+		$meses = [
+			1 => 'ENERO', 2 => 'FEBRERO', 3 => 'MARZO', 4 => 'ABRIL',
+			5 => 'MAYO', 6 => 'JUNIO', 7 => 'JULIO', 8 => 'AGOSTO',
+			9 => 'SETIEMBRE', 10 => 'OCTUBRE', 11 => 'NOVIEMBRE', 12 => 'DICIEMBRE'
+		];
+		
+		for ($mes = 12; $mes >= 1; $mes--) {
+			$venta_actual = isset($monthlyData[$mes]) ? $monthlyData[$mes] : 0;
+			$venta_anterior = isset($monthlyData[$mes - 1]) ? $monthlyData[$mes - 1] : 0;
+			
+			// Calcular crecimiento en soles
+			$crecimiento_soles = $venta_anterior > 0 ? $venta_actual - $venta_anterior : 0;
+			
+			// Calcular crecimiento porcentual
+			$crecimiento_porcentaje = 0;
+			if ($venta_anterior > 0) {
+				$crecimiento_porcentaje = (($venta_actual - $venta_anterior) / $venta_anterior) * 100;
+			} elseif ($venta_actual > 0) {
+				$crecimiento_porcentaje = 0; // Si no había ventas el mes anterior
+			}
+			
+			$cuadro[] = [
+				'mes' => $meses[$mes],
+				'ventas_soles' => 'S/ ' . number_format($venta_actual, 2),
+				'crecimiento_soles' => $crecimiento_soles != 0 ? 'S/ ' . number_format($crecimiento_soles, 2) : 'S/ -',
+				'crecimiento_porcentaje' => $crecimiento_porcentaje != 0 ? round($crecimiento_porcentaje, 2) . '%' : '0 %'
+			];
+		}
+		
+		return array_reverse($cuadro);
+	}
+
+	// ============================================
+	// FUNCIÓN PRINCIPAL DE PROCESAMIENTO
+	// ============================================
+	public static function generarDatosRotacionInventario($registros, $fechaInicio = null, $fechaFin = null) {
+		// Convertir objeto a array si es necesario
+		if (is_object($registros)) {
+			$registros = json_decode(json_encode($registros), true);
+		}
+		
+		if (empty($registros)) {
+			return [];
+		}
+		
+		// Asegurar que cada registro sea un array y filtrar nulls
+		$registros = array_map(function($registro) {
+			if (is_object($registro)) {
+				$registroArray = [];
+				foreach ($registro as $key => $value) {
+					if ($value !== null) {
+						$registroArray[$key] = $value;
+					}
+				}
+				return $registroArray;
+			}
+			return array_filter((array)$registro, fn($v) => $v !== null);
+		}, $registros);
+		
+		// Determinar rango de fechas
+		if (!$fechaInicio || !$fechaFin) {
+			$fechaInicio = date('Y-01-01');
+			$fechaFin = date('Y-12-31');
+		}
+		
+		// AGRUPAR REGISTROS POR PRODUCTO
+		$productoAgrupado = [];
+		foreach ($registros as $registro) {
+			$productId = $registro['product_id'] ?? 0;
+			if (!isset($productoAgrupado[$productId])) {
+				$productoAgrupado[$productId] = [];
+			}
+			$productoAgrupado[$productId][] = $registro;
+		}
+		
+		// PROCESAR CADA PRODUCTO
+		$resultados = [];
+		
+		foreach ($productoAgrupado as $productId => $registrosProducto) {
+			$resultado = [
+				'producto' => '',
+				'product_id' => $productId,
+				'meses' => [],
+				'resumen' => []
+			];
+			
+			// Obtener información del producto
+			$resultado['producto'] = $registrosProducto[0]['name'] ?? '';
+			
+			// Todos los meses del año
+			$mesesAnalizar = [
+				'01' => 'Enero',
+				'02' => 'Febrero',
+				'03' => 'Marzo',
+				'04' => 'Abril',
+				'05' => 'Mayo',
+				'06' => 'Junio',
+				'07' => 'Julio',
+				'08' => 'Agosto',
+				'09' => 'Septiembre',
+				'10' => 'Octubre',
+				'11' => 'Noviembre',
+				'12' => 'Diciembre'
+			];
+			
+			// Inicializar estructura por mes
+			foreach ($mesesAnalizar as $numMes => $nombreMes) {
+				$resultado['meses'][$numMes] = [
+					'nombre' => $nombreMes,
+					'stock_inicial' => 0,
+					'cant_vendida' => 0,
+					'venta_soles' => 0.00,
+					'cant_comprada' => 0
+				];
+			}
+			
+			// Variables de control
+			$stockActual = 0;
+			$mesAnterior = null;
+			
+			// Procesar registros del producto
+			foreach ($registrosProducto as $registro) {
+				$fecha = DateTime::createFromFormat('d/m/Y H:i', $registro['created_at'] ?? '');
+				
+				if (!$fecha) {
+					continue;
+				}
+				
+				$mes = $fecha->format('m');
+				$anio = $fecha->format('Y');
+				$fechaRegistro = $fecha->format('Y-m-d');
+				
+				// Filtrar por rango de fechas
+				if ($fechaRegistro < $fechaInicio || $fechaRegistro > $fechaFin) {
+					continue;
+				}
+				
+				if (!isset($mesesAnalizar[$mes])) {
+					continue;
+				}
+				
+				$operationType = $registro['operation_type_id'] ?? null;
+				$cantidad = $registro['q'] ?? 0;
+				$precio = $registro['prec_alt'] ?? 0;
+				
+				// Si cambiamos de mes, actualizar stock inicial del nuevo mes
+				if ($mesAnterior !== null && $mes != $mesAnterior) {
+					$resultado['meses'][$mes]['stock_inicial'] = $stockActual;
+				}
+				
+				if ($operationType == 1) {
+					// Compra/Entrada
+					if ($mesAnterior === null) {
+						$resultado['meses'][$mes]['stock_inicial'] = $stockActual;
+					}
+					$stockActual += $cantidad;
+					$resultado['meses'][$mes]['cant_comprada'] += $cantidad;
+				} else if ($operationType == 2) {
+					// Venta/Salida
+					if ($mesAnterior === null) {
+						$resultado['meses'][$mes]['stock_inicial'] = $stockActual;
+					}
+					$resultado['meses'][$mes]['cant_vendida'] += $cantidad;
+					$resultado['meses'][$mes]['venta_soles'] += ($cantidad * $precio);
+					$stockActual -= $cantidad;
+				}
+				
+				$mesAnterior = $mes;
+			}
+			
+			// Propagar stock inicial entre meses
+			$stockPropagado = 0;
+			$primerMesConDatos = true;
+			
+			foreach ($mesesAnalizar as $numMes => $nombreMes) {
+				if ($primerMesConDatos && ($resultado['meses'][$numMes]['cant_vendida'] > 0 || $resultado['meses'][$numMes]['cant_comprada'] > 0)) {
+					$stockPropagado = $resultado['meses'][$numMes]['stock_inicial'];
+					$primerMesConDatos = false;
+				} else if (!$primerMesConDatos && $resultado['meses'][$numMes]['stock_inicial'] == 0) {
+					$resultado['meses'][$numMes]['stock_inicial'] = $stockPropagado;
+				}
+				
+				// Actualizar stock propagado
+				$stockPropagado = $resultado['meses'][$numMes]['stock_inicial'] 
+								+ $resultado['meses'][$numMes]['cant_comprada'] 
+								- $resultado['meses'][$numMes]['cant_vendida'];
+			}
+			
+			// Calcular RESUMEN
+			$totalCantVendida = 0;
+			$totalVentaSoles = 0;
+			$mesesConVentas = 0;
+			
+			foreach ($resultado['meses'] as $mes) {
+				$totalCantVendida += $mes['cant_vendida'];
+				$totalVentaSoles += $mes['venta_soles'];
+				if ($mes['cant_vendida'] > 0) {
+					$mesesConVentas++;
+				}
+			}
+			
+			$promedioCantVendida = $mesesConVentas > 0 ? $totalCantVendida / $mesesConVentas : 0;
+			$promedioVentasMes = $mesesConVentas > 0 ? $totalVentaSoles / $mesesConVentas : 0;
+			
+			// Determinar rotación
+			$rotacion = 'SIN MOVIMIENTO';
+			$claseRotacion = 'sin-movimiento';
+			
+			if ($promedioCantVendida >= 20) {
+				$rotacion = '(A)-ALTA ROTACION';
+				$claseRotacion = 'alta-rotacion';
+			} else if ($promedioCantVendida >= 10) {
+				$rotacion = '(M)-MEDIA ROTACION';
+				$claseRotacion = 'media-rotacion';
+			} else if ($promedioCantVendida > 0) {
+				$rotacion = '(B)-BAJA ROTACION';
+				$claseRotacion = 'baja-rotacion';
+			}
+			
+			$resultado['resumen'] = [
+				'stock_actual' => $stockActual,
+				'promedio_cant_vendida' => round($promedioCantVendida, 2),
+				'total_cant_vendida' => $totalCantVendida,
+				'estado' => 'ACTIVO',
+				'rotacion' => $rotacion,
+				'clase_rotacion' => $claseRotacion,
+				'promedio_ventas_mes' => round($promedioVentasMes, 2),
+				'subtotal_ventas' => round($totalVentaSoles, 2),
+				'meses_con_ventas' => $mesesConVentas
+			];
+			
+			// Agregar resultado del producto al array de resultados
+			$resultados[] = $resultado;
+		}
+		
+		return $resultados;
+	}
+
+    public static function generarReporteRotacionVentas($datos) {
+		// Meses a mostrar (mayo a setiembre)
+		$meses = [
+			1 => 'Enero',
+			2 => 'Febrero',
+			3 => 'Marzo',
+			4 => 'Abril',
+			5 => 'Mayo',
+			6 => 'Junio',
+			7 => 'Julio',
+			8 => 'Agosto',
+			9 => 'Setiembre',
+			10 => 'Octubre',
+			11 => 'Noviembre',
+			12 => 'Diciembre'
+		];
+		
+		// Agrupar datos por producto
+		$productos = [];
+		foreach ($datos as $fila) {
+			$id = $fila['product_id'];
+			if (!isset($productos[$id])) {
+				$productos[$id] = [
+					'name' => $fila['name'],
+					'operaciones' => []
+				];
+			}
+			$productos[$id]['operaciones'][] = $fila;
+		}
+
+		$resultado = [];
+
+		foreach ($productos as $id => $prod) {
+			// Ordenar operaciones por fecha (aunque ya lo estén)
+			usort($prod['operaciones'], fn($a, $b) => strtotime($a['created_at']) <=> strtotime($b['created_at']));
+
+			// Inicializar acumuladores mensuales
+			$mesData = [];
+			foreach ($meses as $num => $nombre) {
+				$mesData[$num] = [
+					'entradas' => 0,
+					'salidas' => 0,
+					'ventas_soles' => 0.0
+				];
+			}
+
+			// Procesar cada operación
+			foreach ($prod['operaciones'] as $op) {
+				$fecha = new DateTime($op['created_at']);
+				$mes = (int)$fecha->format('n'); // 1-12
+				$anio = (int)$fecha->format('Y');
+				$q = (int)$op['q'];
+				$precio = (float)$op['prec_alt'];
+				$tipo = (int)$op['operation_type_id'];
+
+				// Solo considerar operaciones dentro de mayo-setiembre 2025
+				if ($anio !== 2025 || !isset($mesData[$mes])) continue;
+
+				if ($tipo === 1) {
+					$mesData[$mes]['entradas'] += $q;
+				} elseif ($tipo === 2) {
+					$mesData[$mes]['salidas'] += $q;
+					$mesData[$mes]['ventas_soles'] += $q * $precio;
+				}
+			}
+
+			// Calcular stock inicial por mes
+			$stock = 0;
+			$totalVendido = 0;
+			$totalVentas = 0.0;
+			$mesesConVenta = 0;
+
+			$fila = [
+				'name' => $prod['name'],
+				'meses' => []
+			];
+
+			foreach ($meses as $num => $nombre) {
+				$stock_inicial = $stock;
+				$vendido = $mesData[$num]['salidas'];
+				$ventas_soles = $mesData[$num]['ventas_soles'];
+
+				$fila['meses'][$num] = [
+					'stock_inicial' => $stock_inicial,
+					'cant_vendida' => $vendido,
+					'venta_soles' => round($ventas_soles, 2)
+				];
+
+				// Actualizar stock: entradas - salidas
+				$stock = $stock + $mesData[$num]['entradas'] - $vendido;
+
+				$totalVendido += $vendido;
+				$totalVentas += $ventas_soles;
+				if ($vendido > 0) $mesesConVenta++;
+			}
+
+			// Calcular métricas finales
+			$promedioCantVendida = count($meses) > 0 ? round($totalVendido / count($meses), 2) : 0;
+			$promedioVentas = count($meses) > 0 ? round($totalVentas / count($meses), 2) : 0;
+
+			// Estado y rotación
+			$estado = 'ACTIVO';
+			if ($totalVendido === 0) {
+				$rotacion = '(I)-INACTIVO';
+			} elseif ($mesesConVenta >= 4) {
+				$rotacion = '(A)-ALTA ROTACION';
+			} elseif ($mesesConVenta >= 2) {
+				$rotacion = '(M)-MEDIA ROTACION';
+			} else {
+				$rotacion = '(B)-BAJA ROTACION';
+			}
+
+			$fila['resumen'] = [
+				'stock_actual' => $stock,
+				'promedio_cant_vendida' => $promedioCantVendida,
+				'total_cant_vendida' => $totalVendido,
+				'estado' => $estado,
+				'rotacion' => $rotacion,
+				'promedio_ventas' => $promedioVentas,
+				'subtotal_ventas' => round($totalVentas, 2)
+			];
+
+			$resultado[] = $fila;
+		}
+
+		return $resultado;
+	}
+
+	public static function generarReporteRotacionVentas2($datos) {
+		$meses = [1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',  5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Setiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'];
+		$productos = [];
+
+		foreach ($datos as $fila) {
+			$id = $fila->product_id; // <-- Usar -> en lugar de ['']
+			if (!isset($productos[$id])) {
+				$productos[$id] = [
+					'name' => $fila->name,
+					'operaciones' => []
+				];
+			}
+			$productos[$id]['operaciones'][] = $fila;
+		}
+        	
+		$resultado = [];
+		foreach ($productos as $id => $prod) {
+			// Ordenar operaciones por fecha (aunque ya lo estén)
+			usort($prod['operaciones'], fn($a, $b) => strtotime($a['created_at']) <=> strtotime($b['created_at']));
+			// Inicializar acumuladores mensuales
+			$mesData = [];
+			foreach ($meses as $num => $nombre) {
+				$mesData[$num] = ['entradas' => 0, 'salidas' => 0, 'ventas_soles' => 0.0];
+			}
+
+			foreach ($prod['operaciones'] as $op) {
+				$op = (object)$op;
+				$fecha = new DateTime($op->created_at);
+				$mes = (int)$fecha->format('n');
+				//$anio = (int)$fecha->format('Y');
+				$q = (int)$op->q;
+				$precio = (float)$op->prec_alt;
+				$tipo = (int)$op->operation_type_id;
+
+				if ($tipo === 1) {
+					$mesData[$mes]['entradas'] += $q;
+				} elseif ($tipo === 2) {
+					$mesData[$mes]['salidas'] += $q;
+					$mesData[$mes]['ventas_soles'] += $q * $precio;
+				}
+			}
+			//return $mesData;
+			$stock = 0;
+			$totalVendido = 0;
+			$totalVentas = 0.0;
+			$mesesConVenta = 0;
+			$filaResultado = ['name' => $prod['name'], 'meses' => []];
+
+			foreach ($meses as $num => $nombre) {
+				$stock_inicial = $stock;
+				$vendido = $mesData[$num]['salidas'];
+				$ventas_soles = $mesData[$num]['ventas_soles'];
+
+				$filaResultado['meses'][$num] = [
+					'stock_inicial' => $stock_inicial,
+					'cant_vendida' => $vendido,
+					'venta_soles' => round($ventas_soles, 2)
+				];
+
+				$stock += $mesData[$num]['entradas'] - $vendido;
+				$totalVendido += $vendido;
+				$totalVentas += $ventas_soles;
+				if ($vendido > 0) $mesesConVenta++;
+			}
+
+			$promedioCantVendida = count($meses) > 0 ? round($totalVendido / count($meses), 2) : 0;
+			$promedioVentas = count($meses) > 0 ? round($totalVentas / count($meses), 2) : 0;
+
+			$rotacion = match(true) {
+				$totalVendido === 0 => '(I)-INACTIVO',
+				$mesesConVenta >= 4 => '(A)-ALTA ROTACION',
+				$mesesConVenta >= 2 => '(M)-MEDIA ROTACION',
+				default => '(B)-BAJA ROTACION'
+			};
+
+			$filaResultado['resumen'] = [
+				'stock_actual' => $stock,
+				'promedio_cant_vendida' => $promedioCantVendida,
+				'total_cant_vendida' => $totalVendido,
+				'estado' => 'ACTIVO',
+				'rotacion' => $rotacion,
+				'promedio_ventas' => $promedioVentas,
+				'subtotal_ventas' => round($totalVentas, 2)
+			];
+
+			$resultado[] = $filaResultado;
+		}
+
+		return $resultado;
+	}
+	// ============================================
+	// FUNCIÓN PARA OBTENER DATOS DE LA BD
+	// ============================================
+
+	public static function obtenerDatosRotacion($productId = null, $fechaInicio = null, $fechaFin = null, $userId = null) {
+		$sql = "SELECT O.product_id, P.name, O.q, O.prec_alt, O.operation_type_id, 
+					O.created_at, O.sell_id
+				FROM dbcarepharm.operation AS O
+			    INNER JOIN dbcarepharm.product AS P ON (P.id = O.product_id AND P.is_active = 1)
+				WHERE O.sell_id <> 0
+				AND O.product_id =6355 ";
+		
+				
+		if ($productId) {
+			$sql .= " AND O.product_id = $productId ";
+		}
+		
+		if ($fechaInicio && $fechaFin) {
+			$sql .= " AND DATE(O.created_at) BETWEEN '".$fechaInicio."' AND '".$fechaFin."' ";
+		}
+		
+		// if ($userId) {
+		// 	$sql .= " AND O.user_id = $userId";
+		// }
+		
+		$sql .= " ORDER BY O.product_id, O.created_at ASC";		
+		
+		$query = Executor::doit($sql);
+		$results = Model::many($query[0], new SellData());
+		
+		$registros = [];
+		foreach ($results as $row) {
+			//$registros[] = $row;
+			$registros[] = (object)array_filter( (array)$row, fn($v) => $v !== null);
+		}
+		
+		return $registros;
+	}
 }
 
 ?>
