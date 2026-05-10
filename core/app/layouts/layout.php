@@ -501,7 +501,7 @@
                                         <li class="nav-item">
                                             <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
-                                                Venta x Producto
+                                                Venta por Producto
                                             </a>
                                         </li> 
                                         <li class="nav-item">
