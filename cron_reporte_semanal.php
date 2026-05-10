@@ -122,7 +122,10 @@ $chartConfig = [
                 'borderWidth' => 3,
                 'tension' => 0.4,
                 'pointRadius' => 4,
-                'pointBackgroundColor' => 'rgba(75, 192, 192, 1)'
+                'pointBackgroundColor' => 'rgba(75, 192, 192, 1)',
+                'datalabels' => [
+                    'display' => false
+                ]
             ]
         ]
     ],
