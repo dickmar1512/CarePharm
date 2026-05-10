@@ -1,9 +1,8 @@
-# .github/workflows/deploy.yml
-name: Desplegar PHP a Laragon
+name: Desplegar a Producción Laragon
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master, main ]
   workflow_dispatch:
 
 jobs:
@@ -14,46 +13,35 @@ jobs:
       - name: Obtener código
         uses: actions/checkout@v4
       
-      - name: Configurar entorno Windows
-        shell: bash
-        run: |
-          echo "MSYS_NO_PATHCONV=1" >> $GITHUB_ENV
+      # Eliminamos el paso de bash que causaba error
       
-      - name: Desplegar a Laragon (PHP)
+      - name: Desplegar a Laragon (Windows CMD)
         shell: cmd
         run: |
-          set LARAGON_WWW=C:\laragon\www
-          set PROYECTO=CarePharm
-          
-          echo "=== INICIANDO DESPLIEGUE PHP ==="
-          echo "Origen: %GITHUB_WORKSPACE%"
-          echo "Destino: %LARAGON_WWW%\%PROYECTO%"
+          echo ========================================
+          echo DESPLEGANDO A PRODUCCION LARAGON
+          echo ========================================
+          echo Origen: %GITHUB_WORKSPACE%
+          echo Destino: C:\laragon\www\CarePharm
+          echo.
           
           :: Crear carpeta si no existe
-          if not exist "%LARAGON_WWW%\%PROYECTO%" mkdir "%LARAGON_WWW%\%PROYECTO%"
+          if not exist "C:\laragon\www\CarePharm" mkdir "C:\laragon\www\CarePharm"
           
-          :: Copiar archivos PHP al www de Laragon
-          robocopy "%GITHUB_WORKSPACE%" "%LARAGON_WWW%\%PROYECTO%" /MIR /XD .git .github /XF *.md deploy.yml
+          :: Copiar archivos (excluyendo .git y .github)
+          robocopy "%GITHUB_WORKSPACE%" "C:\laragon\www\CarePharm" /MIR /XD .git .github /XF *.md
           
+          :: Verificar resultado
           if %errorlevel% geq 8 (
-            echo [ERROR] Fallo en la copia
+            echo [ERROR] Fallo en la copia de archivos
             exit /b 1
           ) else (
             echo [OK] Archivos copiados exitosamente
           )
           
           echo.
-          echo "=== Archivos desplegados ==="
-          dir "%LARAGON_WWW%\%PROYECTO%" /b
-      
-      - name: Limpiar cache de PHP (si aplica)
-        shell: cmd
-        run: |
-          :: Si usas OpCache, reiniciar PHP
-          echo "Laragon PHP: Si hay cambios en configuracion, reinicia Laragon manualmente"
-      
-      - name: Despliegue completado
-        shell: powershell
-        run: |
-          Write-Host "✅ Despliegue completado" -ForegroundColor Green
-          Write-Host "🌐 Accede a tu proyecto en: http://locslhost/Carepharm" -ForegroundColor Cyan
+          echo ========================================
+          echo ARCHIVOS DESPLEGADOS:
+          dir "C:\laragon\www\CarePharm" /b
+          echo ========================================
+          echo ¡Despliegue completado con exito!
