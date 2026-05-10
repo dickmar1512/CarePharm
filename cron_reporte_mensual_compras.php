@@ -93,18 +93,37 @@ foreach($period as $dt){
 
 $promedioPorc = $mesesConCrec > 0 ? ($sumaPorcentajes / $mesesConCrec) : 0;
 
-// 2. Generar el Gráfico de Barras vía QuickChart (se adjuntará como imagen remota)
+// 2. Generar colores aleatorios para las barras
+$barColors = [];
+foreach($ventasData as $v) {
+    $r = rand(0, 200); $g = rand(0, 200); $b = rand(0, 200);
+    $barColors[] = "rgba($r, $g, $b, 0.8)";
+}
+
+// Generar el Gráfico Mixto (Barras + Línea de Tendencia) vía QuickChart
 $chartConfig = [
     'type' => 'bar',
     'data' => [
         'labels' => $labels,
         'datasets' => [
             [
+                'type' => 'bar',
                 'label' => 'Compras en Soles',
                 'data' => $ventasData,
-                'backgroundColor' => 'rgba(255, 99, 132, 0.8)',
-                'borderColor' => 'rgba(255, 99, 132, 1)',
+                'backgroundColor' => $barColors,
+                'borderColor' => 'rgba(0, 0, 0, 0.1)',
                 'borderWidth' => 1
+            ],
+            [
+                'type' => 'line',
+                'label' => 'Tendencia',
+                'data' => $ventasData,
+                'fill' => false,
+                'borderColor' => 'rgba(255, 99, 132, 1)',
+                'borderWidth' => 3,
+                'tension' => 0.4,
+                'pointRadius' => 4,
+                'pointBackgroundColor' => 'rgba(255, 99, 132, 1)'
             ]
         ]
     ],
