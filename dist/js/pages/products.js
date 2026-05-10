@@ -187,8 +187,9 @@ $('#openModalNuevoProducto').on('click', function () {
     openProductModal('add');
 });
 
-// Evento para abrir el modal de edición de producto
-$('.edit-product').on('click', function () {
+// Evento para abrir el modal de edición de producto (usando delegación de eventos para DataTables)
+$(document).on('click', '.edit-product', function (e) {
+    e.preventDefault();
     const productId = this.getAttribute('data-id');
     fetch(`./?action=getproduct&id=${productId}`)
         .then(response => response.json())

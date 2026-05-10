@@ -3,8 +3,8 @@ $('#openModalAgregarCategoria').on('click', function () {
     openCategoriaModal('add');
 });
 
-// Evento para abrir el modal de edición de unidad d emedida
-$('.edit-categoria').on('click', function () {
+// Evento para abrir el modal de edición de categoria (Delegación para DataTables)
+$(document).on('click', '.edit-categoria', function () {
     const categoriaId = this.getAttribute('data-id');
     fetch(`./?action=getcategoria&id=${categoriaId}`)
         .then(response => response.json())
@@ -12,12 +12,12 @@ $('.edit-categoria').on('click', function () {
             openCategoriaModal('edit', categoriaData);
         })
         .catch(error => {
-            console.error('Error al obtener los datos de unidad de medidad:', error);
+            console.error('Error al obtener los datos de categoria:', error);
         });
 });
 
-//Evento para activar o desactivar clientes
-$('.delete-categoria').on('click', function () {
+// Evento para activar o desactivar categorias (Delegación para DataTables)
+$(document).on('click', '.delete-categoria', function () {
 	const arrDato = this.getAttribute('data-id').split('|');
     const categoriaId = arrDato[0];
     const action = arrDato[1];
