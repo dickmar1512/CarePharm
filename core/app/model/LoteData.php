@@ -4,6 +4,11 @@
 class LoteData
 {
 	public static $tablename = "lote";
+	public $fech_ing;
+	public $id_prod;
+	public $num_lot;
+	public $id_sell;
+	public $user_id;
 
 	public function LoteData()
 	{
