@@ -539,6 +539,26 @@ class OperationData
 		return Model::many($query[0], new OperationData());
 	}
 
+	public static function getSalesSummary($sd, $ed)
+	{
+		$sql = "SELECT p.name as producto,
+					   SUM(op.q) as qty,
+					   SUM(op.q * op.prec_alt) as total
+				FROM operation op
+				JOIN product p ON p.id = op.product_id
+				WHERE op.operation_type_id = 2 
+				  AND op.estado = 1
+				  AND DATE(op.created_at) BETWEEN '$sd' AND '$ed'
+				GROUP BY p.id
+				ORDER BY total DESC";
+		$query = Executor::doit($sql);
+		$data = [];
+		while($r = $query[0]->fetch_array()){
+			$data[] = $r;
+		}
+		return $data;
+	}
+
 	public static function getBincartReport($sd, $ed, $user_id = 0)
 	{
 		$sql = "SELECT 
