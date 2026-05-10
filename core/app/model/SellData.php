@@ -1,6 +1,7 @@
 <?php
-#[AllowDynamicProperties]
-class SellData {
+
+class SellData
+{
 	public static $tablename = "sell";
 	public $id;
 	public $person_id;
@@ -26,135 +27,160 @@ class SellData {
 	public $comp;
 	public $tipo;
 
-	public function SellData(){
+	public function SellData()
+	{
 		$this->created_at = "NOW()";
-		$this->fecha_emi  = "";
+		$this->fecha_emi = "";
 		$this->descuento = 0;
 	}
 
-	public function getPerson(){ return PersonData::getById($this->person_id);}
-	public function getUser(){ return UserData::getById($this->user_id);}
+	public function getPerson()
+	{
+		return PersonData::getById($this->person_id);
+	}
+	public function getUser()
+	{
+		return UserData::getById($this->user_id);
+	}
 
-	public function add(){
-		$sql = "insert into ".self::$tablename." (total, cash, discount,user_id,created_at) ";
+	public function add()
+	{
+		$sql = "insert into " . self::$tablename . " (total, cash, discount,user_id,created_at) ";
 		$sql .= "value ($this->total, $this->cash, $this->discount,$this->user_id,$this->created_at)";
 		return Executor::doit($sql);
 	}
 
-	public function add2(){
-		$sql = "insert into ".self::$tablename." (user_id, tipo_comprobante, serie, comprobante, total, cash, discount,created_at, estado, person_id, tipo_pago) ";
-		$sql .= "value ($this->user_id, $this->tipo_comprobante, '".$this->serie."', '".$this->comprobante."', $this->total, $this->cash, $this->discount, '".$this->created_at."', 1, $this->person_id, $this->tipo_pago)";
+	public function add2()
+	{
+		$sql = "insert into " . self::$tablename . " (user_id, tipo_comprobante, serie, comprobante, total, cash, discount,created_at, estado, person_id, tipo_pago) ";
+		$sql .= "value ($this->user_id, $this->tipo_comprobante, '" . $this->serie . "', '" . $this->comprobante . "', $this->total, $this->cash, $this->discount, '" . $this->created_at . "', 1, $this->person_id, $this->tipo_pago)";
 		return Executor::doit($sql);
 	}
 
-	public function add_re(){
-		$sql = "insert into ".self::$tablename." (user_id,operation_type_id,created_at) ";
+	public function add_re()
+	{
+		$sql = "insert into " . self::$tablename . " (user_id,operation_type_id,created_at) ";
 		$sql .= "value ($this->user_id,1,$this->created_at)";
 		return Executor::doit($sql);
 	}
 
-	public function add_re2(){
-		$sql = "insert into ".self::$tablename." (person_id,tipo_comprobante, serie, comprobante,fecha_emi, user_id,operation_type_id,created_at,total,cash,discount) ";
-		$sql .= "value ($this->person_id,$this->tipo_comprobante, '".$this->serie."', lpad($this->comprobante,8,0), STR_TO_DATE('".$this->fecha_emi."','%d/%m/%Y'), $this->user_id,1,$this->created_at,$this->total,$this->cash,$this->discount)";
+	public function add_re2()
+	{
+		$sql = "insert into " . self::$tablename . " (person_id,tipo_comprobante, serie, comprobante,fecha_emi, user_id,operation_type_id,created_at,total,cash,discount) ";
+		$sql .= "value ($this->person_id,$this->tipo_comprobante, '" . $this->serie . "', lpad($this->comprobante,8,0), STR_TO_DATE('" . $this->fecha_emi . "','%d/%m/%Y'), $this->user_id,1,$this->created_at,$this->total,$this->cash,$this->discount)";
 		return Executor::doit($sql);
 	}
 
-	public function add_with_client(){
-		$sql = "insert into ".self::$tablename." (tipo_comprobante, serie, comprobante,fecha_emi, total, discount, person_id, user_id, created_at, estado,tipo_pago) ";
-		$sql .= "value ($this->tipo_comprobante, '".$this->serie."', '".$this->comprobante."', STR_TO_DATE('".$this->fecha_emi."','%d/%m/%Y'),$this->total,$this->discount,$this->person_id,$this->user_id,'".$this->created_at."','1','1')";
+	public function add_with_client()
+	{
+		$sql = "insert into " . self::$tablename . " (tipo_comprobante, serie, comprobante,fecha_emi, total, discount, person_id, user_id, created_at, estado,tipo_pago) ";
+		$sql .= "value ($this->tipo_comprobante, '" . $this->serie . "', '" . $this->comprobante . "', STR_TO_DATE('" . $this->fecha_emi . "','%d/%m/%Y'),$this->total,$this->discount,$this->person_id,$this->user_id,'" . $this->created_at . "','1','1')";
 		return Executor::doit($sql);
 	}
 
-	public function add_re_with_client(){
-		$sql = "insert into ".self::$tablename." (person_id,operation_type_id,user_id,created_at,tipo_comprobante,serie,comprobante,fecha_emi,total,cash,discount) ";
-		$sql .= "value ($this->person_id,1,$this->user_id,NOW(),$this->tipo_comprobante,'".$this->serie."',lpad($this->comprobante,8,0), STR_TO_DATE('".$this->fecha_emi."','%d/%m/%Y'),$this->total,$this->cash,0)";
+	public function add_re_with_client()
+	{
+		$sql = "insert into " . self::$tablename . " (person_id,operation_type_id,user_id,created_at,tipo_comprobante,serie,comprobante,fecha_emi,total,cash,discount) ";
+		$sql .= "value ($this->person_id,1,$this->user_id,NOW(),$this->tipo_comprobante,'" . $this->serie . "',lpad($this->comprobante,8,0), STR_TO_DATE('" . $this->fecha_emi . "','%d/%m/%Y'),$this->total,$this->cash,0)";
 		return Executor::doit($sql);
 	}
 
-	public function addPagoParcial(){
+	public function addPagoParcial()
+	{
 		$sql = "insert into pago_parcial (sellid, tipoPago, importe) ";
 		$sql .= "value ($this->id,1, $this->importepp)";
 		return Executor::doit($sql);
 	}
 
-	public static function delById($id){
-		$sql = "update ".self::$tablename." set estado=0 where id=$id";
+	public static function delById($id)
+	{
+		$sql = "update " . self::$tablename . " set estado=0 where id=$id";
 		Executor::doit($sql);
 	}
 
-	public function del(){
-		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
+	public function del()
+	{
+		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public function cancel(){
-		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
+	public function cancel()
+	{
+		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public function update_box(){
-		$sql = "update ".self::$tablename." set box_id=$this->box_id where id=$this->id";
+	public function update_box()
+	{
+		$sql = "update " . self::$tablename . " set box_id=$this->box_id where id=$this->id";
 		Executor::doit($sql);
 
 		$upd = "update pago_parcial set boxid = $this->box_id where boxid is null ";
 		Executor::doit($upd);
 	}
 
-	public function update_tipoPago(){
-		$sql = "update ".self::$tablename." set tipo_pago=$this->tipo_pago where id=$this->id";
+	public function update_tipoPago()
+	{
+		$sql = "update " . self::$tablename . " set tipo_pago=$this->tipo_pago where id=$this->id";
 		Executor::doit($sql);
 	}
-	public function update_pagoParcial(){
+	public function update_pagoParcial()
+	{
 		$sql = "update pago_parcial set importe=$this->importepp where sellid=$this->id";
 		Executor::doit($sql);
 	}
 
-	public function update_proforma_venta(){
-		$sql = "update ".self::$tablename." set estado = 1 where id=$this->id";
+	public function update_proforma_venta()
+	{
+		$sql = "update " . self::$tablename . " set estado = 1 where id=$this->id";
 		return Executor::doit($sql);
 	}
 
-	public static function getById($id){
-		 $sql = "select * from ".self::$tablename." where id=$id";
+	public static function getById($id)
+	{
+		$sql = "select * from " . self::$tablename . " where id=$id";
 		$query = Executor::doit($sql);
-		return Model::one($query[0],new SellData());
+		return Model::one($query[0], new SellData());
 	}
 
-	public static function getByNroDoc($num){
-		 $sql = "select * from ".self::$tablename." where CONCAT(SERIE,'-',COMPROBANTE)='$num'";
+	public static function getByNroDoc($num)
+	{
+		$sql = "select * from " . self::$tablename . " where CONCAT(SERIE,'-',COMPROBANTE)='$num'";
 		$query = Executor::doit($sql);
-		return Model::one($query[0],new SellData());
+		return Model::one($query[0], new SellData());
 	}
 
-	public static function getSells($inicio,$fin,$user_id){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 AND tipo_comprobante!=70 AND estado = 1 ";
+	public static function getSells($inicio, $fin, $user_id)
+	{
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante!=70 AND estado = 1 ";
 
-		if($user_id != 0){
+		if ($user_id != 0) {
 			$sql .= " and user_id = $user_id ";
 		}
 
-		if($inicio == "" && $fin == ""){
+		if ($inicio == "" && $fin == "") {
 			$inicio = date('Y-m-d H:i:s');
 			$fin = date('Y-m-d H:i:s');
 		}
 
-		$sql .= " and  date(created_at) >= '".$inicio."' and date(created_at) <= '".$fin."' order by created_at desc";
+		$sql .= " and  date(created_at) >= '" . $inicio . "' and date(created_at) <= '" . $fin . "' order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
-	
-	public static function getSellsProcedimento($inicio, $fin, $user_id) { 
+
+	public static function getSellsProcedimento($inicio, $fin, $user_id)
+	{
 		// Validar y escapar parámetros
 		$fechaInicio = self::validateAndFormatDate($inicio);
 		$fechaFin = self::validateAndFormatDate($fin);
 		$userId = (int) $user_id;
-		
+
 		// Escapar fechas para prevenir SQL injection
 		$fechaInicio = addslashes($fechaInicio);
 		$fechaFin = addslashes($fechaFin);
-		
+
 		$sql = "CALL GetSells('$fechaInicio', '$fechaFin', $userId)";
-		
+
 		try {
 			$query = Executor::doit($sql);
 			return Model::many($query[0], new SellData());
@@ -167,94 +193,104 @@ class SellData {
 	/**
 	 * Método auxiliar para validar y formatear fechas
 	 */
-	private static function validateAndFormatDate($fecha) {
+	private static function validateAndFormatDate($fecha)
+	{
 		if (empty($fecha) || $fecha === '') {
 			return date('Y-m-d');
 		}
-		
+
 		// Si viene en formato datetime, extraer solo la fecha
 		if (strpos($fecha, ' ') !== false) {
 			$fecha = substr($fecha, 0, 10);
 		}
-		
+
 		// Validar formato de fecha
 		$dateObj = DateTime::createFromFormat('Y-m-d', $fecha);
 		if ($dateObj && $dateObj->format('Y-m-d') === $fecha) {
 			return $fecha;
 		}
-		
+
 		// Si no es válida, usar fecha actual
 		return date('Y-m-d');
 	}
 
-	public static function getSellsOv(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 AND tipo_comprobante=70  AND estado = 1 order by created_at desc";
+	public static function getSellsOv()
+	{
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante=70  AND estado = 1 order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getSellsXfechaOv($inicio,$fin){
-		$sql = "select * from ".self::$tablename.
-		       " where  date(created_at) >= '$inicio' ".
-               "and date(created_at) <= '$fin' ".
-               "and operation_type_id=2 AND tipo_comprobante =70 AND estado = 1 order by created_at desc";
+	public static function getSellsXfechaOv($inicio, $fin)
+	{
+		$sql = "select * from " . self::$tablename .
+			" where  date(created_at) >= '$inicio' " .
+			"and date(created_at) <= '$fin' " .
+			"and operation_type_id=2 AND tipo_comprobante =70 AND estado = 1 order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getSellsXfechaUsuarioOv($inicio,$fin,$user_id){
-		$sql = "select * from ".self::$tablename.
-		       " where  date(created_at) >= '$inicio' ".
-               "and date(created_at) <= '$fin' ".
-               "and operation_type_id=2 AND tipo_comprobante=70 AND estado = 1 and user_id = '$user_id' order by created_at desc";
+	public static function getSellsXfechaUsuarioOv($inicio, $fin, $user_id)
+	{
+		$sql = "select * from " . self::$tablename .
+			" where  date(created_at) >= '$inicio' " .
+			"and date(created_at) <= '$fin' " .
+			"and operation_type_id=2 AND tipo_comprobante=70 AND estado = 1 and user_id = '$user_id' order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getProformas(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 AND estado = 2 order by created_at desc";
+	public static function getProformas()
+	{
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND estado = 2 order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getSellsUnBoxed(){
-		$sql = "select id, serie, comprobante, total, created_at,GetUserName(user_id) as user from ".self::$tablename." where estado=1 and operation_type_id=2 and box_id is NULL order by created_at desc";
+	public static function getSellsUnBoxed()
+	{
+		$sql = "select id, serie, comprobante, total, created_at,GetUserName(user_id) as user from " . self::$tablename . " where estado=1 and operation_type_id=2 and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getByBoxId($id){
-		$sql = "select id, serie, comprobante, created_at,GetUserName(user_id) as user from ".self::$tablename." where estado=1 and operation_type_id=2 and box_id=$id order by created_at desc";
+	public static function getByBoxId($id)
+	{
+		$sql = "select id, serie, comprobante, created_at,GetUserName(user_id) as user from " . self::$tablename . " where estado=1 and operation_type_id=2 and box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getRes(){
-		$sql = "select * from ".self::$tablename." where estado=1 and operation_type_id=1 order by created_at desc";
+	public static function getRes()
+	{
+		$sql = "select * from " . self::$tablename . " where estado=1 and operation_type_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getResAnuladas($start = null, $end = null, $user_id = 0){
-		$sql = "select * from ".self::$tablename." where estado=0 and operation_type_id=1 ";
-		
-		if($start != null && $end != null){
+	public static function getResAnuladas($start = null, $end = null, $user_id = 0)
+	{
+		$sql = "select * from " . self::$tablename . " where estado=0 and operation_type_id=1 ";
+
+		if ($start != null && $end != null) {
 			$sql .= " and (date(created_at) >= \"$start\" and date(created_at) <= \"$end\") ";
 		}
 
-		if($user_id != 0){
+		if ($user_id != 0) {
 			$sql .= " and user_id = $user_id ";
 		}
 
 		$sql .= " order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getAllByPage($start_from,$limit){
-		$sql = "select * from ".self::$tablename." where estado=1 and id<=$start_from limit $limit";
+	public static function getAllByPage($start_from, $limit)
+	{
+		$sql = "select * from " . self::$tablename . " where estado=1 and id<=$start_from limit $limit";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 
 	}
 
@@ -264,125 +300,132 @@ class SellData {
 				FROM sell sel
 				LEFT JOIN person per ON per.id = sel.person_id
 				WHERE sel.id = $id LIMIT 1";
-				// echo $sql; exit;
+		// echo $sql; exit;
 		$query = Executor::doit($sql);
-		return Model::one($query[0],new SellData());
+		return Model::one($query[0], new SellData());
 	}
 
-	public static function getVentasOtroTipoPago($box_id, $tipopago,$fechaSd='', $fechaEd='',$userid = 0)
+	public static function getVentasOtroTipoPago($box_id, $tipopago, $fechaSd = '', $fechaEd = '', $userid = 0)
 	{
 		$sql = "SELECT ifnull(sum(sel.total - ifnull(pp.importe,0)),0) as total
 				FROM sell sel
 				LEFT JOIN pago_parcial pp ON(sel.id = pp.sellid)
-				WHERE sel.tipo_comprobante in(3,1) and sel.estado = 1 and sel.operation_type_id = 2 and tipo_pago = ".$tipopago;	
+				WHERE sel.tipo_comprobante in(3,1) and sel.estado = 1 and sel.operation_type_id = 2 and tipo_pago = " . $tipopago;
 
-		if($box_id != 0 && $box_id != 'X'):
-			$sql .= " and sel.box_id = ".$box_id;
-		elseif($box_id == 0):
+		if ($box_id != 0 && $box_id != 'X'):
+			$sql .= " and sel.box_id = " . $box_id;
+		elseif ($box_id == 0):
 			$sql .= " and sel.box_id is null ";
 		endif;
 
-		if($fechaSd !='' && $fechaEd != ''){
+		if ($fechaSd != '' && $fechaEd != '') {
 			$sql .= " and date(sel.created_at) between \"$fechaSd\" and  \"$fechaEd\" ";
 		}
 
-		if($userid !=0 ){
-			$sql .= " and sel.user_id = ". $userid;
+		if ($userid != 0) {
+			$sql .= " and sel.user_id = " . $userid;
 		}
-				
+
 		$query = Executor::doit($sql);
-		return Model::one($query[0],new SellData());
+		return Model::one($query[0], new SellData());
 	}
 
-	public static function getAllByDateOp($start,$end,$op){
-  		$sql = "select * from ".self::$tablename." where estado=1 and date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op order by created_at desc";
+	public static function getAllByDateOp($start, $end, $op)
+	{
+		$sql = "select * from " . self::$tablename . " where estado=1 and date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op order by created_at desc";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
-
-	}
-
-	public static function getAllByDateBCOp($clientid,$start,$end,$op){
- 		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 
 	}
 
-	public static function getAllByDateOpProductos($start,$end,$op,$user_id){
-  		$sql = "select a.serie,a.comprobante,a.total, b.q, b.product_id, GetFullNameProduct(b.product_id) prod,b.prec_alt, b.created_at, a.user_id, GetFullNameUser(a.user_id) AS vendedor
-         from ".self::$tablename." a, operation b 
+	public static function getAllByDateBCOp($clientid, $start, $end, $op)
+	{
+		$sql = "select * from " . self::$tablename . " where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
+
+	}
+
+	public static function getAllByDateOpProductos($start, $end, $op, $user_id)
+	{
+		$sql = "select a.serie,a.comprobante,a.total, b.q, b.product_id, GetFullNameProduct(b.product_id) prod,b.prec_alt, b.created_at, a.user_id, GetFullNameUser(a.user_id) AS vendedor
+         from " . self::$tablename . " a, operation b 
          where date(a.created_at) >= \"$start\" 
          and date(a.created_at) <= \"$end\" 
           and a.operation_type_id=$op 
          AND a.id = b.sell_id ";
 
-        if($user_id <> 0)
-        {
-        	$sql .= "and a.user_id = \"$user_id\" ";
-        }    
-       $sql .=  "order by a.created_at desc";
+		if ($user_id <> 0) {
+			$sql .= "and a.user_id = \"$user_id\" ";
+		}
+		$sql .= "order by a.created_at desc";
 
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new SellData());
+		return Model::many($query[0], new SellData());
 
 	}
 
 	/*****Agregue esto para kardex*****/
-	public static function getAllByKardexProd($idprod,$start,$end){
-	$sql = "select GetFullNameProduct(a.product_id) prod, GetFullNamePerson(b.person_id) nombre, ".
-			"CONCAT(b.serie,'-',b.comprobante) comp, ".
-			"(CASE a.operation_type_id WHEN 2 THEN 'VENTA' ELSE 'COMPRA' END) tipo, ".
-			"a.q,a.prec_alt,a.descuento,a.cu,a.created_at ".
-			"from operation a, ".self::$tablename." b ".
-			"where a.sell_id = b.id ".
-			"and date(a.created_at) >= '$start' ".
-			"and date(a.created_at) <= '$end' ".
-			"and a.product_id='$idprod'  ".
+	public static function getAllByKardexProd($idprod, $start, $end)
+	{
+		$sql = "select GetFullNameProduct(a.product_id) prod, GetFullNamePerson(b.person_id) nombre, " .
+			"CONCAT(b.serie,'-',b.comprobante) comp, " .
+			"(CASE a.operation_type_id WHEN 2 THEN 'VENTA' ELSE 'COMPRA' END) tipo, " .
+			"a.q,a.prec_alt,a.descuento,a.cu,a.created_at " .
+			"from operation a, " . self::$tablename . " b " .
+			"where a.sell_id = b.id " .
+			"and date(a.created_at) >= '$start' " .
+			"and date(a.created_at) <= '$end' " .
+			"and a.product_id='$idprod'  " .
 			"order by created_at desc";
-			$query = Executor::doit($sql);
-			return Model::many($query[0],new SellData());
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
 	}
 
-	public static function getAllByKardex($start,$end){
-	$sql = "select GetFullNameProduct(a.product_id) prod, GetFullNamePerson(b.person_id) nombre, ".
-			"CONCAT(b.serie,'-',b.comprobante) comp, ".
-			"(CASE a.operation_type_id WHEN 2 THEN 'VENTA' ELSE 'COMPRA' END) tipo, ".
-			"a.q,a.prec_alt,a.descuento,a.cu,a.created_at ".
-			"from operation a, ".self::$tablename." b ".
-			"where a.sell_id = b.id ".
-			"and date(a.created_at) >= '$start' ".
-			"and date(a.created_at) <= '$end' ".
+	public static function getAllByKardex($start, $end)
+	{
+		$sql = "select GetFullNameProduct(a.product_id) prod, GetFullNamePerson(b.person_id) nombre, " .
+			"CONCAT(b.serie,'-',b.comprobante) comp, " .
+			"(CASE a.operation_type_id WHEN 2 THEN 'VENTA' ELSE 'COMPRA' END) tipo, " .
+			"a.q,a.prec_alt,a.descuento,a.cu,a.created_at " .
+			"from operation a, " . self::$tablename . " b " .
+			"where a.sell_id = b.id " .
+			"and date(a.created_at) >= '$start' " .
+			"and date(a.created_at) <= '$end' " .
 			"order by created_at desc";
-			$query = Executor::doit($sql);
-			return Model::many($query[0],new SellData());
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
 	}
 
 	/**********************************/
 
 	public function update_created_at()
 	{
-		$sql = "update ".self::$tablename." set created_at=$this->created_at where id=$this->id";
+		$sql = "update " . self::$tablename . " set created_at=$this->created_at where id=$this->id";
 		Executor::doit($sql);
 	}
-       
-    public function updateTotalReab($sell_id)
-    {
-       	$sql = "update ".self::$tablename." set total = (select sum(q*prec_alt)  from operation where sell_id = ".$sell_id."), cash = (select sum(q*prec_alt) from operation where sell_id = ".$sell_id.") where id = ".$sell_id;
-       	Executor::doit($sql);
-    }
 
-	public static function getAllUbigeo(){
+	public function updateTotalReab($sell_id)
+	{
+		$sql = "update " . self::$tablename . " set total = (select sum(q*prec_alt)  from operation where sell_id = " . $sell_id . "), cash = (select sum(q*prec_alt) from operation where sell_id = " . $sell_id . ") where id = " . $sell_id;
+		Executor::doit($sql);
+	}
+
+	public static function getAllUbigeo()
+	{
 		$sql = "select * from ubigeo";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new UserData());
+		return Model::many($query[0], new UserData());
 	}
-	public static function getAllTipoDoc(){
+	public static function getAllTipoDoc()
+	{
 		$sql = "select * from tipo_documento";
 		$query = Executor::doit($sql);
-		return Model::many($query[0],new UserData());
+		return Model::many($query[0], new UserData());
 	}
 
-	public static function getImportePagoParcial($id){
+	public static function getImportePagoParcial($id)
+	{
 		$sql = "select sellid, ifnull(importe,0) as importe from pago_parcial where sellid = $id";
 		$query = Executor::doit($sql);
 		//return Model::one($query[0],new SellData());
@@ -397,11 +440,12 @@ class SellData {
 		return $array;
 	}
 
-	public static function getMonthlySalesGrowth($year = null, $user_id = 0) {
+	public static function getMonthlySalesGrowth($year = null, $user_id = 0)
+	{
 		if ($year === null) {
 			$year = date('Y');
 		}
-		
+
 		// Obtener ventas mensuales del año actual y anterior
 		$sql = "SELECT 
 					YEAR(s.created_at) as year,
@@ -412,22 +456,22 @@ class SellData {
 					AND s.tipo_comprobante != 70 
 					AND s.estado = 1
 					AND YEAR(s.created_at) IN (" . ($year - 1) . ", " . $year . ")";
-		
+
 		if ($user_id != 0) {
 			$sql .= " AND s.user_id = " . intval($user_id);
 		}
-		
+
 		$sql .= " GROUP BY YEAR(s.created_at), MONTH(s.created_at)
 				ORDER BY year DESC, month DESC";
-		
+
 		$query = Executor::doit($sql);
 		$results = Model::many($query[0], new SellData());
-		
+
 		// Procesar los datos para calcular crecimiento
 		$monthlyData = [];
 		$currentYearData = [];
 		$previousYearData = [];
-		
+
 		// Separar datos por año
 		foreach ($results as $row) {
 			if ($row->year == $year) {
@@ -436,22 +480,31 @@ class SellData {
 				$previousYearData[$row->month] = floatval($row->total_mes);
 			}
 		}
-		
+
 		// Generar el cuadro mensual
 		$cuadro = [];
 		$meses = [
-			1 => 'ENERO', 2 => 'FEBRERO', 3 => 'MARZO', 4 => 'ABRIL',
-			5 => 'MAYO', 6 => 'JUNIO', 7 => 'JULIO', 8 => 'AGOSTO',
-			9 => 'SETIEMBRE', 10 => 'OCTUBRE', 11 => 'NOVIEMBRE', 12 => 'DICIEMBRE'
+			1 => 'ENERO',
+			2 => 'FEBRERO',
+			3 => 'MARZO',
+			4 => 'ABRIL',
+			5 => 'MAYO',
+			6 => 'JUNIO',
+			7 => 'JULIO',
+			8 => 'AGOSTO',
+			9 => 'SETIEMBRE',
+			10 => 'OCTUBRE',
+			11 => 'NOVIEMBRE',
+			12 => 'DICIEMBRE'
 		];
-		
+
 		for ($mes = 12; $mes >= 1; $mes--) {
 			$venta_actual = isset($currentYearData[$mes]) ? $currentYearData[$mes] : 0;
 			$venta_anterior = isset($previousYearData[$mes]) ? $previousYearData[$mes] : 0;
-			
+
 			// Calcular crecimiento en soles
 			$crecimiento_soles = $venta_anterior > 0 ? $venta_actual - $venta_anterior : 0;
-			
+
 			// Calcular crecimiento porcentual
 			$crecimiento_porcentaje = 0;
 			if ($venta_anterior > 0) {
@@ -459,7 +512,7 @@ class SellData {
 			} elseif ($venta_actual > 0) {
 				$crecimiento_porcentaje = 100; // Si no había ventas el año anterior
 			}
-			
+
 			$cuadro[] = [
 				'mes' => $meses[$mes],
 				'ventas_soles' => number_format($venta_actual, 2),
@@ -467,15 +520,16 @@ class SellData {
 				'crecimiento_porcentaje' => round($crecimiento_porcentaje, 2) . '%'
 			];
 		}
-		
+
 		return array_reverse($cuadro); // Ordenar de enero a diciembre
 	}
 
-	public static function getMonthlySalesComparison($year = null, $user_id = 0) {
+	public static function getMonthlySalesComparison($year = null, $user_id = 0)
+	{
 		if ($year === null) {
 			$year = date('Y');
 		}
-		
+
 		// Obtener ventas mensuales del año especificado
 		$sql = "SELECT 
 					MONTH(s.created_at) as month,
@@ -485,38 +539,47 @@ class SellData {
 					AND s.tipo_comprobante != 70 
 					AND s.estado = 1
 					AND YEAR(s.created_at) = " . intval($year);
-		
+
 		if ($user_id != 0) {
 			$sql .= " AND s.user_id = " . intval($user_id);
 		}
-		
+
 		$sql .= " GROUP BY MONTH(s.created_at)
 				ORDER BY month DESC";
-		
+
 		$query = Executor::doit($sql);
 		$results = Model::many($query[0], new SellData());
-		
+
 		// Organizar datos por mes
 		$monthlyData = [];
 		foreach ($results as $row) {
 			$monthlyData[$row->month] = floatval($row->total_mes);
 		}
-		
+
 		// Generar el cuadro con comparación mes anterior
 		$cuadro = [];
 		$meses = [
-			1 => 'ENERO', 2 => 'FEBRERO', 3 => 'MARZO', 4 => 'ABRIL',
-			5 => 'MAYO', 6 => 'JUNIO', 7 => 'JULIO', 8 => 'AGOSTO',
-			9 => 'SETIEMBRE', 10 => 'OCTUBRE', 11 => 'NOVIEMBRE', 12 => 'DICIEMBRE'
+			1 => 'ENERO',
+			2 => 'FEBRERO',
+			3 => 'MARZO',
+			4 => 'ABRIL',
+			5 => 'MAYO',
+			6 => 'JUNIO',
+			7 => 'JULIO',
+			8 => 'AGOSTO',
+			9 => 'SETIEMBRE',
+			10 => 'OCTUBRE',
+			11 => 'NOVIEMBRE',
+			12 => 'DICIEMBRE'
 		];
-		
+
 		for ($mes = 12; $mes >= 1; $mes--) {
 			$venta_actual = isset($monthlyData[$mes]) ? $monthlyData[$mes] : 0;
 			$venta_anterior = isset($monthlyData[$mes - 1]) ? $monthlyData[$mes - 1] : 0;
-			
+
 			// Calcular crecimiento en soles
 			$crecimiento_soles = $venta_anterior > 0 ? $venta_actual - $venta_anterior : 0;
-			
+
 			// Calcular crecimiento porcentual
 			$crecimiento_porcentaje = 0;
 			if ($venta_anterior > 0) {
@@ -524,7 +587,7 @@ class SellData {
 			} elseif ($venta_actual > 0) {
 				$crecimiento_porcentaje = 0; // Si no había ventas el mes anterior
 			}
-			
+
 			$cuadro[] = [
 				'mes' => $meses[$mes],
 				'ventas_soles' => 'S/ ' . number_format($venta_actual, 2),
@@ -532,25 +595,26 @@ class SellData {
 				'crecimiento_porcentaje' => $crecimiento_porcentaje != 0 ? round($crecimiento_porcentaje, 2) . '%' : '0 %'
 			];
 		}
-		
+
 		return array_reverse($cuadro);
 	}
 
 	// ============================================
 	// FUNCIÓN PRINCIPAL DE PROCESAMIENTO
 	// ============================================
-	public static function generarDatosRotacionInventario($registros, $fechaInicio = null, $fechaFin = null) {
+	public static function generarDatosRotacionInventario($registros, $fechaInicio = null, $fechaFin = null)
+	{
 		// Convertir objeto a array si es necesario
 		if (is_object($registros)) {
 			$registros = json_decode(json_encode($registros), true);
 		}
-		
+
 		if (empty($registros)) {
 			return [];
 		}
-		
+
 		// Asegurar que cada registro sea un array y filtrar nulls
-		$registros = array_map(function($registro) {
+		$registros = array_map(function ($registro) {
 			if (is_object($registro)) {
 				$registroArray = [];
 				foreach ($registro as $key => $value) {
@@ -560,15 +624,15 @@ class SellData {
 				}
 				return $registroArray;
 			}
-			return array_filter((array)$registro, fn($v) => $v !== null);
+			return array_filter((array) $registro, fn($v) => $v !== null);
 		}, $registros);
-		
+
 		// Determinar rango de fechas
 		if (!$fechaInicio || !$fechaFin) {
 			$fechaInicio = date('Y-01-01');
 			$fechaFin = date('Y-12-31');
 		}
-		
+
 		// AGRUPAR REGISTROS POR PRODUCTO
 		$productoAgrupado = [];
 		foreach ($registros as $registro) {
@@ -578,10 +642,10 @@ class SellData {
 			}
 			$productoAgrupado[$productId][] = $registro;
 		}
-		
+
 		// PROCESAR CADA PRODUCTO
 		$resultados = [];
-		
+
 		foreach ($productoAgrupado as $productId => $registrosProducto) {
 			$resultado = [
 				'producto' => '',
@@ -589,10 +653,10 @@ class SellData {
 				'meses' => [],
 				'resumen' => []
 			];
-			
+
 			// Obtener información del producto
 			$resultado['producto'] = $registrosProducto[0]['name'] ?? '';
-			
+
 			// Todos los meses del año
 			$mesesAnalizar = [
 				'01' => 'Enero',
@@ -608,7 +672,7 @@ class SellData {
 				'11' => 'Noviembre',
 				'12' => 'Diciembre'
 			];
-			
+
 			// Inicializar estructura por mes
 			foreach ($mesesAnalizar as $numMes => $nombreMes) {
 				$resultado['meses'][$numMes] = [
@@ -619,41 +683,41 @@ class SellData {
 					'cant_comprada' => 0
 				];
 			}
-			
+
 			// Variables de control
 			$stockActual = 0;
 			$mesAnterior = null;
-			
+
 			// Procesar registros del producto
 			foreach ($registrosProducto as $registro) {
 				$fecha = DateTime::createFromFormat('d/m/Y H:i', $registro['created_at'] ?? '');
-				
+
 				if (!$fecha) {
 					continue;
 				}
-				
+
 				$mes = $fecha->format('m');
 				$anio = $fecha->format('Y');
 				$fechaRegistro = $fecha->format('Y-m-d');
-				
+
 				// Filtrar por rango de fechas
 				if ($fechaRegistro < $fechaInicio || $fechaRegistro > $fechaFin) {
 					continue;
 				}
-				
+
 				if (!isset($mesesAnalizar[$mes])) {
 					continue;
 				}
-				
+
 				$operationType = $registro['operation_type_id'] ?? null;
 				$cantidad = $registro['q'] ?? 0;
 				$precio = $registro['prec_alt'] ?? 0;
-				
+
 				// Si cambiamos de mes, actualizar stock inicial del nuevo mes
 				if ($mesAnterior !== null && $mes != $mesAnterior) {
 					$resultado['meses'][$mes]['stock_inicial'] = $stockActual;
 				}
-				
+
 				if ($operationType == 1) {
 					// Compra/Entrada
 					if ($mesAnterior === null) {
@@ -670,14 +734,14 @@ class SellData {
 					$resultado['meses'][$mes]['venta_soles'] += ($cantidad * $precio);
 					$stockActual -= $cantidad;
 				}
-				
+
 				$mesAnterior = $mes;
 			}
-			
+
 			// Propagar stock inicial entre meses
 			$stockPropagado = 0;
 			$primerMesConDatos = true;
-			
+
 			foreach ($mesesAnalizar as $numMes => $nombreMes) {
 				if ($primerMesConDatos && ($resultado['meses'][$numMes]['cant_vendida'] > 0 || $resultado['meses'][$numMes]['cant_comprada'] > 0)) {
 					$stockPropagado = $resultado['meses'][$numMes]['stock_inicial'];
@@ -685,18 +749,18 @@ class SellData {
 				} else if (!$primerMesConDatos && $resultado['meses'][$numMes]['stock_inicial'] == 0) {
 					$resultado['meses'][$numMes]['stock_inicial'] = $stockPropagado;
 				}
-				
+
 				// Actualizar stock propagado
-				$stockPropagado = $resultado['meses'][$numMes]['stock_inicial'] 
-								+ $resultado['meses'][$numMes]['cant_comprada'] 
-								- $resultado['meses'][$numMes]['cant_vendida'];
+				$stockPropagado = $resultado['meses'][$numMes]['stock_inicial']
+					+ $resultado['meses'][$numMes]['cant_comprada']
+					- $resultado['meses'][$numMes]['cant_vendida'];
 			}
-			
+
 			// Calcular RESUMEN
 			$totalCantVendida = 0;
 			$totalVentaSoles = 0;
 			$mesesConVentas = 0;
-			
+
 			foreach ($resultado['meses'] as $mes) {
 				$totalCantVendida += $mes['cant_vendida'];
 				$totalVentaSoles += $mes['venta_soles'];
@@ -704,14 +768,14 @@ class SellData {
 					$mesesConVentas++;
 				}
 			}
-			
+
 			$promedioCantVendida = $mesesConVentas > 0 ? $totalCantVendida / $mesesConVentas : 0;
 			$promedioVentasMes = $mesesConVentas > 0 ? $totalVentaSoles / $mesesConVentas : 0;
-			
+
 			// Determinar rotación
 			$rotacion = 'SIN MOVIMIENTO';
 			$claseRotacion = 'sin-movimiento';
-			
+
 			if ($promedioCantVendida >= 20) {
 				$rotacion = '(A)-ALTA ROTACION';
 				$claseRotacion = 'alta-rotacion';
@@ -722,7 +786,7 @@ class SellData {
 				$rotacion = '(B)-BAJA ROTACION';
 				$claseRotacion = 'baja-rotacion';
 			}
-			
+
 			$resultado['resumen'] = [
 				'stock_actual' => $stockActual,
 				'promedio_cant_vendida' => round($promedioCantVendida, 2),
@@ -734,15 +798,16 @@ class SellData {
 				'subtotal_ventas' => round($totalVentaSoles, 2),
 				'meses_con_ventas' => $mesesConVentas
 			];
-			
+
 			// Agregar resultado del producto al array de resultados
 			$resultados[] = $resultado;
 		}
-		
+
 		return $resultados;
 	}
 
-    public static function generarReporteRotacionVentas($datos) {
+	public static function generarReporteRotacionVentas($datos)
+	{
 		// Meses a mostrar (mayo a setiembre)
 		$meses = [
 			1 => 'Enero',
@@ -758,7 +823,7 @@ class SellData {
 			11 => 'Noviembre',
 			12 => 'Diciembre'
 		];
-		
+
 		// Agrupar datos por producto
 		$productos = [];
 		foreach ($datos as $fila) {
@@ -791,14 +856,15 @@ class SellData {
 			// Procesar cada operación
 			foreach ($prod['operaciones'] as $op) {
 				$fecha = new DateTime($op['created_at']);
-				$mes = (int)$fecha->format('n'); // 1-12
-				$anio = (int)$fecha->format('Y');
-				$q = (int)$op['q'];
-				$precio = (float)$op['prec_alt'];
-				$tipo = (int)$op['operation_type_id'];
+				$mes = (int) $fecha->format('n'); // 1-12
+				$anio = (int) $fecha->format('Y');
+				$q = (int) $op['q'];
+				$precio = (float) $op['prec_alt'];
+				$tipo = (int) $op['operation_type_id'];
 
 				// Solo considerar operaciones dentro de mayo-setiembre 2025
-				if ($anio !== 2025 || !isset($mesData[$mes])) continue;
+				if ($anio !== 2025 || !isset($mesData[$mes]))
+					continue;
 
 				if ($tipo === 1) {
 					$mesData[$mes]['entradas'] += $q;
@@ -835,7 +901,8 @@ class SellData {
 
 				$totalVendido += $vendido;
 				$totalVentas += $ventas_soles;
-				if ($vendido > 0) $mesesConVenta++;
+				if ($vendido > 0)
+					$mesesConVenta++;
 			}
 
 			// Calcular métricas finales
@@ -870,8 +937,9 @@ class SellData {
 		return $resultado;
 	}
 
-	public static function generarReporteRotacionVentas2($datos) {
-		$meses = [1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril',  5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Setiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'];
+	public static function generarReporteRotacionVentas2($datos)
+	{
+		$meses = [1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Setiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre'];
 		$productos = [];
 
 		foreach ($datos as $fila) {
@@ -884,7 +952,7 @@ class SellData {
 			}
 			$productos[$id]['operaciones'][] = $fila;
 		}
-        	
+
 		$resultado = [];
 		foreach ($productos as $id => $prod) {
 			// Ordenar operaciones por fecha (aunque ya lo estén)
@@ -896,13 +964,13 @@ class SellData {
 			}
 
 			foreach ($prod['operaciones'] as $op) {
-				$op = (object)$op;
+				$op = (object) $op;
 				$fecha = new DateTime($op->created_at);
-				$mes = (int)$fecha->format('n');
+				$mes = (int) $fecha->format('n');
 				//$anio = (int)$fecha->format('Y');
-				$q = (int)$op->q;
-				$precio = (float)$op->prec_alt;
-				$tipo = (int)$op->operation_type_id;
+				$q = (int) $op->q;
+				$precio = (float) $op->prec_alt;
+				$tipo = (int) $op->operation_type_id;
 
 				if ($tipo === 1) {
 					$mesData[$mes]['entradas'] += $q;
@@ -932,13 +1000,14 @@ class SellData {
 				$stock += $mesData[$num]['entradas'] - $vendido;
 				$totalVendido += $vendido;
 				$totalVentas += $ventas_soles;
-				if ($vendido > 0) $mesesConVenta++;
+				if ($vendido > 0)
+					$mesesConVenta++;
 			}
 
 			$promedioCantVendida = count($meses) > 0 ? round($totalVendido / count($meses), 2) : 0;
 			$promedioVentas = count($meses) > 0 ? round($totalVentas / count($meses), 2) : 0;
 
-			$rotacion = match(true) {
+			$rotacion = match (true) {
 				$totalVendido === 0 => '(I)-INACTIVO',
 				$mesesConVenta >= 4 => '(A)-ALTA ROTACION',
 				$mesesConVenta >= 2 => '(M)-MEDIA ROTACION',
@@ -964,38 +1033,39 @@ class SellData {
 	// FUNCIÓN PARA OBTENER DATOS DE LA BD
 	// ============================================
 
-	public static function obtenerDatosRotacion($productId = null, $fechaInicio = null, $fechaFin = null, $userId = null) {
+	public static function obtenerDatosRotacion($productId = null, $fechaInicio = null, $fechaFin = null, $userId = null)
+	{
 		$sql = "SELECT O.product_id, P.name, O.q, O.prec_alt, O.operation_type_id, 
 					O.created_at, O.sell_id
 				FROM dbcarepharm.operation AS O
 			    INNER JOIN dbcarepharm.product AS P ON (P.id = O.product_id AND P.is_active = 1)
 				WHERE O.sell_id <> 0
 				AND O.product_id =6355 ";
-		
-				
+
+
 		if ($productId) {
 			$sql .= " AND O.product_id = $productId ";
 		}
-		
+
 		if ($fechaInicio && $fechaFin) {
-			$sql .= " AND DATE(O.created_at) BETWEEN '".$fechaInicio."' AND '".$fechaFin."' ";
+			$sql .= " AND DATE(O.created_at) BETWEEN '" . $fechaInicio . "' AND '" . $fechaFin . "' ";
 		}
-		
+
 		// if ($userId) {
 		// 	$sql .= " AND O.user_id = $userId";
 		// }
-		
-		$sql .= " ORDER BY O.product_id, O.created_at ASC";		
-		
+
+		$sql .= " ORDER BY O.product_id, O.created_at ASC";
+
 		$query = Executor::doit($sql);
 		$results = Model::many($query[0], new SellData());
-		
+
 		$registros = [];
 		foreach ($results as $row) {
 			//$registros[] = $row;
-			$registros[] = (object)array_filter( (array)$row, fn($v) => $v !== null);
+			$registros[] = (object) array_filter((array) $row, fn($v) => $v !== null);
 		}
-		
+
 		return $registros;
 	}
 }

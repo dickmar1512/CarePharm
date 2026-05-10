@@ -1,14 +1,16 @@
 <?php
-#[AllowDynamicProperties]
-class PostData {
+
+class PostData
+{
 	public static $tablename = "slide";
 
-	public  function createForm(){
+	public function createForm()
+	{
 		$form = new lbForm();
-	    $form->addField("title",array('type' => new lbInputText(array("label"=>"Nombre")),"validate"=>new lbValidator()));
-	    $form->addField("content",array('type' => new lbInputText(array("label"=>"Apellido")),"validate"=>new lbValidator()));
-		$form->addField("image",array('type' => new lbInputText(array()),"validate"=>new lbValidator()));
-	    return $form;
+		$form->addField("title", array('type' => new lbInputText(array("label" => "Nombre")), "validate" => new lbValidator()));
+		$form->addField("content", array('type' => new lbInputText(array("label" => "Apellido")), "validate" => new lbValidator()));
+		$form->addField("image", array('type' => new lbInputText(array()), "validate" => new lbValidator()));
+		return $form;
 
 	}
 
@@ -21,43 +23,49 @@ class PostData {
 	public $is_public;
 	public $created_at;
 
-	public function PostData(){
+	public function PostData()
+	{
 		$this->title = "";
 		$this->content = "";
 		$this->image = "";
 		$this->theme_id = "";
-				$this->user_id = "";
+		$this->user_id = "";
 		$this->is_public = "0";
 		$this->created_at = "NOW()";
 	}
 
-	public function add(){
-		$sql = "insert into ".self::$tablename." (title,content,image,user_id,is_public,theme_id,created_at) ";
+	public function add()
+	{
+		$sql = "insert into " . self::$tablename . " (title,content,image,user_id,is_public,theme_id,created_at) ";
 		$sql .= "value (\"$this->title\",\"$this->content\",\"$this->image\",$this->user_id,$this->is_public,$this->theme_id, $this->created_at)";
 		return Executor::doit($sql);
 	}
 
-	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
+	public static function delById($id)
+	{
+		$sql = "delete from " . self::$tablename . " where id=$id";
 		Executor::doit($sql);
 	}
-	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
-		Executor::doit($sql);
-	}
-
-// partiendo de que ya tenemos creado un objecto PostData previamente utilizamos el contexto
-	public function update(){
-		$sql = "update ".self::$tablename." set title=\"$this->title\",content=\"$this->content\",image=\"$this->image\",is_public=\"$this->is_public\" where id=$this->id";
+	public function del()
+	{
+		$sql = "delete from " . self::$tablename . " where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public static function getById($id){
-		$sql = "select * from ".self::$tablename." where id=$id";
+	// partiendo de que ya tenemos creado un objecto PostData previamente utilizamos el contexto
+	public function update()
+	{
+		$sql = "update " . self::$tablename . " set title=\"$this->title\",content=\"$this->content\",image=\"$this->image\",is_public=\"$this->is_public\" where id=$this->id";
+		Executor::doit($sql);
+	}
+
+	public static function getById($id)
+	{
+		$sql = "select * from " . self::$tablename . " where id=$id";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new PostData();
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->title = $r['title'];
 			$data->content = $r['content'];
@@ -74,12 +82,13 @@ class PostData {
 
 
 
-	public static function getAll(){
-		$sql = "select * from ".self::$tablename." order by created_at desc";
+	public static function getAll()
+	{
+		$sql = "select * from " . self::$tablename . " order by created_at desc";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];
@@ -95,13 +104,14 @@ class PostData {
 	}
 
 
-	public static function getSearch($q){
+	public static function getSearch($q)
+	{
 		// $sql = "select * from ".self::$tablename." order by created_at desc";
-		 $sql = "select *,match(content) against('$q') as relevance from ".self::$tablename." where match(content) against('$q') order by relevance desc";
+		$sql = "select *,match(content) against('$q') as relevance from " . self::$tablename . " where match(content) against('$q') order by relevance desc";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];
@@ -117,12 +127,13 @@ class PostData {
 	}
 
 
-	public static function getAllByUserId($user_id){
-		$sql = "select * from ".self::$tablename." where user_id=$user_id order by created_at desc";
+	public static function getAllByUserId($user_id)
+	{
+		$sql = "select * from " . self::$tablename . " where user_id=$user_id order by created_at desc";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];
@@ -137,12 +148,13 @@ class PostData {
 		return $array;
 	}
 
-	public static function get10ByUserId($user_id){
-		$sql = "select * from ".self::$tablename." where user_id=$user_id order by created_at desc limit 10";
+	public static function get10ByUserId($user_id)
+	{
+		$sql = "select * from " . self::$tablename . " where user_id=$user_id order by created_at desc limit 10";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];
@@ -157,12 +169,13 @@ class PostData {
 		return $array;
 	}
 
-	public static function getAllFromXByUserId($x, $user_id){
-		 $sql = "select * from ".self::$tablename." where user_id=$user_id and id<$x order by created_at desc limit 10";
+	public static function getAllFromXByUserId($x, $user_id)
+	{
+		$sql = "select * from " . self::$tablename . " where user_id=$user_id and id<$x order by created_at desc limit 10";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];
@@ -180,12 +193,13 @@ class PostData {
 
 
 
-	public static function getLike($q){
-		$sql = "select * from ".self::$tablename." where title like '%$q%' or content like '%$q%'";
+	public static function getLike($q)
+	{
+		$sql = "select * from " . self::$tablename . " where title like '%$q%' or content like '%$q%'";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new PostData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->title = $r['title'];

@@ -1,6 +1,7 @@
 <?php
-#[AllowDynamicProperties]
-class Not_1_2Data {
+
+class Not_1_2Data
+{
 	public static $tablename = "nota";
 	public $serieDocModifica;
 	public $fecEmision;
@@ -12,7 +13,8 @@ class Not_1_2Data {
 	public $descMotivo;
 	public $TIPO_DOC;
 
-	public function Not_1_2Data(){
+	public function Not_1_2Data()
+	{
 		//CABECERA CAB
 		$this->RUC = "";
 		$this->TIPO = "";
@@ -20,56 +22,61 @@ class Not_1_2Data {
 		$this->COMPROBANTE = "";
 	}
 
-	public static function get_notas_credito_factura_x_fecha($start, $end){
+	public static function get_notas_credito_factura_x_fecha($start, $end)
+	{
 		$sql = "SELECT n.*,f.SERIE,f.COMPROBANTE FROM  nota as n, factura as f
 		 		WHERE date(n.fecEmision) >= \"$start\" and date(n.fecEmision) <= \"$end\"
-		 		AND n.TIPO_DOC = 7 AND n.tipDocModifica = 1 and n.id_tipo_doc = f.id "; 
+		 		AND n.TIPO_DOC = 7 AND n.tipDocModifica = 1 and n.id_tipo_doc = f.id ";
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Not_1_2Data());
-	}	
+		return Model::many($query[0], new Not_1_2Data());
+	}
 
-	public static function get_notas_credito_boleta_x_fecha($start, $end){
+	public static function get_notas_credito_boleta_x_fecha($start, $end)
+	{
 		$sql = "SELECT a.*, b.* FROM  nota a, boleta b  
 		WHERE date(a.fecEmision) >= \"$start\" and date(a.fecEmision) <= \"$end\"
 		 AND TIPO_DOC = 7 AND tipDocModifica = 3 and a.id_tipo_doc = b.id ";
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Not_1_2Data());
+		return Model::many($query[0], new Not_1_2Data());
 	}
 
 
-	public static function get_notas_debito_factura_x_fecha($start, $end){
+	public static function get_notas_debito_factura_x_fecha($start, $end)
+	{
 		$sql = "SELECT * FROM  nota  
 		WHERE date(fecEmision) >= \"$start\" and date(fecEmision) <= \"$end\"
 		 AND TIPO_DOC = 8 AND tipDocModifica = 1 ";
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Not_1_2Data());
-	}	
+		return Model::many($query[0], new Not_1_2Data());
+	}
 
-	public static function get_notas_debito_boleta_x_fecha($start, $end){
+	public static function get_notas_debito_boleta_x_fecha($start, $end)
+	{
 		$sql = "SELECT * FROM  nota  
 		WHERE date(fecEmision) >= \"$start\" and date(fecEmision) <= \"$end\"
 		 AND TIPO_DOC = 8 AND tipDocModifica = 3 ";
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Not_1_2Data());
+		return Model::many($query[0], new Not_1_2Data());
 	}
 
-	public static function getByIdComprobado($m){
+	public static function getByIdComprobado($m)
+	{
 		$serie = explode("-", $m)[0];
 		$tblComprobante = $serie == "B001" ? "boleta" : "factura";
-		$sql  = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM ".self::$tablename." AS NC ";
-		$sql .= "INNER JOIN ".$tblComprobante." AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m' AND NC.ESTADO = 1";
+		$sql = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM " . self::$tablename . " AS NC ";
+		$sql .= "INNER JOIN " . $tblComprobante . " AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m' AND NC.ESTADO = 1";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Boleta2Data();
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->TIPO_DOC = $r['TIPO_DOC'];
 			$data->ID_TIPO_DOC = $r['ID_TIPO_DOC'];
@@ -106,9 +113,10 @@ class Not_1_2Data {
 
 
 
-	public static function getById($id, $tipo){
+	public static function getById($id, $tipo)
+	{
 
-		$sql = "select * from ".self::$tablename." where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
 
 		// echo $sql; exit();
 
@@ -116,7 +124,7 @@ class Not_1_2Data {
 		$found = null;
 		$data = new Not_1_2Data();
 
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->TIPO_DOC = $r['TIPO_DOC'];
 			$data->ID_TIPO_DOC = $r['ID_TIPO_DOC'];

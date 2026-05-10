@@ -1,6 +1,7 @@
 <?php
-#[AllowDynamicProperties]
-class Cab_1_2Data {
+
+class Cab_1_2Data
+{
 	public static $tablename = "cab";
 	public $numDocUsuario;
 	public $rznSocialUsuario;
@@ -22,7 +23,8 @@ class Cab_1_2Data {
 	public $ublVersionId;
 	public $customizationId;
 
-	public function Cab_1_2Data(){
+	public function Cab_1_2Data()
+	{
 		//CABECERA CAB
 		$this->RUC = "";
 		$this->TIPO = "";
@@ -30,15 +32,16 @@ class Cab_1_2Data {
 		$this->COMPROBANTE = "";
 	}
 
-	public static function getById($id, $tipo){
+	public static function getById($id, $tipo)
+	{
 
-		$sql = "select * from ".self::$tablename." where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
 
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Cab_1_2Data();
 
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->TIPO_DOC = $r['TIPO_DOC'];
 			$data->ID_TIPO_DOC = $r['ID_TIPO_DOC'];
@@ -66,8 +69,9 @@ class Cab_1_2Data {
 
 		return $found;
 	}
-	public function update_fecha(){
-		$sql = "update ".self::$tablename." set fecEmision='".$this->fecEmision."', horEmision = '".$this->horEmision."' where id=$this->id";
+	public function update_fecha()
+	{
+		$sql = "update " . self::$tablename . " set fecEmision='" . $this->fecEmision . "', horEmision = '" . $this->horEmision . "' where id=$this->id";
 		Executor::doit($sql);
 	}
 }

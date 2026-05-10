@@ -1,6 +1,7 @@
 <?php
-#[AllowDynamicProperties]
-class CategoryData {
+
+class CategoryData
+{
 	public static $tablename = "category";
 	public $id;
 	public $name;
@@ -9,8 +10,9 @@ class CategoryData {
 	public $status;
 	public $image;
 	public $email;
-	
-	public function CategoryData(){
+
+	public function CategoryData()
+	{
 		$this->name = "";
 		$this->description = "";
 		$this->email = "";
@@ -19,9 +21,10 @@ class CategoryData {
 		$this->status = 1;
 	}
 
-	public function add(){
+	public function add()
+	{
 		$sql = "insert into category (name,description,created_at) ";
-		$sql .= "value ('".$this->name."','".$this->description."','".$this->created_at."')";
+		$sql .= "value ('" . $this->name . "','" . $this->description . "','" . $this->created_at . "')";
 		Executor::doit($sql);
 	}
 
@@ -37,22 +40,24 @@ class CategoryData {
 
 	public function del()
 	{
-		$sql = "update " . self::$tablename . " set status = ".$this->status." where id=$this->id";
+		$sql = "update " . self::$tablename . " set status = " . $this->status . " where id=$this->id";
 		Executor::doit($sql);
 	}
 
-    // partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
-	public function update(){
-		$sql = "update ".self::$tablename." set name='".$this->name."', description='".$this->description."' where id=$this->id";
+	// partiendo de que ya tenemos creado un objecto CategoryData previamente utilizamos el contexto
+	public function update()
+	{
+		$sql = "update " . self::$tablename . " set name='" . $this->name . "', description='" . $this->description . "' where id=$this->id";
 		Executor::doit($sql);
 	}
 
-	public static function getById($id){
-		$sql = "select * from ".self::$tablename." where id=$id";
+	public static function getById($id)
+	{
+		$sql = "select * from " . self::$tablename . " where id=$id";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new CategoryData();
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->name = $r['name'];
 			$data->description = $r['description'];
@@ -63,12 +68,13 @@ class CategoryData {
 		return $found;
 	}
 
-	public static function getAll(){
-		$sql = "select * from ".self::$tablename;
+	public static function getAll()
+	{
+		$sql = "select * from " . self::$tablename;
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new CategoryData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->name = $r['name'];
@@ -81,12 +87,13 @@ class CategoryData {
 	}
 
 
-	public static function getLike($q){
-		$sql = "select * from ".self::$tablename." where name like '%$q%'";
+	public static function getLike($q)
+	{
+		$sql = "select * from " . self::$tablename . " where name like '%$q%'";
 		$query = Executor::doit($sql);
 		$array = array();
 		$cnt = 0;
-		while($r = $query[0]->fetch_array()){
+		while ($r = $query[0]->fetch_array()) {
 			$array[$cnt] = new CategoryData();
 			$array[$cnt]->id = $r['id'];
 			$array[$cnt]->name = $r['name'];
