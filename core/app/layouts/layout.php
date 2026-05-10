@@ -353,13 +353,7 @@
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 <p>Registro Venta</p>
                                             </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
-                                                <i class="nav-icon far fa-circle text-info"></i> 
-                                                Ventas x Producto
-                                            </a>
-                                        </li>     
+                                        </li>    
                                     </ul>
                                 </li>
                                 <?php if ($admin == 1 || $dirtec == 1) { ?>
@@ -504,6 +498,12 @@
                                                 <p>Ventas x Cliente</p>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
+                                                <i class="nav-icon far fa-circle text-info"></i> 
+                                                Ventas x Producto
+                                            </a>
+                                        </li> 
                                         <li class="nav-item">
                                             <a href="./?view=sellsRepostNotaVenta" class="nav-link" data-view="sellsRepostNotaVenta">
                                                 <i class="nav-icon far fa-circle text-info"></i>
