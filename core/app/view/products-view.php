@@ -90,9 +90,8 @@
 											<a href="#" class="btn btn-xs btn-warning edit-product" data-id="<?php echo $product->id; ?>">
 												<i class="fas fa-pencil-alt"></i>
 											</a>
-											<!-- <a href="#" class="btn btn-warning btn-xs edit-client"	data-id="<?php echo $client->id; ?>">Editar</a>	 -->
-											<a href="./?view=delproduct&id=<?php echo $product->id; ?>"
-												class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+											<a href="#" data-id="<?php echo $product->id; ?>"
+												class="btn btn-xs btn-danger delete-product"><i class="fa fa-trash"></i></a>
 										</td>
 									</tr>
 								<?php endforeach; ?>
