@@ -1,13 +1,22 @@
 <?php
-require 'plugins/PHPMailer/src/Exception.php';
-require 'plugins/PHPMailer/src/PHPMailer.php';
-require 'plugins/PHPMailer/src/SMTP.php';
+// require 'plugins/PHPMailer/src/Exception.php';
+// require 'plugins/PHPMailer/src/PHPMailer.php';
+// require 'plugins/PHPMailer/src/SMTP.php';
+
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\Exception;
+
+// Calcular la ruta base del proyecto
+$basePath = dirname(__DIR__, 3); // Va de core/app/model hasta la raíz
+
+require_once $basePath . '/plugins/PHPMailer/src/Exception.php';
+require_once $basePath . '/plugins/PHPMailer/src/PHPMailer.php';
+require_once $basePath . '/plugins/PHPMailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
-
-#[AllowDynamicProperties]
 class CLSPHPMailer
 {
 
