@@ -66,7 +66,7 @@ try {
     $stmtInsertProveedor = $conn->prepare("INSERT INTO person (tipo_persona, numero_documento, name, lastname, address1, email1, phone1, kind, created_at) 
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
-    $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE barcode = ?");
+    $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (barcode <> '' AND barcode = ?) OR name = ?");
     $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, created_at, is_active) 
                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ? 
@@ -84,6 +84,17 @@ try {
     $stmtSelectUnidad = $conn->prepare("SELECT id FROM unidad_medida WHERE name = ?");
     $stmtInsertUnidad = $conn->prepare("INSERT INTO unidad_medida (name,sigla) VALUES (?,'-')");                                    
 
+    // Nuevas sentencias para evitar duplicados y actualizar totales
+    $stmtSelectOperacion = $conn->prepare("SELECT id, q FROM operation WHERE product_id = ? AND sell_id = ?");
+    $stmtUpdateOperacion = $conn->prepare("UPDATE operation SET q = q + ?, prec_alt = ? WHERE id = ?");
+    
+    $stmtSelectLoteExistente = $conn->prepare("SELECT id FROM lote WHERE id_prod = ? AND num_lot = ? AND id_sell = ?");
+    
+    $stmtUpdateSellTotal = $conn->prepare("UPDATE sell SET total = (SELECT SUM(q * prec_alt) FROM operation WHERE sell_id = ?), cash = (SELECT SUM(q * prec_alt) FROM operation WHERE sell_id = ?) WHERE id = ?");
+
+    $stmtInsertHistory = $conn->prepare("INSERT INTO price_history (product_id, price_in, price_out, user_id, sell_id, created_at) 
+                                        VALUES (?, ?, ?, ?, ?, ?)");
+
     // Obtener y filtrar filas del Excel
     $rows = $xlsx->rows();
     array_shift($rows); // Eliminar encabezados
@@ -95,8 +106,8 @@ try {
     });
 
     $inserted_rows = 0;
-    $ultimoRucProcesado = null;
     $idcompra = null;
+    $processedSells = []; // Para acumular IDs de compras y actualizar sus totales al final
 
     // Inicia transacción para poder hacer rollback si hay errores
     $conn->beginTransaction();
@@ -106,6 +117,8 @@ try {
         $rucproveedor = trim($fields[17]);
         $proveedor = trim($fields[16]);
         
+        if (empty($rucproveedor)) continue; // Saltar filas sin RUC
+
         // Validar y obtener/insertar proveedor
         $stmtSelectProveedor->execute([$rucproveedor]);
         $proveedorExistente = $stmtSelectProveedor->fetch(PDO::FETCH_ASSOC);
@@ -128,10 +141,11 @@ try {
         }
         
         // Procesar unidad de medida
-        $stmtSelectUnidad->execute([trim($fields[3])]);
+        $nombreUnidad = !empty($fields[3]) ? trim($fields[3]) : 'UNIDAD';
+        $stmtSelectUnidad->execute([$nombreUnidad]);
         $unidadExistente = $stmtSelectUnidad->fetch(PDO::FETCH_ASSOC);
         if (!$unidadExistente) {
-            $stmtInsertUnidad->execute([trim($fields[3])]);
+            $stmtInsertUnidad->execute([$nombreUnidad]);
             $idunidad = $conn->lastInsertId();
         } else {
             $idunidad = $unidadExistente['id'];
@@ -153,20 +167,19 @@ try {
             'price_out' => !empty($fields[13]) ? (float)$fields[13] : 0,
             'price_may' => !empty($fields[14]) ? (float)$fields[14] : 0,
             'unit' => $idunidad,
-            'presentation' => trim($fields[3]),
+            'presentation' => $nombreUnidad,
             'user_id' => $_SESSION["user_id"],
             'category_id' => 1,
-            'fecha_venc' => $fields[5],
-            'laboratorio' => trim($fields[4]),
+            'fecha_venc' => !empty($fields[5]) ? $fields[5] : null,
+            'laboratorio' => !empty($fields[4]) ? trim($fields[4]) : '-',
             'created_at' => date('Y-m-d H:i:s'),
             'is_active' => 1
         ];
 
-        $stmtSelectProducto->execute([$barcode]);
+        $stmtSelectProducto->execute([$barcode, $productData['name']]);
         $productoExistente = $stmtSelectProducto->fetch(PDO::FETCH_ASSOC);
         
         if ($productoExistente) {
-            // Actualizar producto existente
             $stmtUpdateProducto->execute([
                 $productData['stock'],
                 $productData['price_in'],
@@ -178,100 +191,85 @@ try {
             ]);
             $idproducto = $productoExistente['id'];
         } else {
-            // Insertar nuevo producto
             $stmtInsertProducto->execute([
-                $productData['image'],
-                $productData['barcode'],
-                $productData['name'], 
-                $productData['description'], 
-                $productData['stock'], 
-                $productData['is_stock'], 
-                $productData['inventary_min'], 
-                $productData['price_in'],
-                $productData['price_out'], 
-                $productData['price_may'],
-                $productData['unit'], 
-                $productData['presentation'], 
-                $productData['user_id'],
-                $productData['category_id'],
-                $productData['fecha_venc'],
-                $productData['laboratorio'],
-                $productData['created_at'],
-                $productData['is_active']
+                $productData['image'], $productData['barcode'], $productData['name'], 
+                $productData['description'], $productData['stock'], $productData['is_stock'], 
+                $productData['inventary_min'], $productData['price_in'], $productData['price_out'], 
+                $productData['price_may'], $productData['unit'], $productData['presentation'], 
+                $productData['user_id'], $productData['category_id'], $productData['fecha_venc'],
+                $productData['laboratorio'], $productData['created_at'], $productData['is_active']
             ]);
             $idproducto = $conn->lastInsertId();
         }
        
-        // Procesar compra (solo si el RUC es diferente al anterior)
-        if ($rucproveedor !== $ultimoRucProcesado) {
-            $comprobante = explode('-', $fields[11]);
-            $serie = trim($comprobante[0]);
-            $numcom = trim($comprobante[1] ?? '');
-            
-            // Validar si la compra ya existe
-            $stmtSelectCompra->execute([$numcom, $serie]);
-            $compraExistente = $stmtSelectCompra->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$compraExistente) {
-                // Formatear fecha
-                $fechcompra = trim($fields[19]);
-                $fecha_emi = date('Y-m-d');
-                
-                if (!empty($fechcompra)) {
-                    $fechaObj = DateTime::createFromFormat('d/m/Y', $fechcompra);
-                    if ($fechaObj !== false) {
-                        $fecha_emi = $fechaObj->format('Y-m-d');
-                    }
-                }
-                
-                // Insertar nueva compra
-                $stmtInsertCompra->execute([
-                    $idproveedor,
-                    1, // tipo_comprobante
-                    $serie,
-                    $numcom,
-                    $fecha_emi,
-                    $_SESSION["user_id"],
-                    1, // operation_type_id
-                    date('Y-m-d H:i:s'),
-                    $productData['price_in'],
-                    $productData['price_in'],
-                    0 // discount
-                ]);
-                
-                $idcompra = $conn->lastInsertId();
-                $ultimoRucProcesado = $rucproveedor;
-            } else {
-                $idcompra = $compraExistente['id'];
+        // Procesar compra (Header)
+        $comprobante_input = trim($fields[11]);
+        $parts = explode('-', $comprobante_input);
+        $serie = trim($parts[0] ?? '');
+        $numcom = trim($parts[1] ?? '');
+        
+        $stmtSelectCompra->execute([$numcom, $serie]);
+        $compraExistente = $stmtSelectCompra->fetch(PDO::FETCH_ASSOC);
+        
+        if ($compraExistente) {
+            $idcompra = $compraExistente['id'];
+        } else {
+            $fechcompra = trim($fields[19]);
+            $fecha_emi = date('Y-m-d');
+            if (!empty($fechcompra)) {
+                $fechaObj = DateTime::createFromFormat('d/m/Y', $fechcompra);
+                if ($fechaObj !== false) $fecha_emi = $fechaObj->format('Y-m-d');
             }
-        }
-
-        // Insertar operación solo si tenemos una compra válida
-        if ($idcompra) {
-            $stmtInsertOperacion->execute([
-                $idproducto,
-                $productData['stock'],
-                $productData['price_in'],
-                0, // descuento
-                1, // operation_type_id
-                $idcompra,
-                date('Y-m-d H:i:s'),
-                '', // descripcion
-                '' // idpaquete
-            ]);
             
-            $inserted_rows++;
+            $stmtInsertCompra->execute([
+                $idproveedor, 1, $serie, $numcom, $fecha_emi, $_SESSION["user_id"], 1, 
+                date('Y-m-d H:i:s'), 0, 0, 0
+            ]);
+            $idcompra = $conn->lastInsertId();
         }
 
-         // Insertar lote
-        $stmtInsertLote->execute([
+        if (!in_array($idcompra, $processedSells)) {
+            $processedSells[] = $idcompra;
+        }
+
+        // Procesar Operación (Detalle) - Evitar duplicados consolidando cantidades
+        $stmtSelectOperacion->execute([$idproducto, $idcompra]);
+        $opExistente = $stmtSelectOperacion->fetch(PDO::FETCH_ASSOC);
+
+        if ($opExistente) {
+            $stmtUpdateOperacion->execute([$productData['stock'], $productData['price_in'], $opExistente['id']]);
+        } else {
+            $stmtInsertOperacion->execute([
+                $idproducto, $productData['stock'], $productData['price_in'], 0, 1, 
+                $idcompra, date('Y-m-d H:i:s'), '', ''
+            ]);
+        }
+        
+        // Insertar lote si no existe para esta compra/producto
+        $numLote = !empty($fields[8]) ? trim($fields[8]) : 'S/L';
+        $stmtSelectLoteExistente->execute([$idproducto, $numLote, $idcompra]);
+        if (!$stmtSelectLoteExistente->fetch()) {
+            $stmtInsertLote->execute([$idproducto, $numLote, $idcompra, $_SESSION["user_id"]]);
+        }
+
+        // REGISTRAR EN EL HISTORIAL DE PRECIOS
+        $stmtInsertHistory->execute([
             $idproducto,
-            trim($fields[8]),
+            $productData['price_in'],
+            $productData['price_out'],
+            $_SESSION["user_id"],
             $idcompra,
-            $_SESSION["user_id"]
+            date('Y-m-d H:i:s')
         ]);
 
+        $inserted_rows++;
     }
+
+    // ACTUALIZAR TOTALES DE TODAS LAS COMPRAS PROCESADAS
+    foreach ($processedSells as $sid) {
+        $stmtUpdateSellTotal->execute([$sid, $sid, $sid]);
+    }
+
     // Punto de verificación 1
     error_log("DEBUG: Después de procesar proveedor - RUC: " . $rucproveedor);
     var_dump($idproveedor); // Verifica el ID del proveedor
