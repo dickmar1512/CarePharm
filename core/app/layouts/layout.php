@@ -47,6 +47,9 @@
     <link rel="stylesheet" href="plugins/sweetalert2/css/sweetalert2.min.css">
     <script src="plugins/sweetalert2/js/sweetalert2@11.js"></script>
 
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+
     <!-- jsPDF -->
     <script src="plugins/jspdf/jspdf.umd.min.js"></script>
     <!-- jspdf-autotable -->
@@ -742,8 +745,7 @@
     </div>
 
     <!-- REQUIRED JS SCRIPTS -->
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery (Moved to head) -->
     <!-- jQuery UI 1.11.4 -->
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
