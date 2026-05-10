@@ -20,7 +20,7 @@ class Det_IngGas
 
 	public function delId($id)
 	{
-		$sql = "delete from ".self::$tablename." where id = ".$id;
+		$sql = "update ".self::$tablename." set estado=0 where id = ".$id;
         return Executor::doit($sql);
 	}
 }

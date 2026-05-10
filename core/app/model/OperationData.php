@@ -47,11 +47,11 @@ class OperationData {
 	}
 
 	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
+		$sql = "update ".self::$tablename." set estado=0 where id=$id";
 		Executor::doit($sql);
 	}
 	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
+		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -177,6 +177,7 @@ class OperationData {
 	{
  		$sql = "select product_id, q   from ".self::$tablename." 
  			where 
+ 			estado = 1 and
  			date(created_at) >= \"$start\" and 
  			date(created_at) <= \"$end\" and
  			operation_type_id = 2
@@ -185,7 +186,7 @@ class OperationData {
 		if($start == $end)
 		{
 			$sql = "select  product_id, q   from ".self::$tablename." 
-				where date(created_at) = \"$start\" and
+				where estado = 1 and date(created_at) = \"$start\" and
  				operation_type_id = 2 and 
  				product_id = $product_id";
 		}
@@ -322,20 +323,20 @@ class OperationData {
 
 
 	public static function getOutputByProductIdCutId($product_id,$cut_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id and operation_type_id=2 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and product_id=$product_id and cut_id=$cut_id and operation_type_id=2 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
 
 
 	public static function getOutputByProductId($product_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and operation_type_id=2 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and product_id=$product_id and operation_type_id=2 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
 	
 	public static function getInputByProductId($product_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and operation_type_id=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and product_id=$product_id and operation_type_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
@@ -358,13 +359,13 @@ class OperationData {
 
 
 	public static function getInputByProductIdCutId($product_id,$cut_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id and operation_type_id=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and product_id=$product_id and cut_id=$cut_id and operation_type_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
 
 	public static function getInputByProductIdCutIdYesF($product_id,$cut_id){
-		$sql = "select * from ".self::$tablename." where product_id=$product_id and cut_id=$cut_id and operation_type_id=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and product_id=$product_id and cut_id=$cut_id and operation_type_id=1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new OperationData());
 	}
@@ -388,7 +389,7 @@ class OperationData {
 					COUNT(DISTINCT YEAR(o.created_at), MONTH(o.created_at)) as total_months,
 					IFNULL(SUM(o.q) / NULLIF(COUNT(DISTINCT YEAR(o.created_at), MONTH(o.created_at)), 0), 0) as avg_qty_month
 				FROM product p
-				INNER JOIN operation o ON p.id = o.product_id AND o.operation_type_id = 2";
+				INNER JOIN operation o ON p.id = o.product_id AND o.operation_type_id = 2 AND o.estado = 1";
 		
 		if($sd && $ed){
 			$sql .= " AND DATE(o.created_at) BETWEEN '$sd' AND '$ed' ";
@@ -412,6 +413,7 @@ class OperationData {
 				FROM operation o
 				INNER JOIN product p ON o.product_id = p.id
 				WHERE o.operation_type_id = 2 
+				AND o.estado = 1
 				AND p.is_active = 1";
 		
 		if($sd && $ed){

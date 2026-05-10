@@ -78,12 +78,12 @@ class SellData {
 	}
 
 	public static function delById($id){
-		$sql = "delete from ".self::$tablename." where id=$id";
+		$sql = "update ".self::$tablename." set estado=0 where id=$id";
 		Executor::doit($sql);
 	}
 
 	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
+		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -252,7 +252,7 @@ class SellData {
 	}
 
 	public static function getAllByPage($start_from,$limit){
-		$sql = "select * from ".self::$tablename." where id<=$start_from limit $limit";
+		$sql = "select * from ".self::$tablename." where estado=1 and id<=$start_from limit $limit";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 

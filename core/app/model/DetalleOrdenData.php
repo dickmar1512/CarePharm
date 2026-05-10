@@ -60,7 +60,7 @@ class DetalleOrdenData {
 	}
 
 	public function del(){
-		$sql = "delete from ".self::$tablename." where id=$this->id";
+		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
 
 		Executor::doit($sql);
 	}

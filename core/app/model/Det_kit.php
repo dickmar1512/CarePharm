@@ -29,7 +29,7 @@ class Det_kit
 
 	public function delId($iddet)
 	{
-		$sql = "delete from detalle_paq where iddetalle = $iddet";
+		$sql = "update detalle_paq set estado=0 where iddetalle = $iddet";
         return Executor::doit($sql);
 	}
 

@@ -55,7 +55,7 @@ class PersonData
 
 	public static function delById($id)
 	{
-		$sql = "delete from " . self::$tablename . " where id=$id";
+		$sql = "update " . self::$tablename . " set status=0 where id=$id";
 		Executor::doit($sql);
 	}
 	public function del()
