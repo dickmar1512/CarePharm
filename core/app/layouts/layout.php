@@ -501,7 +501,7 @@
                                         <li class="nav-item">
                                             <a href="./?view=reportecomparativoingresos" class="nav-link" data-view="reportecomparativoingresos">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Comparativo Ingresos</p>
+                                                <p>Comparativo Ingr.</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
