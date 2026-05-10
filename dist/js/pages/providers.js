@@ -68,7 +68,7 @@ function showProviderModal(provider = null) {
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="dni">RUC*</label>
+                            <label for="dni">RUCDIKC*</label>
                             <input type="text" name="dni" class="form-control form-control-sm" id="dni" 
                                 maxlength="8" ${initialType == 3 ? 'required' : ''}
                                 value="${initialType == 3 ? provider?.numero_documento : ''}">
