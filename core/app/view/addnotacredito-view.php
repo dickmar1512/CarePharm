@@ -230,19 +230,17 @@ if (count($_POST) > 0) {
 				$cantidad = 1;
 
 			$precio_unitario = $item->prec_alt;
+			$descripcion_producto = $product->name;
 
-			$descripcion_producto = $producto->name;
+			// Store the product info before creating a new one or reuse it
+			if ($product->is_stock != 0) {
+				$p_sumar = new ProductData();
+				$p_sumar->name = $descripcion_producto;
+				$p_sumar->stock = $cantidad;
+				$p_sumar->sumar_stock_name();
+			}
 
-			$producto = new ProductData();
-
-			$producto->name = $descripcion_producto;
-			$producto->stock = $cantidad;
-
-
-			if ($producto->is_stock != 0)
-				$producto->sumar_stock_name();
-
-			$mtoValorVentaItem = $cantidad * $precio_unitario;//$_POST["mtoValorVentaItem"];
+			$mtoValorVentaItem = $cantidad * $precio_unitario;
 			$mtoPrecioVentaUnitario = $precio_unitario;
 			$mtoBaseIgvItem = $mtoValorVentaItem;
 
@@ -362,20 +360,19 @@ if (count($_POST) > 0) {
 					$precio_unitario = $item->prec_alt;
 					$descripcion_producto = $data[$i][1];
 
-					$producto = new ProductData();
-
-					$producto->name = $descripcion_producto;
-					$producto->stock = $cantidad;
-					$producto->restar_stock_name();
-
 					$producto2 = new ProductData();
-
 					$producto2->name = $data[$i][0];
 					$producto2->stock = $cantidad;
-					$producto2->sumar_stock_name();
 
+					// If the original product managed stock, return it
+					if ($product->is_stock != 0) {
+						$producto2->sumar_stock_name();
+					}
 
-					$mtoValorVentaItem = $cantidad * $precio_unitario;//$_POST["mtoValorVentaItem"];
+					// If the new description matches another product that manages stock, rest it? 
+					// Usually description correction doesn't change the product ID, so we just return the original stock
+					
+					$mtoValorVentaItem = $cantidad * $precio_unitario;
 					$mtoPrecioVentaUnitario = $precio_unitario;
 					$mtoBaseIgvItem = $mtoValorVentaItem;
 
@@ -748,11 +745,12 @@ if (count($_POST) > 0) {
 					$precio_unitario = $item->prec_alt;
 					$descripcion_producto = $data[$i][0];
 
-					$producto = new ProductData();
-
-					$producto->name = $descripcion_producto;
-					$producto->stock = $cantidad;
-					$producto->sumar_stock_name();
+					if ($product->is_stock != 0) {
+						$producto_sumar = new ProductData();
+						$producto_sumar->name = $descripcion_producto;
+						$producto_sumar->stock = $cantidad;
+						$producto_sumar->sumar_stock_name();
+					}
 
 					$mtoValorVentaItem = $cantidad * $precio_unitario;
 

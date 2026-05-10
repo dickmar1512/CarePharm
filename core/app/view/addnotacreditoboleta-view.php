@@ -224,18 +224,14 @@
 
 				$descripcion_producto = $product->name;
 
-				$producto = new ProductData();
-
-				$producto->name= $descripcion_producto;
-				$producto->stock = $product->stock;
-				$producto->id = $product->id;
-				
-				if($product->is_stock==1){
-					$producto->stock = $producto->stock + $cantidad;
-					$producto->update_stock();
+				if ($product->is_stock == 1) {
+					$p_sumar = new ProductData();
+					$p_sumar->id = $product->id;
+					$p_sumar->stock = $product->stock + $cantidad;
+					$p_sumar->update_stock();
 				}
 				
-				$mtoValorVentaItem = $cantidad * $precio_unitario;//$_POST["mtoValorVentaItem"];
+				$mtoValorVentaItem = $cantidad * $precio_unitario;
 				$mtoPrecioVentaUnitario = $precio_unitario;
 				$mtoBaseIgvItem = $mtoValorVentaItem;
 
@@ -359,22 +355,16 @@
 				$precio_unitario = $item->prec_alt;
 				$descripcion_producto = $data[$i][1];
 
-				$producto = new ProductData();
-
-				$producto->name= $descripcion_producto;
-				$producto->stock = $cantidad;
-				$producto->restar_stock_name();
-
-				$producto2 = new ProductData();
-
-				$producto2->name= $data[$i][0];
-				$producto2->stock = $cantidad;
-				$producto2->sumar_stock_name();
-				
-
-				$mtoValorVentaItem = $cantidad * $precio_unitario;//$_POST["mtoValorVentaItem"];
-				$mtoPrecioVentaUnitario = $precio_unitario;
-				$mtoBaseIgvItem = $mtoValorVentaItem;
+					if ($product->is_stock == 1) {
+						$p_sumar = new ProductData();
+						$p_sumar->id = $product->id;
+						$p_sumar->stock = $product->stock + $cantidad;
+						$p_sumar->update_stock();
+					}
+					
+					$mtoValorVentaItem = $cantidad * $precio_unitario;
+					$mtoPrecioVentaUnitario = $precio_unitario;
+					$mtoBaseIgvItem = $mtoValorVentaItem;
 
 				$filecontent2 .= $codUnidadMedida.'|'.
 								$cantidad.'|'.
@@ -752,15 +742,16 @@
 				if($data[$i][0]==$product->name){ 
 				$cantidad = $data[$i][1];
 				$precio_unitario = $item->prec_alt;
-				$descripcion_producto = $data[$i][0];
+					$descripcion_producto = $data[$i][0];
 
-				$producto = new ProductData();
+					if ($product->is_stock == 1) {
+						$p_sumar = new ProductData();
+						$p_sumar->id = $product->id;
+						$p_sumar->stock = $product->stock + $cantidad;
+						$p_sumar->update_stock();
+					}
 
-				$producto->name= $descripcion_producto;
-				$producto->stock = $cantidad;
-				$producto->sumar_stock_name();
-
-				$mtoValorVentaItem = $cantidad * $precio_unitario;
+					$mtoValorVentaItem = $cantidad * $precio_unitario;
 
 				//$_POST["mtoValorVentaItem"];
 				$mtoPrecioVentaUnitario = $precio_unitario;

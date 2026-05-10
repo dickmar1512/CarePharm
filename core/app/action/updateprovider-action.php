@@ -19,6 +19,7 @@ if (!empty($data)) {
 	}
 		
 	$provider->address1 = $data["address1"];
+	$provider->ubigeo = $data["ubigeo"] ?? "";
 	$provider->email1 = $data["email1"];
 	$provider->phone1 = $data["phone1"];
 	$provider->update_provider();

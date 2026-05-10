@@ -87,6 +87,11 @@ class SellData {
 		Executor::doit($sql);
 	}
 
+	public function cancel(){
+		$sql = "update ".self::$tablename." set estado=0 where id=$this->id";
+		Executor::doit($sql);
+	}
+
 	public function update_box(){
 		$sql = "update ".self::$tablename." set box_id=$this->box_id where id=$this->id";
 		Executor::doit($sql);
@@ -183,7 +188,7 @@ class SellData {
 	}
 
 	public static function getSellsOv(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=2 AND tipo_comprobante=70  AND estado != 2 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where operation_type_id=2 AND tipo_comprobante=70  AND estado = 1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -192,7 +197,7 @@ class SellData {
 		$sql = "select * from ".self::$tablename.
 		       " where  date(created_at) >= '$inicio' ".
                "and date(created_at) <= '$fin' ".
-               "and operation_type_id=2 AND tipo_comprobante =70 AND estado != 2 order by created_at desc";
+               "and operation_type_id=2 AND tipo_comprobante =70 AND estado = 1 order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -201,7 +206,7 @@ class SellData {
 		$sql = "select * from ".self::$tablename.
 		       " where  date(created_at) >= '$inicio' ".
                "and date(created_at) <= '$fin' ".
-               "and operation_type_id=2 AND tipo_comprobante=70 AND estado != 2 and user_id = '$user_id' order by created_at desc";
+               "and operation_type_id=2 AND tipo_comprobante=70 AND estado = 1 and user_id = '$user_id' order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -213,19 +218,35 @@ class SellData {
 	}
 
 	public static function getSellsUnBoxed(){
-		$sql = "select id, serie, comprobante, total, created_at,GetUserName(user_id) as user from ".self::$tablename." where operation_type_id=2 and box_id is NULL order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at,GetUserName(user_id) as user from ".self::$tablename." where estado=1 and operation_type_id=2 and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getByBoxId($id){
-		$sql = "select id, serie, comprobante, created_at,GetUserName(user_id) as user from ".self::$tablename." where operation_type_id=2 and box_id=$id order by created_at desc";
+		$sql = "select id, serie, comprobante, created_at,GetUserName(user_id) as user from ".self::$tablename." where estado=1 and operation_type_id=2 and box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
 
 	public static function getRes(){
-		$sql = "select * from ".self::$tablename." where operation_type_id=1 order by created_at desc";
+		$sql = "select * from ".self::$tablename." where estado=1 and operation_type_id=1 order by created_at desc";
+		$query = Executor::doit($sql);
+		return Model::many($query[0],new SellData());
+	}
+
+	public static function getResAnuladas($start = null, $end = null, $user_id = 0){
+		$sql = "select * from ".self::$tablename." where estado=0 and operation_type_id=1 ";
+		
+		if($start != null && $end != null){
+			$sql .= " and (date(created_at) >= \"$start\" and date(created_at) <= \"$end\") ";
+		}
+
+		if($user_id != 0){
+			$sql .= " and user_id = $user_id ";
+		}
+
+		$sql .= " order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 	}
@@ -274,7 +295,7 @@ class SellData {
 	}
 
 	public static function getAllByDateOp($start,$end,$op){
-  		$sql = "select * from ".self::$tablename." where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op order by created_at desc";
+  		$sql = "select * from ".self::$tablename." where estado=1 and date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new SellData());
 

@@ -19,8 +19,10 @@ if (!empty($data)){
 	}
 		
 	$provider->address1 = $data["address1"];
+	$provider->ubigeo = $data["ubigeo"] ?? "";
 	$provider->email1 = $data["email1"];
 	$provider->phone1 = $data["phone1"];
+	$provider->created_at = date("Y-m-d H:i:s");
 	$provider->add_provider();
 
 	echo json_encode(["success" => true]);

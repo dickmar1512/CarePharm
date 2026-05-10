@@ -34,7 +34,7 @@
                             <div class="form-group row">
                                 <label for="sd" class="col-sm-4 col-form-label">Desde:</label>
                                 <div class="col-sm-8">
-                                    <input type="date" name="sd" id="sd" value="<?php echo isset($_GET['sd']) ? $_GET['sd'] : ''; ?>" class="form-control">
+                                    <input type="date" name="sd" id="sd" value="<?php echo isset($_GET['sd']) ? $_GET['sd'] : date("Y-m-01");; ?>" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                             <div class="form-group row">
                                 <label for="ed" class="col-sm-4 col-form-label">Hasta:</label>
                                 <div class="col-sm-8">
-                                    <input type="date" name="ed" id="ed" value="<?php echo isset($_GET['ed']) ? $_GET['ed'] : ''; ?>" class="form-control">
+                                    <input type="date" name="ed" id="ed" value="<?php echo isset($_GET['ed']) ? $_GET['ed'] : date("Y-m-d");; ?>" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -68,8 +68,8 @@
             </div>
             <div class="card-body">
                 <?php
-                $sd = isset($_GET['sd']) && $_GET['sd'] != "" ? $_GET['sd'] : null;
-                $ed = isset($_GET['ed']) && $_GET['ed'] != "" ? $_GET['ed'] : null;
+                $sd = isset($_GET['sd']) && $_GET['sd'] != "" ? $_GET['sd'] : date('Y-m-01');
+                $ed = isset($_GET['ed']) && $_GET['ed'] != "" ? $_GET['ed'] : date('Y-m-d');
                 $reports = OperationData::getMonthlySalesSummary($sd, $ed);
                 if(count($reports) > 0):
                 ?>

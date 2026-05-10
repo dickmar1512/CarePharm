@@ -23,6 +23,7 @@ if (!empty($data)) {
     
     $client->company = "";
     $client->address1 = $data["address1"];
+    $client->ubigeo = $data["ubigeo"] ?? "";
     $client->email1 = $data["email1"];
     $client->phone1 = $data["phone1"];
     $client->id = $data["client_id"];

@@ -48,19 +48,21 @@
 									<th>N° Doc.</th>
 									<th>Nombre completo</th>
 									<th>Direccion</th>
+									<th>Ubigeo</th>
 									<th>Email</th>
 									<th>Telefono</th>
-									<th></th>
+									<th>Acciones</th>
 								</thead>
 								<?php
 								foreach ($providers as $provider) {
 									?>
-									<tr>
+									<tr style="<?=($provider->status == 1) ? '' : 'background: #FFCBD1;'; ?>;">
 										<td><?=$provider->numero_documento;?></td>
 										<td>
 											<?=$provider->name . " " . $provider->lastname?>
 										</td>
 										<td><?=$provider->address1?></td>
+										<td><?=$provider->ubigeo?></td>
 										<td><?=$provider->email1?></td>
 										<td><?=$provider->phone1?></td>
 										<td style="display: flex; justify-content: center;">
@@ -78,12 +80,10 @@
 												<?php 
 												endif; ?>
 											</div>	
-
 										</td>
 									</tr>
 									<?php
 								}
-
 								?>
 							</table>
 							<?php

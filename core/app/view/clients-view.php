@@ -48,6 +48,7 @@
 									<th>N° Doc.</th>
 									<th>Nombre completo</th>
 									<th>Direccion</th>
+									<th>Ubigeo</th>
 									<th>Email</th>
 									<th>Telefono</th>
 									<th><i class='fa fa-gears'></i></th>
@@ -61,6 +62,7 @@
 											<?php echo $client->lastname . " " . $client->name; ?>
 										</td>
 										<td><?=$client->address1; ?></td>
+										<td><?=$client->ubigeo; ?></td>
 										<td><?=$client->email1; ?></td>
 										<td><?=$client->phone1; ?></td>
 										<td>

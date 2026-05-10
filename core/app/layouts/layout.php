@@ -388,6 +388,12 @@
                                                     <p>Registro Compra</p>
                                                 </a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a href="./?view=resanuladas" class="nav-link" data-view="resanuladas">
+                                                    <i class="nav-icon far fa-circle text-danger"></i>
+                                                    <p>Compras Anuladas</p>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
                                 <?php } ?>

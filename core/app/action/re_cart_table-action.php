@@ -89,7 +89,7 @@ $total = 0;
                             <select name="client_id" class="form-control select2bs4" required>
                                 <option value="">-- SELECCIONAR PROVEEDOR --</option>
                                 <?php foreach ($providers as $p): ?>
-                                    <option value="<?php echo $p->id; ?>"><?php echo $p->name . " " . $p->lastname; ?> (<?= $p->no_ruc ?>)</option>
+                                    <option value="<?php echo $p->id; ?>"><?php echo $p->name . " " . $p->lastname; ?> (<?= $p->numero_documento ?>)</option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

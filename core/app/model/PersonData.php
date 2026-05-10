@@ -48,8 +48,8 @@ class PersonData
 
 	public function add_provider()
 	{
-		$sql = "insert into person (tipo_persona, numero_documento, name, lastname, address1, email1, phone1, kind, created_at) ";
-		$sql .= "value ('".$this->tipo_persona."', '".$this->numero_documento."', '".$this->name."', '".$this->lastname."', '".$this->address1."','".$this->email1."','".$this->phone1."', 2, '".$this->created_at."')";
+		$sql = "insert into person (tipo_persona, numero_documento, name, lastname, ubigeo, address1, email1, phone1, kind, created_at) ";
+		$sql .= "value ('".$this->tipo_persona."', '".$this->numero_documento."', '".$this->name."', '".$this->lastname."', '".$this->ubigeo."', '".$this->address1."','".$this->email1."','".$this->phone1."', 2, '".$this->created_at."')";
 		Executor::doit($sql);
 	}
 
@@ -73,13 +73,13 @@ class PersonData
 
 	public function update_client()
 	{
-		$sql = "update " . self::$tablename . " set name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
+		$sql = "update " . self::$tablename . " set name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\",ubigeo=\"$this->ubigeo\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
 	public function update_provider()
 	{
-		$sql = "update " . self::$tablename . " set name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\" where id=$this->id";
+		$sql = "update " . self::$tablename . " set name=\"$this->name\",email1=\"$this->email1\",address1=\"$this->address1\",lastname=\"$this->lastname\",phone1=\"$this->phone1\",ubigeo=\"$this->ubigeo\" where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -105,6 +105,7 @@ class PersonData
 			$data->phone1 = $r['phone1'];
 			$data->email1 = $r['email1'];
 			$data->tipo_persona = $r["tipo_persona"];
+			$data->ubigeo = $r["ubigeo"];
 			$data->created_at = $r['created_at'];
 			//$data->company = $r['company'];
 			$found = $data;
@@ -160,6 +161,7 @@ class PersonData
 			$array[$cnt]->phone1 = $r['phone1'];
 			$array[$cnt]->company = $r['company'];
 			$array[$cnt]->address1 = $r['address1'];
+			$array[$cnt]->ubigeo = $r['ubigeo'];
 			$array[$cnt]->created_at = $r['created_at'];
 			$array[$cnt]->status = $r['status'];
 			$cnt++;
@@ -184,6 +186,7 @@ class PersonData
 			$array[$cnt]->email1 = $r['email1'];
 			$array[$cnt]->phone1 = $r['phone1'];
 			$array[$cnt]->address1 = $r['address1'];
+			$array[$cnt]->ubigeo = $r['ubigeo'];
 			$array[$cnt]->kind = $r['kind'];
 			$array[$cnt]->created_at = $r['created_at'];
 			$array[$cnt]->status = $r['status'];
