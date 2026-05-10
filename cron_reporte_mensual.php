@@ -123,7 +123,7 @@ $chartUrl = "https://quickchart.io/chart?w=600&h=300&c=" . urlencode(json_encode
 // 3. Preparar el HTML del correo
 $arraddress = array('juan.irene@kalpg.com');
 $arrAddcc = array('sagitatario.1982@gmail.com', 'mayaya.ocampo@gmail.com');
-$asunto = "REPORTE COMPARATIVO DE INGRESOS (Ultimos 12 Meses)";
+$asunto = "REPORTE DE VENTAS MENSUALES COMPARATIVO (Ultimos 12 Meses)";
 
 $cuerpo = "<head><style>
     .mi-tabla { width: 100%; border-collapse: collapse; border: 1px solid #000; font-family: Arial, sans-serif; font-size: 13px; }
