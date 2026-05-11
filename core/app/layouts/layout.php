@@ -432,7 +432,13 @@
                                             <li>
                                                 <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
                                                     <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Listado Presentacion</p>
+                                                    <p>Listado Paquetes</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="./?view=salidasdiversas" class="nav-link" data-view="salidasdiversas">
+                                                    <i class="nav-icon far fa-circle text-warning"></i>
+                                                    <p>Salidas Diversas</p>
                                                 </a>
                                             </li>
                                         </ul>  

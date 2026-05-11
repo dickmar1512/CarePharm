@@ -16,7 +16,7 @@ class Det_kit
 
 	public static function getById($id)
 	{
-		$sql = "select a.iddetalle,a.idpaquete,a.idprod,b.barcode,b.name,a.precio,a.descuento,a.cantidad from " . self::$tablename . " a, product b where a.idprod = b.id and  a.idpaquete=$id";
+		$sql = "select a.iddetalle,a.idpaquete,a.idprod,b.barcode,b.name,a.precio,a.descuento,a.cantidad from " . self::$tablename . " a, product b where a.idprod = b.id and a.idpaquete=$id and a.estado=1";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new Det_kit());
 
@@ -24,12 +24,12 @@ class Det_kit
 
 	public function add()
 	{
-		$sql = "insert into " . self::$tablename . " (idpaquete,idprod,fecha_ing,precio,descuento,cantidad) ";
-		$sql .= "value (\"$this->idpaquete\",\"$this->idprod\",sysdate(),\"$this->precio\",\"$this->descuento\",\"$this->cantidad\")";
+		$sql = "insert into " . self::$tablename . " (idpaquete,idprod,fecha_ing,precio,descuento,cantidad,estado) ";
+		$sql .= "value (\"$this->idpaquete\",\"$this->idprod\",sysdate(),\"$this->precio\",\"$this->descuento\",\"$this->cantidad\",1)";
 		return Executor::doit($sql);
 	}
 
-	public function delId($iddet)
+	public static function delId($iddet)
 	{
 		$sql = "update detalle_paq set estado=0 where iddetalle = $iddet";
 		return Executor::doit($sql);

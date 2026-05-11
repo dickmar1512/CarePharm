@@ -99,6 +99,22 @@ class SellData
 		Executor::doit($sql);
 	}
 
+	public static function getLastBySerie($serie, $tipo = null)
+	{
+		$sql = "select * from " . self::$tablename . " where serie=\"$serie\"";
+		if($tipo != null) { $sql .= " AND tipo_comprobante=\"$tipo\""; }
+		$sql .= " order by id desc limit 1";
+		$query = Executor::doit($sql);
+		return Model::one($query[0], new SellData());
+	}
+
+	public function add_sd()
+	{
+		$sql = "insert into " . self::$tablename . " (user_id, tipo_comprobante, serie, comprobante, total, cash, discount, created_at, estado, person_id, tipo_pago, observacion, operation_type_id) ";
+		$sql .= "value ($this->user_id, $this->tipo_comprobante, '" . $this->serie . "', '" . $this->comprobante . "', $this->total, $this->cash, $this->discount, '" . $this->created_at . "', 1, NULL, $this->tipo_pago, \"$this->observacion\", 2)";
+		return Executor::doit($sql);
+	}
+
 	public function del()
 	{
 		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
