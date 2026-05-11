@@ -13,137 +13,143 @@ function openProductModal(action, productData = null) {
     });
     
     Swal.fire({
-        title: action === 'edit' ? 'Editar Producto/Servicio' : 'Nuevo Producto/Servicio',
-        html: `<hr>
-                <form id="productForm">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="image" style="display: flex; justify-content: left;">Imagen*</label>
-                                <div class="custom-file" style="display: flex; justify-content: left;">
-                                    <input type="file" name="image" id="image" class="custom-file-input">
-                                    <label class="btn btn-success" for="image">
-                                        <i class="fas fa-upload"></i> Seleccionar archivo
+        title: `<div class="text-left"><i class="fas ${action === 'edit' ? 'fa-edit text-warning' : 'fa-plus-circle text-primary'} mr-2"></i> ${action === 'edit' ? 'Editar Producto/Servicio' : 'Nuevo Producto/Servicio'}</div>`,
+        html: `<div class="p-2 text-left compact-modal">
+                <form id="productForm" enctype="multipart/form-data">
+                    <div class="row">
+                        <!-- Identificación y Básicos -->
+                        <div class="col-md-12 mb-3">
+                            <h6 class="text-primary font-weight-bold border-bottom pb-1 text-xs uppercase"><i class="fas fa-id-card mr-1"></i> Identificación del Producto</h6>
+                            <div class="row mt-2">
+                                <div class="col-md-3">
+                                    <label class="text-xs mb-1">Código DIGEMID</label>
+                                    <input type="text" name="cod_digemid" id="cod_digemid" class="form-control form-control-sm" placeholder="DIGEMID" value="${productData ? (productData.cod_digemid || '') : ''}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-xs mb-1">Código Barras*</label>
+                                    <input type="text" name="barcode" id="barcode" class="form-control form-control-sm font-weight-bold" placeholder="EAN-13" value="${productData ? productData.barcode : ''}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-xs mb-1">Categoría</label>
+                                    <select name="category_id" class="form-control form-control-sm">
+                                        ${categoryOptions}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-xs mb-1">U. Medida*</label>
+                                    <select name="selUnidadMedida" class="form-control form-control-sm" required>
+                                        ${unidadesOptions}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información Principal -->
+                        <div class="col-md-12 mb-3">
+                            <h6 class="text-primary font-weight-bold border-bottom pb-1 text-xs uppercase"><i class="fas fa-info-circle mr-1"></i> Información Detallada</h6>
+                            <div class="row mt-2">
+                                <div class="col-md-12 mb-2">
+                                    <label class="text-xs mb-1">Nombre Comercial*</label>
+                                    <input type="text" name="name" id="name" class="form-control form-control-sm" placeholder="Nombre del Producto" value="${productData ? productData.name : ''}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-xs mb-1">Principio Activo</label>
+                                    <input type="text" name="prin_act" id="prin_act" class="form-control form-control-sm" placeholder="Ej: Paracetamol" value="${productData ? (productData.principio_activo || '') : ''}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-xs mb-1">Presentación / Formas</label>
+                                    <input type="text" name="presentacion" id="presentacion" class="form-control form-control-sm" placeholder="Ej: Caja x 100 Tab" value="${productData ? (productData.presentation || '') : ''}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Precios e Inventario -->
+                        <div class="col-md-8 mb-3 border-right">
+                            <h6 class="text-primary font-weight-bold border-bottom pb-1 text-xs uppercase"><i class="fas fa-money-bill-wave mr-1"></i> Precios y Almacén</h6>
+                            <div class="row mt-2">
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1 text-danger">Precio Compra*</label>
+                                    <input type="number" step="any" name="price_in" id="price_in" class="form-control form-control-sm font-weight-bold" value="${productData ? productData.price_in : ''}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1 text-success">Precio Venta*</label>
+                                    <input type="number" step="any" name="price_out" id="price_out" class="form-control form-control-sm font-weight-bold" value="${productData ? productData.price_out : ''}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1 text-info">Precio Mayor*</label>
+                                    <input type="number" step="any" name="price_may" id="price_may" class="form-control form-control-sm" value="${productData ? productData.price_may : ''}" required>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1">Anaquel / Ubicación*</label>
+                                    <input type="text" name="anaquel" id="anaquel" class="form-control form-control-sm" value="${productData ? productData.anaquel : ''}" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1">Inv. Inicial</label>
+                                    <input type="number" name="q" id="q" class="form-control form-control-sm" value="${productData ? productData.stock : '0'}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1">Mínimo Stock</label>
+                                    <input type="number" name="inventary_min" id="inventary_min" class="form-control form-control-sm" value="${productData ? productData.inventary_min : '10'}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Opciones y Foto -->
+                        <div class="col-md-4 mb-3">
+                            <h6 class="text-primary font-weight-bold border-bottom pb-1 text-xs uppercase"><i class="fas fa-cog mr-1"></i> Ajustes</h6>
+                            <div class="mt-2 pl-2">
+                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" ${((productData && productData.is_active==1)|| action =='add') ? 'checked' : ''}>
+                                    <label class="custom-control-label text-xs" for="is_active">Producto Activo</label>
+                                </div>
+                                <div class="custom-control custom-switch mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="is_stock" name="is_stock" ${((productData && productData.is_stock==1) || action =='add') ? 'checked' : ''}>
+                                    <label class="custom-control-label text-xs" for="is_stock">Maneja Stock</label>
+                                </div>
+                                <div class="custom-control custom-switch mb-2">
+                                    <input type="checkbox" class="custom-control-input" id="is_may" name="is_may" ${(productData && productData.is_may==1) ? 'checked' : ''}>
+                                    <label class="custom-control-label text-xs" for="is_may">Venta x Mayor</label>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="text-xs d-block mb-1">Imagen del Producto</label>
+                                <div class="text-center p-2 border rounded bg-light">
+                                    <input type="file" name="image" id="image" class="d-none">
+                                    <label for="image" class="btn btn-xs btn-outline-secondary mb-0">
+                                        <i class="fas fa-camera mr-1"></i> Cambiar
                                     </label>
-                                    <span id="file-name" class="ml-2">${productData && productData.image ? productData.image : ''}</span>
-                                    ${productData && productData.image ? `<br><img src="storage/products/${productData.image}" class="img-responsive" style="max-width: 100px; margin-top: 10px;">` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="barcode" style="display: flex; justify-content: left;">Código de Barras*</label>
-                                <input type="text" name="barcode" id="barcode" class="form-control" placeholder="Código de Barras" value="${productData ? productData.barcode : ''}" required>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="category_id" style="display: flex; justify-content: left;">Categoría</label>
-                                <select name="category_id" class="form-control">
-                                    ${categoryOptions}
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="selUnidadMedida" style="display: flex; justify-content: left;">Unidad de Medida*</label>
-                                <select name="selUnidadMedida" class="form-control" required>
-                                    ${unidadesOptions}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="name" style="display: flex; justify-content: left;">Nombre*</label>
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Nombre del Producto" value="${productData ? productData.name : ''}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="prin_act" style="display: flex; justify-content: left;">Principio Activo</label>
-                        <textarea name="prin_act" id="prin_act" class="form-control" placeholder="Principio Activo">${productData ? productData.principio_activo : '-'}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="description" style="display: flex; justify-content: left;">Descripción</label>
-                        <textarea name="description" id="description" class="form-control" placeholder="Descripción del Producto">${productData ? productData.description : ''}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="presentacion" style="display: flex; justify-content: left;">Presentación</label>
-                        <textarea name="presentacion" id="presentacion" class="form-control" placeholder="Presentación del Producto">${productData ? productData.presentation : ''}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                               <label for="price_in" style="display: flex; justify-content: left;">Precio de Entrada*</label>
-                               <input type="text" name="price_in" id="price_in" class="form-control" placeholder="Precio de Entrada" value="${productData ? productData.price_in : ''}" required>
-                            </div>                            
-                            <div class="col-md-4">
-                                <label for="price_out" style="display: flex; justify-content: left;">Precio de Salida*</label>
-                                <input type="text" name="price_out" id="price_out" class="form-control" placeholder="Precio de Salida" value="${productData ? productData.price_out : ''}" required>
-                            </div>                            
-                            <div class="col-md-4">
-                                <label for="price_may" style="display: flex; justify-content: left;">Precio Por Mayor*</label>
-                                <input type="text" name="price_may" id="price_may" class="form-control" placeholder="Precio Por Mayor" value="${productData ? productData.price_may : ''}" required>
-                            </div>    
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="anaquel" style="display: flex; justify-content: left;">Anaquel*</label>
-                                <input type="text" name="anaquel" id="anaquel" class="form-control" placeholder="Anaquel" value="${productData ? productData.anaquel : ''}" required>
-                            </div>                                                                    
-                            <div class="col-md-4">
-                                <label for="inventary_min" style="display: flex; justify-content: left;">Mínima en Inventario</label>
-                                <input type="text" name="inventary_min" id="inventary_min" class="form-control" placeholder="Mínima en Inventario (Default 10)" value="${productData ? productData.inventary_min : ''}">
-                            </div>                          
-                            <div class="col-md-4">
-                                <label for="q" style="display: flex; justify-content: left;">Inventario Inicial</label>
-                                <input type="text" name="q" id="q" class="form-control" placeholder="Inventario Inicial" value="${productData ? productData.stock : ''}">
-                            </div>   
-                        </div>   
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="icheck-primary d-inline">
-                                    <input type="checkbox" name="is_stock" id="is_stock" ${((productData && productData.is_stock==1) || action =='add') ? 'checked' : ''}>
-                                    <label for="is_stock">Con Stock</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="icheck-success d-inline">
-                                    <input type="checkbox" name="is_active" id="is_active" ${((productData && productData.is_active==1)|| action =='add') ? 'checked' : ''}>
-                                    <label for="is_active">Está Activo</label>
-                                </div>
-                            </div>                            
-                            <div class="col-md-4">
-                                <div class="icheck-warning d-inline">
-                                    <input type="checkbox" name="is_may" id="is_may" ${(productData && productData.is_may==1) ? 'checked' : ''}>
-                                    <label for="is_may">Precio por Mayor</label>
+                                    <div id="preview-container" class="mt-2">
+                                        <img id="img-preview" src="${productData && productData.image ? 'storage/products/'+productData.image : 'dist/img/no-image.png'}" class="img-thumbnail" style="max-height: 60px;">
+                                    </div>
+                                    <span id="file-name" class="text-xs d-block text-truncate mt-1"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <input type="hidden" name="product_id" value="${productData ? productData.id : ''}">
-                    <input type="hidden" name="fecha_venc" value="${fechaVencimiento}">
-                </form>`,
+                    <input type="hidden" name="fecha_venc" value="${productData ? productData.fecha_venc : fechaVencimiento}">
+                </form>
+               </div>`,
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: action === 'edit' ? 'Actualizar Producto' : 'Agregar Producto',
+        confirmButtonText: action === 'edit' ? '<i class="fas fa-save mr-1"></i> Actualizar' : '<i class="fas fa-plus mr-1"></i> Registrar',
         cancelButtonText: 'Cancelar',
-        customClass: {
-            container: 'custom-swal-container',
-            popup: 'custom-swal-popup',
-            header: 'custom-swal-header',
-            title: 'custom-swal-title',
-            content: 'custom-swal-content',
-            closeButton: 'custom-swal-close-button'
-        },
-        width: '50%',
+        width: '850px',
         didOpen: () => {
             if (!productData) {
                 $('#barcode').val($('#genbarcode').val());
             }
             document.getElementById('image').addEventListener('change', function (e) {
-                const fileName = e.target.files[0].name;
-                document.getElementById('file-name').textContent = fileName;
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(ex) {
+                        document.getElementById('img-preview').src = ex.target.result;
+                    }
+                    reader.readAsDataURL(e.target.files[0]);
+                    document.getElementById('file-name').textContent = e.target.files[0].name;
+                }
             });
         },
         preConfirm: () => {
@@ -151,7 +157,7 @@ function openProductModal(action, productData = null) {
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             if (!data.barcode || !data.name || !data.price_in || !data.price_out || !data.anaquel || !data.selUnidadMedida) {
-                Swal.showValidationMessage('Por favor, completa todos los campos obligatorios');
+                Swal.showValidationMessage('Por favor, completa todos los campos obligatorios (*)');
                 return false;
             }
             return data;

@@ -54,7 +54,7 @@
                                     </li>
                                     <li class="mb-3 d-flex">
                                         <div class="mr-3 text-info"><i class="fas fa-2 fa-2x"></i></div>
-                                        <div>Complete los campos obligatorios: Nombre, Código, Precio de Venta y Stock Inicial.</div>
+                                        <div>Complete los campos obligatorios: Nombre, Código, Precio de Venta, Stock Inicial y Código DIGEMID.</div>
                                     </li>
                                     <li class="mb-3 d-flex">
                                         <div class="mr-3 text-info"><i class="fas fa-3 fa-2x"></i></div>

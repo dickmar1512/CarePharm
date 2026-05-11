@@ -67,9 +67,9 @@ try {
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
     $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (barcode <> '' AND barcode = ?) OR name = ?");
-    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active) 
-                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ? 
+    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active, cod_digemid) 
+                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ?, cod_digemid = ? 
                                          WHERE id = ?");
     
     $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE comprobante = ? AND serie = ?");
@@ -173,6 +173,7 @@ try {
             'fecha_venc' => !empty($fields[5]) ? $fields[5] : null,
             'laboratorio' => !empty($fields[4]) ? trim($fields[4]) : '-',
             'reg_san' => !empty($fields[20]) ? trim($fields[20]) : '-',
+            'cod_digemid' => !empty($fields[21]) ? trim($fields[21]) : '-',
             'created_at' => date('Y-m-d H:i:s'),
             'is_active' => 1
         ];
@@ -189,6 +190,7 @@ try {
                 $productData['fecha_venc'],
                 $productData['user_id'],
                 $productData['reg_san'],
+                $productData['cod_digemid'],
                 $productoExistente['id']
             ]);
             $idproducto = $productoExistente['id'];
@@ -199,7 +201,8 @@ try {
                 $productData['inventary_min'], $productData['price_in'], $productData['price_out'], 
                 $productData['price_may'], $productData['unit'], $productData['presentation'], 
                 $productData['user_id'], $productData['category_id'], $productData['fecha_venc'],
-                $productData['laboratorio'], $productData['reg_san'], $productData['created_at'], $productData['is_active']
+                $productData['laboratorio'], $productData['reg_san'], $productData['created_at'], $productData['is_active'],
+                $productData['cod_digemid']
             ]);
             $idproducto = $conn->lastInsertId();
         }

@@ -6,6 +6,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 if (!empty($data)) {
     $product = new ProductData();
     $product->barcode          = $data["barcode"];
+    $product->cod_digemid      = $data["cod_digemid"];
     $product->name             = addslashes($data["name"]);
     $product->principio_activo = $data["prin_act"];
     $product->price_in         = $data["price_in"];

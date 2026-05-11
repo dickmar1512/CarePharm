@@ -10,6 +10,30 @@ class Boleta2Data
 	public $SERIE;
 	public $COMPROBANTE;
 	public $TIPO_DOC;
+	PUBLIC $TIPO;
+	public $ID_TIPO_DOC;
+	public $ESTADO;
+	public $tipOperacion;
+	public $fecEmision;
+	public $horEmision;
+	public $codLocalEmisor;
+	public $tipDocUsuario;
+	public $numDocUsuario;
+	public $rznSocialUsuario;
+	public $tipMoneda;
+	public $codTipoNota;
+	public $descMotivo;
+	public $tipDocModifica;
+	public $serieDocModifica;
+	public $sumTotTributos;
+	public $sumTotValVenta;
+	public $sumPrecioVenta;
+	public $sumDescTotal;
+	public $sumOtrosCargos;
+	public $sumTotalAnticipos;
+	public $sumImpVenta;
+	public $ublVersionId;
+	public $customizationId;
 
 	public function Boleta2Data()
 	{

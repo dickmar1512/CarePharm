@@ -13,6 +13,26 @@ class Not_1_2Data
 	public $rznSocialUsuario;
 	public $descMotivo;
 	public $TIPO_DOC;
+	public $RUC;
+	public $TIPO;
+	public $SERIE;
+	public $COMPROBANTE;
+	public $tipDocModifica;
+	public $sumTotTributos;
+	public $sumTotValVenta;
+	public $sumPrecioVenta;
+	public $sumDescTotal;
+	public $sumOtrosCargos;
+	public $sumTotalAnticipos;
+	public $sumImpVenta;
+	public $ublVersionId;
+	public $customizationId;
+	public $ID_TIPO_DOC;
+	public $ESTADO;
+	public $tipOperacion;
+	public $codLocalEmisor;
+	public $tipDocUsuario;
+	public $tipMoneda;
 
 	public function Not_1_2Data()
 	{
