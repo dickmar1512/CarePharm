@@ -3,13 +3,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark"><i class='fas fa-file-excel text-success mr-2'></i> Importar Productos vía Excel</h1>
+                <h1 class="m-0 text-dark"><i class='fas fa-file-excel text-success mr-2'></i> Importar Nueva compra vía
+                    Excel</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="./">Inicio</a></li>
-                    <li class="breadcrumb-item"><a href="./?view=products">Productos</a></li>
-                    <li class="breadcrumb-item active">Importación Masiva</li>
+                    <li class="breadcrumb-item"><a href="./?view=importarexcel">Compras</a></li>
+                    <li class="breadcrumb-item active">Nueva Compra Excel</li>
                 </ol>
             </div>
         </div>
@@ -21,13 +22,14 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-9">
-                
+
                 <!-- Mensajes de Estado -->
                 <?php if (isset($_GET['success'])): ?>
                     <div class="alert alert-success alert-dismissible shadow-sm border-0 mb-4">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <h5><i class="icon fas fa-check"></i> ¡Éxito!</h5>
-                        Se importaron <strong><?php echo $_GET['rows'] ?></strong> productos correctamente a la base de datos.
+                        Se importaron <strong><?php echo $_GET['rows'] ?></strong> productos correctamente a la base de
+                        datos.
                     </div>
                 <?php endif; ?>
 
@@ -42,29 +44,117 @@
                 <div class="row">
                     <!-- Instrucciones -->
                     <div class="col-md-5">
-                        <div class="card card-outline card-info shadow-sm h-100">
-                            <div class="card-header py-2">
-                                <h3 class="card-title text-sm font-weight-bold uppercase">Instrucciones de Uso</h3>
+                        <div class="card card-outline card-info shadow-sm">
+                            <div class="card-header py-2 text-center">
+                                <h3 class="card-title text-sm font-weight-bold uppercase"><i
+                                        class="fas fa-info-circle mr-1"></i> Instrucciones de Formato</h3>
                             </div>
-                            <div class="card-body">
-                                <ul class="list-unstyled text-sm">
-                                    <li class="mb-3 d-flex">
-                                        <div class="mr-3 text-info"><i class="fas fa-1 fa-2x"></i></div>
-                                        <div>Descargue la plantilla oficial de Excel para asegurar el formato correcto.</div>
-                                    </li>
-                                    <li class="mb-3 d-flex">
-                                        <div class="mr-3 text-info"><i class="fas fa-2 fa-2x"></i></div>
-                                        <div>Complete los campos obligatorios: Nombre, Código, Precio de Venta y Stock Inicial.</div>
-                                    </li>
-                                    <li class="mb-3 d-flex">
-                                        <div class="mr-3 text-info"><i class="fas fa-3 fa-2x"></i></div>
-                                        <div>Suba el archivo y el sistema procesará los datos automáticamente.</div>
-                                    </li>
-                                </ul>
-                                <hr>
-                                <a href="dist/templates/plantilla_productos.xlsx" class="btn btn-outline-info btn-block btn-sm shadow-sm" download>
-                                    <i class="fas fa-download mr-1"></i> Descargar Plantilla Modelo
-                                </a>
+                            <div class="card-body p-0">
+                                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                    <table class="table table-sm table-striped text-xs mb-0">
+                                        <thead class="bg-light sticky-top">
+                                            <tr>
+                                                <th class="pl-3">COL</th>
+                                                <th>DATO REQUERIDO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">A (0)</td>
+                                                <td>Cód. DIGEMID</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">B (1)</td>
+                                                <td>Nombre del Producto*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">C (2)</td>
+                                                <td>Descripción</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">D (3)</td>
+                                                <td>Presentación</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">E (4)</td>
+                                                <td>Laboratorio</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">F (5)</td>
+                                                <td>F. Vencimiento (dd/mm/aaaa)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold">G (6)</td>
+                                                <td class="text-muted italic">Cant. x Caja (Opcional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">H (7)</td>
+                                                <td>Stock Inicial / Unid.*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">I (8)</td>
+                                                <td>Número de Lote</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold">J (9)</td>
+                                                <td class="text-muted italic">Precio Prov. (Opcional)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">K (10)</td>
+                                                <td>Precio Unit. Costo*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">L (11)</td>
+                                                <td>Nro. Factura (F001-001)*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">M (12)</td>
+                                                <td>Nro. de Guía</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">N (13)</td>
+                                                <td>Precio Venta Público*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">O (14)</td>
+                                                <td>Precio Venta Mayor</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">P (15)</td>
+                                                <td>Código de Barras*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">Q (16)</td>
+                                                <td>Nombre Proveedor</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">R (17)</td>
+                                                <td>RUC Proveedor*</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">S (18)</td>
+                                                <td>Sede / Observaciones</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">T (19)</td>
+                                                <td>F. Compra (dd/mm/aaaa)</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">U (20)</td>
+                                                <td>Registro Sanitario</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="p-3 bg-light border-top">
+                                    <p class="text-xs text-muted mb-2"><i class="fas fa-exclamation-triangle mr-1"></i>
+                                        Los campos con (*) son altamente recomendados para la consistencia del
+                                        inventario.</p>
+                                    <a href="./?action=downloadtemplate" class="btn btn-info btn-block btn-xs shadow-sm"
+                                        target="_blank">
+                                        <i class="fas fa-download mr-1"></i> DESCARGAR PLANTILLA EXCEL
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -76,22 +166,28 @@
                                 <h3 class="card-title text-sm font-weight-bold uppercase">Subir Archivo Excel</h3>
                             </div>
                             <div class="card-body py-4">
-                                <form class="form-horizontal" method="post" id="importForm" action="./?view=addproductxls" role="form" enctype="multipart/form-data">
+                                <form class="form-horizontal" method="post" id="importForm"
+                                    action="./?view=addproductxls" role="form" enctype="multipart/form-data">
                                     <div class="upload-zone border-dashed p-5 text-center mb-4" id="drop-zone">
                                         <div class="mb-3">
                                             <i class="fas fa-cloud-upload-alt fa-4x text-success opacity-3"></i>
                                         </div>
-                                        <p class="text-muted font-weight-bold mb-1">Arrastre el archivo aquí o haga clic para buscar</p>
+                                        <p class="text-muted font-weight-bold mb-1">Arrastre el archivo aquí o haga clic
+                                            para buscar</p>
                                         <p class="text-xs text-muted">Formatos permitidos: .xls, .xlsx</p>
-                                        
-                                        <input type="file" name="image" id="excelFile" class="custom-file-input" style="display:none;" required>
+
+                                        <input type="file" name="image" id="excelFile" class="custom-file-input"
+                                            style="display:none;" required>
                                         <label class="btn btn-success mt-3" for="excelFile" id="fileLabel">
                                             <i class="fas fa-file-excel mr-2"></i> Seleccionar archivo
                                         </label>
-                                        <div id="file-info" class="mt-2 font-weight-bold text-success text-sm" style="display:none;"></div>
+                                        <div id="file-info" class="mt-2 font-weight-bold text-success text-sm"
+                                            style="display:none;"></div>
                                     </div>
-                                    
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block shadow-sm py-3 font-weight-bold" id="btnImport" disabled>
+
+                                    <button type="submit"
+                                        class="btn btn-primary btn-lg btn-block shadow-sm py-3 font-weight-bold"
+                                        id="btnImport" disabled>
                                         <i class="fas fa-upload mr-2"></i> INICIAR PROCESAMIENTO
                                     </button>
                                 </form>
@@ -112,16 +208,24 @@
         transition: all 0.3s ease;
         cursor: pointer;
     }
+
     .border-dashed:hover {
         background-color: rgba(40, 167, 69, 0.05);
         border-color: #218838;
     }
-    .opacity-3 { opacity: 0.3; }
-    .uppercase { text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .opacity-3 {
+        opacity: 0.3;
+    }
+
+    .uppercase {
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 </style>
 
 <script>
-    document.getElementById('excelFile').addEventListener('change', function(e) {
+    document.getElementById('excelFile').addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const fileName = file.name;
@@ -137,7 +241,7 @@
     // Simple Drag & Drop visual effect
     const dropZone = document.getElementById('drop-zone');
     dropZone.onclick = () => document.getElementById('excelFile').click();
-    
+
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, (e) => {
             e.preventDefault();

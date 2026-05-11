@@ -8,6 +8,7 @@ if (!empty($data))
 	$product = ProductData::getById($data["product_id"]);
 
 	$product->barcode = $data["barcode"];
+	$product->cod_digemid = $data["cod_digemid"];
 	$product->name = $data["name"];
 	$product->principio_activo = $data["prin_act"];
 	$product->price_in = $data["price_in"];

@@ -1,4 +1,5 @@
 <?php
+
 #[AllowDynamicProperties]
 class PersonData
 {
@@ -42,25 +43,25 @@ class PersonData
 	public function add_client()
 	{
 		$sql = "insert into person (tipo_persona, numero_documento, name, lastname, ubigeo,  address1, email1, phone1, kind, created_at, company) ";
-		$sql .= "value ('".$this->tipo_persona."', '".$this->numero_documento."', '".$this->name."', '".$this->lastname."', '".$this->ubigeo."', '".$this->address1."', '".$this->email1."','".$this->phone1."', '1', '".$this->created_at."', '".$this->company."')";
+		$sql .= "value ('" . $this->tipo_persona . "', '" . $this->numero_documento . "', '" . $this->name . "', '" . $this->lastname . "', '" . $this->ubigeo . "', '" . $this->address1 . "', '" . $this->email1 . "','" . $this->phone1 . "', '1', '" . $this->created_at . "', '" . $this->company . "')";
 		return Executor::doit($sql);
 	}
 
 	public function add_provider()
 	{
 		$sql = "insert into person (tipo_persona, numero_documento, name, lastname, ubigeo, address1, email1, phone1, kind, created_at) ";
-		$sql .= "value ('".$this->tipo_persona."', '".$this->numero_documento."', '".$this->name."', '".$this->lastname."', '".$this->ubigeo."', '".$this->address1."','".$this->email1."','".$this->phone1."', 2, '".$this->created_at."')";
+		$sql .= "value ('" . $this->tipo_persona . "', '" . $this->numero_documento . "', '" . $this->name . "', '" . $this->lastname . "', '" . $this->ubigeo . "', '" . $this->address1 . "','" . $this->email1 . "','" . $this->phone1 . "', 2, '" . $this->created_at . "')";
 		Executor::doit($sql);
 	}
 
 	public static function delById($id)
 	{
-		$sql = "delete from " . self::$tablename . " where id=$id";
+		$sql = "update " . self::$tablename . " set status=0 where id=$id";
 		Executor::doit($sql);
 	}
 	public function del()
 	{
-		$sql = "update " . self::$tablename . " set status = ".$this->status." where id=$this->id";
+		$sql = "update " . self::$tablename . " set status = " . $this->status . " where id=$this->id";
 		Executor::doit($sql);
 	}
 
@@ -216,7 +217,7 @@ class PersonData
 	{
 		$sql = "SELECT id, CONCAT(name,' ', lastname) as name, address1, ubigeo
 				FROM person
-				WHERE numero_documento = '".$numDocUsuario."' AND kind = 1 AND tipo_persona = $tipo LIMIT 1";
+				WHERE numero_documento = '" . $numDocUsuario . "' AND kind = 1 AND tipo_persona = $tipo LIMIT 1";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new PersonData();

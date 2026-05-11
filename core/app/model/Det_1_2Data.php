@@ -1,9 +1,12 @@
 <?php
+
 #[AllowDynamicProperties]
-class Det_1_2Data {
+class Det_1_2Data
+{
 	public static $tablename = "det";
 
-	public function Det_1_2Data(){
+	public function Det_1_2Data()
+	{
 		//CABECERA CAB
 		$this->codUnidadMedida = "";
 		$this->ctdUnidadItem = "";
@@ -37,38 +40,41 @@ class Det_1_2Data {
 		$this->mtoValorReferencialUnitario = "";
 	}
 
-	public static function getById($id, $tipo){
+	public static function getById($id, $tipo)
+	{
 
 		$sql = "SELECT ctdUnidadItem, mtoValorUnitario, desItem, mtoValorVentaItem, codTriIGV, mtoIgvItem 
-			FROM ".self::$tablename."
+			FROM " . self::$tablename . "
 			WHERE ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
 
-			$query = Executor::doit($sql);
+		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Det_1_2Data());
+		return Model::many($query[0], new Det_1_2Data());
 
 	}
 
-	public static function getByIdNota($id, $tipo){
+	public static function getByIdNota($id, $tipo)
+	{
 
-		$sql = "SELECT * FROM ".self::$tablename."
+		$sql = "SELECT * FROM " . self::$tablename . "
 			WHERE ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
 
-			$query = Executor::doit($sql);
+		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Det_1_2Data());
+		return Model::many($query[0], new Det_1_2Data());
 
 	}
 
-	public static function getByNroDoc($nro){
+	public static function getByNroDoc($nro)
+	{
 
-		$sql = "SELECT * FROM ".self::$tablename."
+		$sql = "SELECT * FROM " . self::$tablename . "
 			INNER JOIN 1_2_factura_yaqha f ON d.ID_TIPO_DOC=f.id
 			WHERE CONCAT(f.SERIE,'-',f.COMPROBANTE)=$nro";
 
-			$query = Executor::doit($sql);
+		$query = Executor::doit($sql);
 
-		return Model::many($query[0],new Det_1_2Data());
+		return Model::many($query[0], new Det_1_2Data());
 
 	}
 

@@ -47,6 +47,9 @@
     <link rel="stylesheet" href="plugins/sweetalert2/css/sweetalert2.min.css">
     <script src="plugins/sweetalert2/js/sweetalert2@11.js"></script>
 
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+
     <!-- jsPDF -->
     <script src="plugins/jspdf/jspdf.umd.min.js"></script>
     <!-- jspdf-autotable -->
@@ -367,7 +370,13 @@
                                             <li class="nav-item">
                                                 <a href="./?view=re" class="nav-link" data-view="re">
                                                     <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Reabastecer</p>
+                                                    <p>Nueva Compra</p>
+                                                </a>
+                                            </li>                                            
+                                            <li>
+                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
+                                                    <i class="nav-icon far fa-circle text-info"></i>
+                                                    <p>Nueva Compra Excel</p>
                                                 </a>
                                             </li>                                            
                                             <li class="nav-item">
@@ -421,15 +430,15 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
+                                                <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
                                                     <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Importar Excel</p>
+                                                    <p>Listado Paquetes</p>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Listado Presentacion</p>
+                                                <a href="./?view=salidasdiversas" class="nav-link" data-view="salidasdiversas">
+                                                    <i class="nav-icon far fa-circle text-warning"></i>
+                                                    <p>Salidas Diversas</p>
                                                 </a>
                                             </li>
                                         </ul>  
@@ -495,13 +504,43 @@
                                         <li class="nav-item">
                                             <a href="./?view=sellreports" class="nav-link" data-view="sellreports">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Ventas x Cliente</p>
+                                                <p>VENTA POR CLIENTE</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=bincartreport" class="nav-link" data-view="bincartreport">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>REPORTE BINCART</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=reportecomparativoingresos" class="nav-link" data-view="reportecomparativoingresos">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>REP. VENTA GENERAL</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="./?view=systemlog" class="nav-link" data-view="systemlog">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                <p>LOGS DE ACCIONES</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
-                                                Ventas x Producto
+                                                <p>VENTA DETAL. PROD.</p>
+                                            </a>
+                                        </li> 
+                                        <li class="nav-item">
+                                            <a href="./?view=salesbyproductstock" class="nav-link" data-view="salesbyproductstock">
+                                                <i class="nav-icon far fa-circle text-info"></i> 
+                                                <p>REPO. VENTA X PROD.</p>
+                                            </a>
+                                        </li>                                        
+                                        <li class="nav-item">
+                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                REPO. VENTA MENSUAL
                                             </a>
                                         </li> 
                                         <li class="nav-item">
@@ -521,12 +560,6 @@
                                             <a href="./?view=reportsfactura" class="nav-link" data-view="reportsfactura">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 Factura
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                Ventas Mensuales
                                             </a>
                                         </li>
                                         <?php }?>
@@ -718,8 +751,7 @@
     </div>
 
     <!-- REQUIRED JS SCRIPTS -->
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery (Moved to head) -->
     <!-- jQuery UI 1.11.4 -->
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->

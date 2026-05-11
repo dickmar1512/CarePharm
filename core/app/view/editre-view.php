@@ -134,3 +134,34 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+	$(function () {
+		$("td[contenteditable=true]").blur(function () {
+			var field_id = $(this).attr("id");
+			var value = $(this).text().trim();
+			
+			// Si el valor está vacío o no es un número válido, se puede validar aquí
+			if(value === "") return;
+
+			$.post("./?action=updateres", field_id + "=" + value, function (data) {
+				$("#status").html(data);
+				$("#status").fadeIn();
+				setTimeout(function() {
+					location.reload();
+				}, 1500);
+			}).fail(function() {
+				$("#status").html("<span class='text-danger'>Error al guardar los cambios</span>");
+				$("#status").fadeIn();
+			});
+		});
+
+		// Manejar Enter para quitar el foco
+		$("td[contenteditable=true]").keypress(function (e) {
+			if (e.which == 13) {
+				e.preventDefault();
+				$(this).blur();
+			}
+		});
+	});
+</script>

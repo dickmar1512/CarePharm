@@ -89,27 +89,25 @@
         });
     });
 
-    $(document).ready(function () {
-        // Selecciona todos los enlaces de edición
-        $('.edit-user').on('click', function (e) {
-            e.preventDefault(); // Evita que el enlace redirija
-            
-            const userId = $(this).data('id'); // Obtiene el ID del usuario
-            
-            // Hacer una solicitud AJAX para obtener los datos del usuario
-            $.ajax({
-                url: `./?action=edituser&id=${userId}`,
-                type: 'GET',
-                dataType: 'json',
-                success: function (user) {
-                    // Mostrar el modal de SweetAlert2 con los datos del usuario
-                    showEditUserModal(user);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error al obtener los datos del usuario:', error);
-                    Swal.fire('Error', 'No se pudieron cargar los datos del usuario.', 'error');
-                }
-            });
+    // Evento para abrir el modal de edición de usuario (Delegación para DataTables)
+    $(document).on('click', '.edit-user', function (e) {
+        e.preventDefault(); // Evita que el enlace redirija
+        
+        const userId = $(this).data('id'); // Obtiene el ID del usuario
+        
+        // Hacer una solicitud AJAX para obtener los datos del usuario
+        $.ajax({
+            url: `./?action=edituser&id=${userId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (user) {
+                // Mostrar el modal de SweetAlert2 con los datos del usuario
+                showEditUserModal(user);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error al obtener los datos del usuario:', error);
+                Swal.fire('Error', 'No se pudieron cargar los datos del usuario.', 'error');
+            }
         });
     });
 

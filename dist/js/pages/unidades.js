@@ -3,8 +3,8 @@ $('#openModalAgregarUnidad').on('click', function () {
     openUnidadModal('add');
 });
 
-// Evento para abrir el modal de edición de unidad d emedida
-$('.edit-unidad').on('click', function () {
+// Evento para abrir el modal de edición de unidad d emedida (Delegación para DataTables)
+$(document).on('click', '.edit-unidad', function () {
     const unidadId = this.getAttribute('data-id');
     fetch(`./?action=getunidad&id=${unidadId}`)
         .then(response => response.json())
