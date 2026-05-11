@@ -43,7 +43,9 @@
 								<i class="fa fa-clock-o"></i>
 								Historial
 							</a>
-							<button id="procesarVentasBtn" class="btn btn-primary procesar-venta">
+							<button id="procesarVentasBtn" class="btn btn-primary procesar-venta" disabled>
+                    Procesar Ventas 
+                    <i class="fa fa-arrow-right"></i>
 								Procesar Ventas 
 								<i class="fa fa-arrow-right"></i>
 							</button>

@@ -73,8 +73,8 @@ try {
                                          WHERE id = ?");
     
     $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE comprobante = ? AND serie = ?");
-    $stmtInsertCompra = $conn->prepare("INSERT INTO sell (person_id, tipo_comprobante, serie, comprobante, fecha_emi, user_id, operation_type_id, created_at, total, cash, discount) 
-                                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");     
+    $stmtInsertCompra = $conn->prepare("INSERT INTO sell (person_id, tipo_comprobante, serie, comprobante, fecha_emi, user_id, operation_type_id, created_at, total, cash, discount, observacion) 
+                                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");     
     $stmtInsertOperacion = $conn->prepare("INSERT INTO operation (product_id, q, prec_alt, descuento, operation_type_id, sell_id, created_at, descripcion, idpaquete) 
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
   
@@ -158,8 +158,10 @@ try {
         $productData = [
             'image' => 'medgen.png',
             'barcode' => $barcode,
-            'name' => trim($fields[0]),
-            'description' => trim($fields[1]),
+            'cod_digemid' => !empty($fields[0]) ? trim($fields[0]) : '-',
+            'name' => trim($fields[1]),
+            'description' => trim($fields[2]),
+            'presentation' => trim($fields[3]),
             'stock' => !empty($fields[7]) ? (int)$fields[7] : 0,
             'is_stock' => 1,
             'inventary_min' => 10,
@@ -167,13 +169,11 @@ try {
             'price_out' => !empty($fields[13]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[13]) : 0,
             'price_may' => !empty($fields[14]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[14]) : 0,
             'unit' => $idunidad,
-            'presentation' => trim($fields[2]),
             'user_id' => $_SESSION["user_id"],
             'category_id' => 1,
             'fecha_venc' => !empty($fields[5]) ? $fields[5] : null,
             'laboratorio' => !empty($fields[4]) ? trim($fields[4]) : '-',
             'reg_san' => !empty($fields[20]) ? trim($fields[20]) : '-',
-            'cod_digemid' => !empty($fields[21]) ? trim($fields[21]) : '-',
             'created_at' => date('Y-m-d H:i:s'),
             'is_active' => 1
         ];
@@ -226,9 +226,13 @@ try {
                 if ($fechaObj !== false) $fecha_emi = $fechaObj->format('Y-m-d');
             }
             
+            $nro_guia = trim($fields[12] ?? '');
+            $sede = trim($fields[18] ?? '');
+            $observacion = "GUIA: $nro_guia | SEDE: $sede";
+
             $stmtInsertCompra->execute([
                 $idproveedor, 1, $serie, $numcom, $fecha_emi, $_SESSION["user_id"], 1, 
-                date('Y-m-d H:i:s'), 0, 0, 0
+                date('Y-m-d H:i:s'), 0, 0, 0, $observacion
             ]);
             $idcompra = $conn->lastInsertId();
         }

@@ -117,9 +117,11 @@ $(document).ready(function() {
         }
         
         // Habilitar o deshabilitar el botón
-        if (difference === 0) {
+        if (parseFloat(difference) === 0) {
+            $processButton.prop('disabled', false);
             $processButton.removeClass('disabled');
         } else {
+            $processButton.prop('disabled', true);
             $processButton.addClass('disabled');
         }
     }
@@ -162,7 +164,7 @@ $(document).ready(function() {
                 if (response.success) {
                     // Redirigir si todo está bien
                     console.log(response);
-                    window.location.href = './?view=b&id=' + response.box_id;
+                    window.location.href = './?view=box&id=' + response.box_id;
                 } else {
                     // Mostrar error
                     alert('Error: ' + response.message);
