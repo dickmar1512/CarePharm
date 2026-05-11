@@ -504,7 +504,7 @@
                                         <li class="nav-item">
                                             <a href="./?view=sellreports" class="nav-link" data-view="sellreports">
                                                 <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Ventas x Cliente</p>
+                                                <p>VENTA POR CLIENTE</p>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -534,7 +534,13 @@
                                         <li class="nav-item">
                                             <a href="./?view=salesbyproductstock" class="nav-link" data-view="salesbyproductstock">
                                                 <i class="nav-icon far fa-circle text-info"></i> 
-                                                <p>REP. VENTA PRODUC.</p>
+                                                <p>REPO. VENTA X PROD.</p>
+                                            </a>
+                                        </li>                                        
+                                        <li class="nav-item">
+                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
+                                                <i class="nav-icon far fa-circle text-info"></i>
+                                                REPO. VENTA MENSUAL
                                             </a>
                                         </li> 
                                         <li class="nav-item">
@@ -554,12 +560,6 @@
                                             <a href="./?view=reportsfactura" class="nav-link" data-view="reportsfactura">
                                                 <i class="nav-icon far fa-circle text-info"></i>
                                                 Factura
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                Ventas Mensuales
                                             </a>
                                         </li>
                                         <?php }?>
