@@ -27,6 +27,7 @@ class SellData
 	public $vendedor;
 	public $comp;
 	public $tipo;
+	public	$observacion;
 
 	public function SellData()
 	{

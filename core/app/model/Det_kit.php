@@ -4,6 +4,13 @@
 class Det_kit
 {
 	public static $tablename = "detalle_paq";
+	public $iddetalle;
+	public $idpaquete;
+	public $idprod;
+	public $precio;
+	public $descuento;
+	public $cantidad;
+	
 	function Det_kit()
 	{
 		$this->iddetalle = "";
