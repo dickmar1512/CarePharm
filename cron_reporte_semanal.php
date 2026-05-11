@@ -142,6 +142,11 @@ $chartConfig = [
 ];
 $chartUrl = "https://quickchart.io/chart?w=600&h=300&c=" . urlencode(json_encode($chartConfig));
 
+// Asegurar que el directorio storage exista
+if (!file_exists(ROOT . "/storage")) {
+    mkdir(ROOT . "/storage", 0777, true);
+}
+
 // 3. Generar PDF
 $pdf = new FPDF();
 $pdf->AddPage();
@@ -152,7 +157,7 @@ $pdf->Cell(0, 10, iconv('UTF-8', 'windows-1252', "Periodo: " . date('d/m/Y', str
 $pdf->Ln(5);
 
 // Gráfico en PDF
-$chartImgPath = "storage/chart_temp_semanal.png";
+$chartImgPath = ROOT . "/storage/chart_temp_semanal.png";
 $chartImgData = @file_get_contents($chartUrl);
 if ($chartImgData) {
     file_put_contents($chartImgPath, $chartImgData);
@@ -183,7 +188,7 @@ $pdf->Cell(45, 8, number_format($totalVentas, 2), 1, 0, 'R');
 $pdf->Cell(50, 8, number_format($totalCrecimiento, 2), 1, 0, 'R');
 $pdf->Cell(50, 8, round($promedioPorc, 2) . "%", 1, 1, 'R');
 
-$pdfPath = "storage/Reporte_Semanal_Ventas.pdf";
+$pdfPath = ROOT . "/storage/Reporte_Semanal_Ventas.pdf";
 $pdf->Output('F', $pdfPath);
 
 // 4. Preparar el HTML del correo
