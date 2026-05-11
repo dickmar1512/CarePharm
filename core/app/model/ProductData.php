@@ -167,6 +167,13 @@ class ProductData
 		Executor::doit($sql);
 	}
 
+	public static function getByDuplicate($cod_digemid, $barcode, $name)
+	{
+		$sql = "select * from " . self::$tablename . " where (cod_digemid <> '' AND cod_digemid = \"$cod_digemid\") OR (barcode <> '' AND barcode = \"$barcode\") OR name = \"$name\" limit 1";
+		$query = Executor::doit($sql);
+		return Model::one($query[0], new ProductData());
+	}
+
 	public static function getById($id)
 	{
 		$sql = "select id,image,barcode,name,principio_activo,description,stock,is_stock,inventary_min,price_in,price_out,unit,presentation,laboratorio,reg_san,user_id,category_id,created_at,fecha_venc,is_active,price_may,anaquel,is_may from " . self::$tablename . " where id=$id";

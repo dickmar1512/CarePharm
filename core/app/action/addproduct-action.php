@@ -28,33 +28,41 @@ if (!empty($data)) {
     $product->inventary_min = $inventary_min;
     $product->user_id       = $_SESSION["user_id"];
   
-    if(isset($data['is_stock']))
-    {
-      $product->is_stock = 1;
-    }
-    else
-    {
-      $product->is_stock = 0;
-    }
+    $product->user_id       = $_SESSION["user_id"];
   
-    if(isset($_FILES["image"]))
-    {
-      $image = new Upload($_FILES["image"]);
-      if($image->uploaded){
-        $image->Process("storage/products/");
-        if($image->processed)
+    // Verificar si ya existe para actualizar o insertar
+    $existing = ProductData::getByDuplicate($product->cod_digemid, $product->barcode, $product->name);
+
+    if($existing) {
+        $product->id = $existing->id;
+        $product->is_active = 1;
+        // Si viene stock nuevo, se suma al existente o se reemplaza? 
+        // El usuario dijo "actualizar". En importación sumamos. Aquí reemplazamos por lo que puso en el modal?
+        // Usaremos el valor del modal.
+        $product->update();
+        $prod = [$existing->id, true]; // Simular retorno de Executor
+    } else {
+        if(isset($data['is_stock'])) { $product->is_stock = 1; } else { $product->is_stock = 0; }
+        
+        if(isset($_FILES["image"]))
         {
-          $product->image = $image->file_dst_name;
-          $prod = $product->add_with_image();
+          $image = new Upload($_FILES["image"]);
+          if($image->uploaded){
+            $image->Process("storage/products/");
+            if($image->processed)
+            {
+              $product->image = $image->file_dst_name;
+              $prod = $product->add_with_image();
+            }
+            }else
+            {
+             $prod= $product->add();
+            }
         }
-        }else
+        else
         {
          $prod= $product->add();
         }
-    }
-    else
-    {
-     $prod= $product->add();
     }
     
     echo json_encode(["success" => true]);
