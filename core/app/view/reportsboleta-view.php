@@ -59,6 +59,8 @@
         <?php if(isset($_GET["sd"]) && isset($_GET["ed"])): ?>
             <?php 
                 $boletas = Boleta2Data::get_boletas_x_fecha($_GET["sd"], $_GET["ed"], $_GET["selSerie"] ?? '0', $_GET["comprobante"] ?? '');
+                $empresa_sfs = EmpresaData::getDatos();
+                $ruc_sfs = $empresa_sfs->Emp_Ruc;
             ?>
             <div class="card shadow-sm mt-3">
                 <div class="card-header border-0 d-flex align-items-center">
@@ -139,12 +141,30 @@
                                                 <a href="./?view=onesell&id=<?php echo $bol->EXTRA1 ?>&tipodoc=3" class="btn btn-dark btn-xs" title="Ver Detalle">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="./?action=regeneratesfsjson&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>" class="btn btn-primary btn-xs" title="Descargar JSON SUNAT">
-                                                    <i class="fas fa-file-code"></i>
-                                                </a>
-                                                <a href="./?action=regeneratesfsflat&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>" class="btn btn-success btn-xs" title="Descargar ZIP Archivos Planos">
-                                                    <i class="fas fa-file-archive"></i>
-                                                </a>
+                                                <?php 
+                                                    $base_sfs = $ruc_sfs . "-03-" . $bol->SERIE . "-" . $bol->COMPROBANTE;
+                                                    $json_exists = file_exists("../efact1.3.4/sunat_archivos/sfs/DATA/" . $base_sfs . ".json");
+                                                    $flat_exists = file_exists("../efact1.3.4/sunat_archivos/sfs/DATA/" . $base_sfs . ".cab");
+                                                ?>
+                                                <?php if ($json_exists): ?>
+                                                    <a href="#" onclick="confirmRegenerate('./?action=regeneratesfsjson&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>&regenerate=1', 'json'); event.preventDefault();" class="btn btn-warning btn-xs" title="Regenerar JSON">
+                                                        <i class="fas fa-file-code"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a href="./?action=regeneratesfsjson&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>" class="btn btn-primary btn-xs" title="Generar JSON SUNAT">
+                                                        <i class="fas fa-file-code"></i>
+                                                    </a>
+                                                <?php endif; ?>
+
+                                                <?php if ($flat_exists): ?>
+                                                    <a href="#" onclick="confirmRegenerate('./?action=regeneratesfsflat&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>&regenerate=1', 'flat'); event.preventDefault();" class="btn btn-warning btn-xs" title="Regenerar Planos">
+                                                        <i class="fas fa-file-archive"></i>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <a href="./?action=regeneratesfsflat&tipo_doc=03&id_tipo_doc=<?php echo $bol->id; ?>" class="btn btn-success btn-xs" title="Generar Archivos Planos">
+                                                        <i class="fas fa-file-archive"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -199,3 +219,25 @@
     .badge { font-weight: 500; font-size: 85%; }
     .opacity-50 { opacity: 0.5; }
 </style>
+
+<script>
+function confirmRegenerate(url, fileType) {
+    let titleText = fileType === 'json' ? 'El archivo JSON ya existe' : 'Los archivos planos ya existen';
+    let msgText = fileType === 'json' ? '¿Desea reescribirlo? (El archivo existente se moverá a data_ori)' : '¿Desea reescribirlos? (Los archivos existentes se moverán a data_ori)';
+
+    Swal.fire({
+        title: titleText,
+        text: msgText,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ffc107',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, reescribir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
+</script>

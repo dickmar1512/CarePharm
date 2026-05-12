@@ -6,8 +6,9 @@ if (mysqli_connect_errno()) {
     exit();
 }
 
-$tipo_doc = $_GET["tipo_doc"] ?? null; // '01' (Factura) o '03' (Boleta)
-$id_tipo_doc = $_GET["id_tipo_doc"] ?? null; // ID de la boleta o factura (tabla)
+$tipo_doc = $_GET["tipo_doc"] ?? null; 
+$id_tipo_doc = $_GET["id_tipo_doc"] ?? null; 
+$regenerate = $_GET["regenerate"] ?? 0;
 
 if (!$tipo_doc || !$id_tipo_doc) {
     echo json_encode(["status" => "error", "message" => "Faltan parámetros (tipo_doc, id_tipo_doc)"]);
@@ -74,16 +75,27 @@ if ($aca = $res_aca->fetch_assoc()) {
 // Nombre del archivo a generar
 $filename = $RUC . "-" . $tipo_doc . "-" . $serie . "-" . $comprobante . ".json";
 $path = "../efact1.3.4/sunat_archivos/sfs/DATA/" . $filename;
+$path_ori_dir = "../efact1.3.4/data_ori/";
+$path_ori = $path_ori_dir . $filename;
+
+if ($regenerate == 1 && file_exists($path)) {
+    if (!file_exists($path_ori_dir)) {
+        mkdir($path_ori_dir, 0777, true);
+    }
+    copy($path, $path_ori);
+    unlink($path);
+}
 
 // Convertir array a JSON String
 $json_string = json_encode($json_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-// Opción 1: Guardar el archivo directamente en la carpeta SFS DATA
+// Guardar el archivo directamente en la carpeta SFS DATA
 @file_put_contents($path, $json_string);
 
-// Opción 2: Forzar la descarga en el navegador del cliente
-header('Content-disposition: attachment; filename=' . $filename);
-header('Content-type: application/json');
-echo $json_string;
+if (isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+} else {
+    echo "JSON Generado correctamente en SFS/DATA.";
+}
 exit();
 ?>

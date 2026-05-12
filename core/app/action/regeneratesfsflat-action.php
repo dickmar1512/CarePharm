@@ -8,6 +8,7 @@ if (mysqli_connect_errno()) {
 
 $tipo_doc = $_GET["tipo_doc"] ?? null; 
 $id_tipo_doc = $_GET["id_tipo_doc"] ?? null; 
+$regenerate = $_GET["regenerate"] ?? 0;
 
 if (!$tipo_doc || !$id_tipo_doc) {
     echo "Faltan parámetros (tipo_doc, id_tipo_doc)";
@@ -33,6 +34,21 @@ if ($row = $res_doc->fetch_assoc()) {
 
 $base_filename = $RUC . "-" . $tipo_doc . "-" . $serie . "-" . $comprobante;
 $base_path = "../efact1.3.4/sunat_archivos/sfs/DATA/";
+$path_ori_dir = "../efact1.3.4/data_ori/";
+
+if ($regenerate == 1) {
+    if (!file_exists($path_ori_dir)) {
+        mkdir($path_ori_dir, 0777, true);
+    }
+    $extensions = ['cab', 'det', 'tri', 'ley', 'aca'];
+    foreach ($extensions as $ext) {
+        $file = $base_path . $base_filename . "." . $ext;
+        if (file_exists($file)) {
+            copy($file, $path_ori_dir . $base_filename . "." . $ext);
+            unlink($file);
+        }
+    }
+}
 
 $files_created = [];
 
@@ -142,22 +158,10 @@ if ($aca = $res_aca->fetch_assoc()) {
 }
 
 // Generamos un ZIP para que el usuario pueda descargarlos todos a la vez.
-// $zipFile = tempnam(sys_get_temp_dir(), 'sfs') . '.zip';
-// $zip = new ZipArchive();
-// if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
-//     exit("No se puede abrir <$zipFile>\n");
-// }
-
-// foreach ($files_created as $name => $content) {
-//     $zip->addFromString($name, $content);
-// }
-// $zip->close();
-
-// header('Content-Type: application/zip');
-// header('Content-disposition: attachment; filename='.$base_filename.'-SFS-Archivos.zip');
-// header('Content-Length: ' . filesize($zipFile));
-// readfile($zipFile);
-
-// unlink($zipFile);
+if (isset($_SERVER['HTTP_REFERER'])) {
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+} else {
+    echo "Archivos Planos Generados correctamente en SFS/DATA.";
+}
 exit();
 ?>
