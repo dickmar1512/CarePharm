@@ -142,22 +142,22 @@ if ($aca = $res_aca->fetch_assoc()) {
 }
 
 // Generamos un ZIP para que el usuario pueda descargarlos todos a la vez.
-$zipFile = tempnam(sys_get_temp_dir(), 'sfs') . '.zip';
-$zip = new ZipArchive();
-if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
-    exit("No se puede abrir <$zipFile>\n");
-}
+// $zipFile = tempnam(sys_get_temp_dir(), 'sfs') . '.zip';
+// $zip = new ZipArchive();
+// if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
+//     exit("No se puede abrir <$zipFile>\n");
+// }
 
-foreach ($files_created as $name => $content) {
-    $zip->addFromString($name, $content);
-}
-$zip->close();
+// foreach ($files_created as $name => $content) {
+//     $zip->addFromString($name, $content);
+// }
+// $zip->close();
 
-header('Content-Type: application/zip');
-header('Content-disposition: attachment; filename='.$base_filename.'-SFS-Archivos.zip');
-header('Content-Length: ' . filesize($zipFile));
-readfile($zipFile);
+// header('Content-Type: application/zip');
+// header('Content-disposition: attachment; filename='.$base_filename.'-SFS-Archivos.zip');
+// header('Content-Length: ' . filesize($zipFile));
+// readfile($zipFile);
 
-unlink($zipFile);
+// unlink($zipFile);
 exit();
 ?>
