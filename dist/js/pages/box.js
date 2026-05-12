@@ -117,7 +117,7 @@ $(document).ready(function() {
         }
         
         // Habilitar o deshabilitar el botón
-        if (parseFloat(difference) === 0) {
+        if (parseFloat(difference) === 0 && totalVentas > 0) {
             $processButton.prop('disabled', false);
             $processButton.removeClass('disabled');
         } else {
