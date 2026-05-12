@@ -86,6 +86,14 @@
 								endif;
 								if (count($boxes) > 0) {
 									$total_total = 0;
+                                    
+                                    $dbPath = '../efact1.3.4/bd/BDFacturador.db';
+                                    $sqliteDb = null;
+                                    if (file_exists($dbPath) && class_exists('SQLite3')) {
+                                        try {
+                                            $sqliteDb = new SQLite3($dbPath, SQLITE3_OPEN_READONLY);
+                                        } catch (Exception $e) {}
+                                    }
 									?>
 
 									<table class="table table-bordered table-hover datatable" id="boxhistory">
@@ -109,11 +117,31 @@
 													<?php
 													$total = 0;
 													foreach ($sells as $sell) {
+                                                        $notacomprobar = $sell->serie . "-" . $sell->comprobante;
+                                                        $probar = Not_1_2Data::getByIdComprobado($notacomprobar);
+                                                        
+                                                        $estadoSituacion = '-';
+                                                        if ($sqliteDb) {
+                                                            $query_sfs = "SELECT IND_SITU FROM DOCUMENTO WHERE NUM_DOCU = '" . $notacomprobar . "'";
+                                                            $results_sfs = $sqliteDb->query($query_sfs);
+                                                            if ($results_sfs && $doc = $results_sfs->fetchArray(SQLITE3_ASSOC)) {
+                                                                $estadoSituacion = $doc['IND_SITU'];
+                                                            }
+                                                        }
+                                                        $isRejected = in_array($estadoSituacion, ["05", "10", "06", "11", "12"]);
+                                                        $isCreditNote = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7);
+                                                        $isAnnulled = ($sell->estado == 0);
+                                                        $isInvalid = ($isRejected || $isCreditNote || $isAnnulled);
+
 														$operations = OperationData::getAllProductsBySellId($sell->id);
+                                                        $sellTotal = 0;
 														foreach ($operations as $operation) {
 															$product = $operation->getProduct();
-															$total += $operation->q * $product->price_out;
+															$sellTotal += $operation->q * $product->price_out;
 														}
+                                                        if (!$isInvalid) {
+                                                            $total += $sellTotal;
+                                                        }
 													}
 													$total_total += $total;
 													?>
@@ -128,6 +156,7 @@
 									</table>
 									<h1>Total: <?php echo number_format($total_total, 2, ".", ","); ?></h1>
 									<?php
+                                    if ($sqliteDb) { $sqliteDb->close(); }
 								} else {
 
 									?>
