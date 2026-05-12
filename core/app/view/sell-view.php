@@ -320,25 +320,37 @@ $empresa = EmpresaData::getDatos();
                             <input type="hidden" name="ublVersionId" value="2.1">
                             <input type="hidden" name="customizationId" value="2.0">
                             <input type="hidden" name="tipDocUsuario" value="1">
+                            <input type="hidden" name="codProducto" value="0">
                             <input type="hidden" name="codUnidadMedida" value="NIU">
-                            <input type="hidden" name="codProducto" value="-">
-                            <input type="hidden" name="codProductoSUNAT" value="-">
-                            <input type="hidden" name="codTriIGV" value="1000">
-                            <input type="hidden" name="mtoIgvItem" value="0">
-                            <input type="hidden" name="mtoIscItem" value="0">
-                            <input type="hidden" name="nomTributoIgvItem" value="IGV">
-                            <input type="hidden" name="codTipTributoIgvItem" value="VAT">
-                            <input type="hidden" name="tipAfeIGV" value="10">
-                            <input type="hidden" name="porIgvItem" value="18.00">
-                            <input type="hidden" name="nomTributoIscItem" value="-">
-                            <input type="hidden" name="codTipTributoIscItem" value="-">
-                            <input type="hidden" name="tipSisISC" value="-">
-                            <input type="hidden" name="porIscItem" value="0">
                             <input type="hidden" name="sumTotTributosItem" value="0">
+                            <input type="hidden" name="codProductoSUNAT" value="-">
+                            <input type="hidden" name="mtoIgvItem" value="0">
+                            <input type="hidden" name="codTriIGV" value="9997">
+                            <input type="hidden" name="codTipTributoIgvItem" value="VAT">
+                            <input type="hidden" name="nomTributoIgvItem" value="EXO">
+                            <input type="hidden" name="tipAfeIGV" value="20">
+                            <input type="hidden" name="codCatTributoIgvItem" value="E">
+                            <input type="hidden" name="tipSisISC" value="">
+                            <input type="hidden" name="mtoIscItem" value="0">
+                            <input type="hidden" name="porIgvItem" value="0">
+                            <input type="hidden" name="codTriISC" value="-">
+                            <input type="hidden" name="nomTributoIscItem" value="">
+                            <input type="hidden" name="codTipTributoIscItem" value="-">
+                            <input type="hidden" name="codCatTributoIscItem" value="-">
+                            <input type="hidden" name="porIscItem" value="">
                             <input type="hidden" name="mtoValorReferencialUnitario" value="0">
-                            <input type="hidden" name="ideTributo" value="1000">
-                            <input type="hidden" name="nomTributo" value="IGV">
+                            <input type="hidden" name="codTipDescuentoItem" value="-">
+                            <input type="hidden" name="porDescuentoItem" value="0">
+                            <input type="hidden" name="mtoDescuentoItem" value="0">
+                            <input type="hidden" name="mtoBasImpDescuentoItem" value="0">
+                            <input type="hidden" name="codTipCargoItem" value="-">
+                            <input type="hidden" name="porCargoItem" value="0">
+                            <input type="hidden" name="mtoCargoItem" value="0">
+                            <input type="hidden" name="mtoBasImpCargoItem" value="0">
+                            <input type="hidden" name="ideTributo" value="9997">
+                            <input type="hidden" name="nomTributo" value="EXO">
                             <input type="hidden" name="codTipTributo" value="VAT">
+                            <input type="hidden" name="codCatTributo" value="E">
                             <input type="hidden" name="mtoTributo" value="0">
 
                             <div class="row mb-3">
@@ -400,35 +412,50 @@ $empresa = EmpresaData::getDatos();
                             <input type="hidden" name="RUC" value="<?php echo $empresa->Emp_Ruc; ?>">
                             <input type="hidden" name="TIPO" value="01">
                             <input type="hidden" name="tipOperacion" value="0101">
-                            <input type="hidden" name="ublVersionId" value="2.1">
-                            <input type="hidden" name="customizationId" value="2.0">
-                            <input type="hidden" name="tipDocUsuario" value="6">
                             <input type="hidden" name="fecVencimiento" value="-">
                             <input type="hidden" name="codLocalEmisor" value="0000">
                             <input type="hidden" name="tipMoneda" value="PEN">
+                            <input type="hidden" name="porDescGlobal" value="-">
+                            <input type="hidden" name="mtoDescGlobal" value="0">
+                            <input type="hidden" name="mtoBasImpDescGlobal" value="0">
                             <input type="hidden" name="sumTotTributos" value="0">
                             <input type="hidden" name="sumDescTotal" value="<?= $dsctotal ?>">
                             <input type="hidden" name="sumOtrosCargos" value="0">
                             <input type="hidden" name="sumTotalAnticipos" value="0">
+                            <input type="hidden" name="ublVersionId" value="2.1">
+                            <input type="hidden" name="customizationId" value="2.0">
+                            <input type="hidden" name="tipDocUsuario" value="6">
+                            <input type="hidden" name="codProducto" value="0">
                             <input type="hidden" name="codUnidadMedida" value="NIU">
-                            <input type="hidden" name="codProducto" value="-">
-                            <input type="hidden" name="codProductoSUNAT" value="-">
-                            <input type="hidden" name="codTriIGV" value="1000">
-                            <input type="hidden" name="mtoIgvItem" value="0">
-                            <input type="hidden" name="mtoIscItem" value="0">
-                            <input type="hidden" name="nomTributoIgvItem" value="IGV">
-                            <input type="hidden" name="codTipTributoIgvItem" value="VAT">
-                            <input type="hidden" name="tipAfeIGV" value="10">
-                            <input type="hidden" name="porIgvItem" value="18.00">
-                            <input type="hidden" name="nomTributoIscItem" value="-">
-                            <input type="hidden" name="codTipTributoIscItem" value="-">
-                            <input type="hidden" name="tipSisISC" value="-">
-                            <input type="hidden" name="porIscItem" value="0">
                             <input type="hidden" name="sumTotTributosItem" value="0">
+                            <input type="hidden" name="codProductoSUNAT" value="-">
+                            <input type="hidden" name="mtoIgvItem" value="0">
+                            <input type="hidden" name="codTriIGV" value="9997">
+                            <input type="hidden" name="codTipTributoIgvItem" value="VAT">
+                            <input type="hidden" name="nomTributoIgvItem" value="EXO">
+                            <input type="hidden" name="tipAfeIGV" value="20">
+                            <input type="hidden" name="codCatTributoIgvItem" value="E">
+                            <input type="hidden" name="tipSisISC" value="">
+                            <input type="hidden" name="mtoIscItem" value="0">
+                            <input type="hidden" name="porIgvItem" value="0">
+                            <input type="hidden" name="codTriISC" value="-">
+                            <input type="hidden" name="nomTributoIscItem" value="">
+                            <input type="hidden" name="codTipTributoIscItem" value="-">
+                            <input type="hidden" name="codCatTributoIscItem" value="-">
+                            <input type="hidden" name="porIscItem" value="">
                             <input type="hidden" name="mtoValorReferencialUnitario" value="0">
-                            <input type="hidden" name="ideTributo" value="1000">
-                            <input type="hidden" name="nomTributo" value="IGV">
+                            <input type="hidden" name="codTipDescuentoItem" value="-">
+                            <input type="hidden" name="porDescuentoItem" value="0">
+                            <input type="hidden" name="mtoDescuentoItem" value="0">
+                            <input type="hidden" name="mtoBasImpDescuentoItem" value="0">
+                            <input type="hidden" name="codTipCargoItem" value="-">
+                            <input type="hidden" name="porCargoItem" value="0">
+                            <input type="hidden" name="mtoCargoItem" value="0">
+                            <input type="hidden" name="mtoBasImpCargoItem" value="0">
+                            <input type="hidden" name="ideTributo" value="9997">
+                            <input type="hidden" name="nomTributo" value="EXO">
                             <input type="hidden" name="codTipTributo" value="VAT">
+                            <input type="hidden" name="codCatTributo" value="E">
                             <input type="hidden" name="mtoTributo" value="0">
                             
                             <div class="row mb-3">
