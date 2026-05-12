@@ -47,10 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         
         // Enviar correo
         $arraddress = $arrAddcc = array();
-        //$arraddress[] = 'juan.irene@kalpg.com';
-        $arraddress[] = 'dick.marlon.tamani.romayna@gmail.com';
+        $arraddress[] = 'juan.irene@kalpg.com';
         $arrAddcc[] = 'sagitatario.1982@gmail.com';
-        //$arrAddcc[] = 'mayaya.ocampo@gmail.com';
+        $arrAddcc[] = 'mayaya.ocampo@gmail.com';
         $asunto = "Cierre caja por Limite de efectivo en caja";
         
         $mailer = new CLSPHPMailer();
