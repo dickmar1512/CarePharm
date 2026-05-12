@@ -138,7 +138,10 @@
                                                 </a>
                                                 <a href="./?action=regeneratesfsjson&tipo_doc=01&id_tipo_doc=<?php echo $fac->id; ?>" class="btn btn-primary btn-xs" title="Descargar JSON SUNAT">
                                                     <i class="fas fa-file-code"></i>
-                                                </a>		
+                                                </a>
+                                                <a href="./?action=regeneratesfsflat&tipo_doc=01&id_tipo_doc=<?php echo $fac->id; ?>" class="btn btn-success btn-xs" title="Descargar ZIP Archivos Planos">
+                                                    <i class="fas fa-file-archive"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
