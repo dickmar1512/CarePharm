@@ -135,6 +135,9 @@
                                             <td class="text-center">
                                                 <a href="./?view=onesell&id=<?php echo $fac->EXTRA1 ?>&tipodoc=1" class="btn btn-dark btn-xs" title="Ver Detalle">
                                                     <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="./?action=regeneratesfsjson&tipo_doc=01&id_tipo_doc=<?php echo $fac->id; ?>" class="btn btn-primary btn-xs" title="Descargar JSON SUNAT">
+                                                    <i class="fas fa-file-code"></i>
                                                 </a>		
                                             </td>
                                         </tr>
