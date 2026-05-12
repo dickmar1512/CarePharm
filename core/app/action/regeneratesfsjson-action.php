@@ -42,7 +42,7 @@ if ($cab = $res_cab->fetch_assoc()) {
 
 // 2. DETALLE
 $json_data["detalle"] = array();
-$sql_det = "SELECT codUnidadMedida, ctdUnidadItem, codProducto, codProductoSUNAT, desItem, mtoValorUnitario, sumTotTributosItem, codTriIGV, mtoIgvItem, mtoBaseIgvItem, nomTributoIgvItem, codTipTributoIgvItem, tipAfeIGV, porIgvItem, codTriISC, mtoIscItem, mtoBaseIscItem, nomTributoIscItem, codTipTributoIscItem, tipSisISC, porIscItem, codTriOtroItem, mtoTriOtroItem, mtoBaseTriOtroItem, nomTributoIOtroItem, codTipTributoIOtroItem, porTriOtroItem, mtoPrecioVentaUnitario, mtoValorVentaItem, mtoValorReferencialUnitario FROM det WHERE TIPO_DOC = '$tipo_doc' AND ID_TIPO_DOC = '$id_tipo_doc'";
+$sql_det = "SELECT codUnidadMedida, ctdUnidadItem, codProducto, codProductoSUNAT, desItem, mtoValorUnitario, sumTotTributosItem, codTriIGV, mtoIgvItem, mtoBaseIgvItem, nomTributoIgvItem, codTipTributoIgvItem, tipAfeIGV, porIgvItem, codTriISC, mtoIscItem, mtoBaseIscItem, nomTributoIscItem, codTipTributoIscItem, tipSisISC, porIscItem, codTriOtroItem, mtoTriOtroItem, mtoBaseTriOtroItem, nomTributoIOtroItem, codTipTributoIOtroItem, porTriOtroItem, codTriIcbper, mtoTriIcbperItem, ctdBolsasTriIcbperItem, nomTributoIcbperItem, codTipTributoIcbperItem, mtoTriIcbperUnidad, mtoPrecioVentaUnitario, mtoValorVentaItem, mtoValorReferencialUnitario FROM det WHERE TIPO_DOC = '$tipo_doc' AND ID_TIPO_DOC = '$id_tipo_doc'";
 $res_det = $conexion->query($sql_det);
 while ($det = $res_det->fetch_assoc()) {
     $json_data["detalle"][] = $det;
