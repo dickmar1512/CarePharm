@@ -170,7 +170,7 @@ class SellData
 
 	public static function getSells($inicio, $fin, $user_id)
 	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante!=70 AND estado = 1 ";
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante!=70 AND estado IN (0,1) ";
 
 		if ($user_id != 0) {
 			$sql .= " and user_id = $user_id ";
@@ -268,14 +268,14 @@ class SellData
 
 	public static function getSellsUnBoxed()
 	{
-		$sql = "select id, serie, comprobante, total, created_at,GetUserName(user_id) as user from " . self::$tablename . " where estado=1 and operation_type_id=2 and box_id is NULL order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado IN (0,1) and operation_type_id=2 and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
 
 	public static function getByBoxId($id)
 	{
-		$sql = "select id, serie, comprobante, created_at,GetUserName(user_id) as user from " . self::$tablename . " where estado=1 and operation_type_id=2 and box_id=$id order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado IN (0,1) and operation_type_id=2 and box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}

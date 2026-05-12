@@ -61,6 +61,17 @@
 
 							if (count($products) > 0) {
 								$total_total = 0;
+                                $yape_val = 0;
+                                $plin_val = 0;
+                                $tcredito_val = 0;
+
+                                $dbPath = '../efact1.3.4/bd/BDFacturador.db';
+                                $sqliteDb = null;
+                                if (file_exists($dbPath) && class_exists('SQLite3')) {
+                                    try {
+                                        $sqliteDb = new SQLite3($dbPath, SQLITE3_OPEN_READONLY);
+                                    } catch (Exception $e) {}
+                                }
 								?>
 								<table class="table table-bordered table-hover">
 									<thead class="thead-dark">
@@ -80,15 +91,21 @@
 										} else {
 											$tipodoc = 3;
 										}
+
+                                        $estadoSituacion = '-';
+                                        if ($sqliteDb) {
+                                            $query_sfs = "SELECT IND_SITU FROM DOCUMENTO WHERE NUM_DOCU = '" . $notacomprobar . "'";
+                                            $results_sfs = $sqliteDb->query($query_sfs);
+                                            if ($results_sfs && $doc = $results_sfs->fetchArray(SQLITE3_ASSOC)) {
+                                                $estadoSituacion = $doc['IND_SITU'];
+                                            }
+                                        }
+                                        $isRejected = in_array($estadoSituacion, ["05", "10", "06", "11", "12"]);
+                                        $isCreditNote = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7);
+                                        $isAnnulled = ($sell->estado == 0);
+                                        $isInvalid = ($isRejected || $isCreditNote || $isAnnulled);
 										?>
-										<tr style="background: <?php if (isset($probar)) {
-											if ($probar->TIPO_DOC == 8) {
-												echo "#C2FCCF";
-											}
-											if ($probar->TIPO_DOC == 7) {
-												echo "#FFC4C4";
-											}
-										} ?>">
+										<tr style="background: <?php if ($isInvalid) { echo "#FFC4C4"; } elseif (isset($probar) && $probar->TIPO_DOC == 8) { echo "#C2FCCF"; } ?>">
 											<td style="width:30px;">
 												<a href="./?view=onesell&id=<?php echo $sell->id; ?>&tipodoc=<?= $tipodoc ?>"
 													class="btn btn-default btn-xs"><i class="fa fa-arrow-right"></i></a>
@@ -102,10 +119,17 @@
 												$total = 0;
 												foreach ($operations as $operation) {
 													$product = $operation->getProduct();
-													$total += (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7) ? 0 : $operation->q * $operation->prec_alt;
+													$total += $operation->q * $operation->prec_alt;
 												}
+                                                if ($isInvalid) $total = 0;
 												$total_total += $total;
 												echo "<b>" . number_format($total, 2, ".", ",") . "</b>";
+                                                
+                                                if ($total > 0) {
+                                                    if ($sell->tipo_pago == 3) $yape_val += $total;
+                                                    if ($sell->tipo_pago == 2) $plin_val += $total;
+                                                    if ($sell->tipo_pago == 4) $tcredito_val += $total;
+                                                }
 												?>
 
 											</td>
@@ -126,7 +150,9 @@
 									<p>No se ha realizado ninguna venta.</p>
 								</div>
 
-							<?php } ?>
+							<?php 
+                            if ($sqliteDb) { $sqliteDb->close(); }
+                            } ?>
 					</div>
 					<div class="col-md-3">
 						<table class="table table-bordered table-hover" id="denominations">
@@ -186,9 +212,9 @@
 								</tr>
 								<tr>
 									<td><label for="yape">Yape</label></td>
-									<?php $yape = json_decode(json_encode(SellData::getVentasOtroTipoPago($_GET["id"],3)),true)['total'];
-									if ($yape > 0): 
-										$yape = number_format($yape, 2, '.', ',');
+									<?php 
+									if ($yape_val > 0): 
+										$yape = number_format($yape_val, 2, '.', ',');
 									else:
 										$yape = "0.00";
 									endif;
@@ -197,9 +223,9 @@
 								</tr>
 								<tr>
 									<td><label for="plin">Plin</label></td>
-									<?php $plin = json_decode(json_encode(SellData::getVentasOtroTipoPago($_GET["id"],2)),true)['total'];
-									if ($plin > 0): 
-										$plin = number_format($plin, 2, '.', ',');
+									<?php 
+									if ($plin_val > 0): 
+										$plin = number_format($plin_val, 2, '.', ',');
 									else:
 										$plin = "0.00";
 									endif;
@@ -208,9 +234,9 @@
 								</tr>
 								<tr>
 									<td><label for="tcredito">T.Credito</label></td>
-									<?php $tcredito = json_decode(json_encode(SellData::getVentasOtroTipoPago($_GET["id"],4)),true)['total'];
-									if ($tcredito > 0): 
-										$tcredito = number_format($tcredito, 2, '.', ',');
+									<?php 
+									if ($tcredito_val > 0): 
+										$tcredito = number_format($tcredito_val, 2, '.', ',');
 									else:
 										$tcredito = "0.00";
 									endif;

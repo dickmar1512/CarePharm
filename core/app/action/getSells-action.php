@@ -68,17 +68,11 @@ try {
     
     $products = SellData::getSells($fechaSd, $fechaEd, $user_id);
     
-    $resPlin     = SellData::getVentasOtroTipoPago('X',2,$fechaSd, $fechaEd,$user_id);
-    $plin        = $resPlin ? $resPlin->total : 0;
-    
-    $resYape     = SellData::getVentasOtroTipoPago('X',3,$fechaSd, $fechaEd,$user_id);
-    $yape        = $resYape ? $resYape->total : 0;
-    
-    $resTdebito  = SellData::getVentasOtroTipoPago('X',4,$fechaSd, $fechaEd,$user_id);
-    $tdebito     = $resTdebito ? $resTdebito->total : 0;
-    
-    $resTcredito = SellData::getVentasOtroTipoPago('X',5,$fechaSd, $fechaEd,$user_id);
-    $tcredito    = $resTcredito ? $resTcredito->total : 0;
+    $plin = 0;
+    $yape = 0;
+    $tdebito = 0;
+    $tcredito = 0;
+    $efectivo = 0;
     
     // Conexión SQLite única fuera del loop
     $sqliteDb = null;
@@ -156,34 +150,52 @@ try {
 
 		$fechaObj = new DateTime($sell->created_at);
 		$fechaFormateada = $fechaObj->format('d/m/Y H:i:s');
-        $background = '';
+        $isCreditNote = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7);
+        $isRejected = in_array($estadoSituacion, ["05", "10", "06"]); // Rechazado / Errores
+        $isAnnulled = ($sell->estado == 0 || stripos($nombreSituacion, 'anulad') !== false || stripos($nombreSituacion, 'baja') !== false);
+        
+        $isInvalid = ($isCreditNote || $isRejected || $isAnnulled);
 
-        if (isset($probar)) {
-            if ($probar->TIPO_DOC == 8) { $background = "#C2FCCF"; } 
-            elseif ($probar->TIPO_DOC == 7) { $background = "#FFC4C4"; }
+        if ($isInvalid) {
+            $background = "#FFC4C4";
+            if ($sell->estado == 0) { $estado = "ANULADO SISTEMA"; }
         } else {
-            $background = "#FFFFFF";
+            if (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 8) { 
+                $background = "#C2FCCF"; 
+            } else {
+                $background = "#FFFFFF";
+            }
         }
 
         $verComprobanteLink = '<a href="./?view=onesell&id='.$sell->id.'&tipodoc='.$sell->tipo_comprobante.'" class="btn btn-xs btn-default"><i class="fas fa-eye"></i></a>';
-        $verNotaCreditoLink = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7) ? '<a href="./?view=notacreditoboletat&num='.$probar->SERIE.'-'.$probar->COMPROBANTE.'" class="btn btn-xs btn-danger" title="Ver Nota de Credito"><i class="fas fa-file-invoice"></i></a>': '';
+        $verNotaCreditoLink = $isCreditNote ? '<a href="./?view=notacreditoboletat&num='.$probar->SERIE.'-'.$probar->COMPROBANTE.'" class="btn btn-xs btn-danger" title="Ver Nota de Credito"><i class="fas fa-file-invoice"></i></a>': '';
         $descargarXMLLink = $descargarXML ? '<a href="'.$rutaXML.'/'.$comprobanteXML.'" class="btn btn-xs btn-default" download="'.$comprobanteXML.'"><i class="fas fa-download"></i> XML</a>' : '';
         $descargarCDRLink = $descargarCDR ? '<a href="'.$rutaCDR.'/'.$comprobanteCDR.'" class="btn btn-xs btn-default" target="_blank"><i class="fas fa-download"></i> CDR</a>' : '';
 
         $capital = 0;
-        if ($admin == 1) {
+        if ($admin == 1 && !$isInvalid) {
             $objOper = OperationData::getAllProductsBySellId($sell->id);
             foreach ($objOper as $oper) {
                 $objProd = ProductData::getById($oper->product_id);
                 if($objProd){
-                    $capital += (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7) ? 0 : $oper->q * $objProd->price_in;
+                    $capital += $oper->q * $objProd->price_in;
                 }
             }
             $tc += $capital;
         }
         
-        $total = (isset($probar->TIPO_DOC) && $probar->TIPO_DOC == 7) ? 0 : $sell->total;
+        $total = $isInvalid ? 0 : $sell->total;
         $tv += $total;
+        
+        if (!$isInvalid && in_array($sell->tipo_comprobante, [1, 3])) {
+            switch ($sell->tipo_pago) {
+                case 1: $efectivo += $total; break;
+                case 2: $plin += $total; break;
+                case 3: $yape += $total; break;
+                case 4: $tdebito += $total; break;
+                case 5: $tcredito += $total; break;
+            }
+        }
         
         $data[] = [
             'background' => $background,

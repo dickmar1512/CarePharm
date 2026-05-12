@@ -197,7 +197,7 @@ function loadSellsData() {
                 if(response.data && response.data.length > 0) {
                     response.data.forEach(venta => {
                         const importeFormateado = parseFloat(venta.importe || 0).toFixed(2);
-                        dataTable.row.add([
+                        var rowNode = dataTable.row.add([
                             venta.verComprobante +' '+ venta.verNotaCredito || '',
                             venta.comprobante || '',
                             venta.cliente || '',
@@ -208,12 +208,16 @@ function loadSellsData() {
                             venta.estado || '',
                             venta.descargarXML +' '+ venta.descargarCDR || '',
                             venta.usuario || ''
-                        ]).draw(false);
+                        ]).node();
+                        
+                        if (venta.background && venta.background !== '#FFFFFF' && venta.background !== '') {
+                            $(rowNode).css('background-color', venta.background);
+                        }
                     });
                  }
                 
                 // Redibujar la tabla con los nuevos datos
-                dataTable.draw();
+                dataTable.draw(false);
                 
                 var totalotros = parseFloat(response.total_plin)+parseFloat(response.total_yape)+parseFloat(response.total_tdebito)+parseFloat(response.total_tcredito);
                 // Actualizar totales
