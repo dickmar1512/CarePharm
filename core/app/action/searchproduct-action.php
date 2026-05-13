@@ -224,6 +224,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                     </tr>
                     <tr class="desktop-header">
                         <th style="width: 35%;">PRODUCTO</th>
+                        <th style="width: 10%;">LABORATORIO</th>
                         <th style="width: 10%;">STOCK</th>
                         <th style="width: 55%;">
                             <div style="display: flex; gap: 4px; font-size: 0.8em;">
@@ -246,6 +247,9 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                         <tr class="<?php if ($q <= $product->inventary_min) { echo "table-warning"; } ?>">
                             <td>
                                 <strong class="text-responsive"><?php echo $product->name; ?></strong>
+                            </td>
+                            <td>
+                                <strong class="text-responsive"><?php echo $product->laboratorio; ?></strong>
                             </td>
                             <td class="text-center">
                                 <span class="badge <?php echo ($product->is_stock == 0) ? 'badge-success' : 'badge-info'; ?>">
