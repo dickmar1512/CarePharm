@@ -218,7 +218,7 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
             <table class="table table-bordered table-hover compact-table">
                 <thead class="compact-header">
                     <tr>
-                        <th colspan="3" style="padding: 8px;">
+                        <th colspan="4" style="padding: 8px;">
                             RESULTADOS (<?php echo count($products); ?>)
                         </th>
                     </tr>
