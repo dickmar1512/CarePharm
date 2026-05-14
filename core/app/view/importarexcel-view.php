@@ -81,67 +81,67 @@
                                             </tr>
                                             <tr>
                                                 <td class="pl-3 font-weight-bold text-info">F (5)</td>
+                                                <td>Registro Sanitario</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="pl-3 font-weight-bold text-info">G (6)</td>
                                                 <td>F. Vencimiento (dd/mm/aaaa)</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold">G (6)</td>
+                                                <td class="pl-3 font-weight-bold text-info">H (7)</td>
                                                 <td class="text-muted italic">Cant. x Caja (Opcional)</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">H (7)</td>
+                                                <td class="pl-3 font-weight-bold text-info">I (8)</td>
                                                 <td>Stock Inicial / Unid.*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">I (8)</td>
+                                                <td class="pl-3 font-weight-bold text-info">J (9)</td>
                                                 <td>Número de Lote</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold">J (9)</td>
+                                                <td class="pl-3 font-weight-bold">K (10)</td>
                                                 <td class="text-muted italic">Precio Prov. (Opcional)</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">K (10)</td>
+                                                <td class="pl-3 font-weight-bold text-info">L (11)</td>
                                                 <td>Precio Unit. Costo*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">L (11)</td>
+                                                <td class="pl-3 font-weight-bold text-info">M (12)</td>
                                                 <td>Nro. Factura (F001-001)*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">M (12)</td>
+                                                <td class="pl-3 font-weight-bold text-info">N (13)</td>
                                                 <td>Nro. de Guía</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">N (13)</td>
+                                                <td class="pl-3 font-weight-bold text-info">O (14)</td>
                                                 <td>Precio Venta Público*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">O (14)</td>
+                                                <td class="pl-3 font-weight-bold text-info">P (15)</td>
                                                 <td>Precio Venta Mayor</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">P (15)</td>
+                                                <td class="pl-3 font-weight-bold text-info">Q (16)</td>
                                                 <td>Código de Barras*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">Q (16)</td>
+                                                <td class="pl-3 font-weight-bold text-info">R (17)</td>
                                                 <td>Nombre Proveedor</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">R (17)</td>
+                                                <td class="pl-3 font-weight-bold text-info">S (18)</td>
                                                 <td>RUC Proveedor*</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">S (18)</td>
+                                                <td class="pl-3 font-weight-bold text-info">T (19)</td>
                                                 <td>Sede / Observaciones</td>
                                             </tr>
                                             <tr>
-                                                <td class="pl-3 font-weight-bold text-info">T (19)</td>
-                                                <td>F. Compra (dd/mm/aaaa)</td>
-                                            </tr>
-                                            <tr>
                                                 <td class="pl-3 font-weight-bold text-info">U (20)</td>
-                                                <td>Registro Sanitario</td>
+                                                <td>F. Compra (dd/mm/aaaa)</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -178,7 +178,7 @@
 
                                         <input type="file" name="image" id="excelFile" class="custom-file-input"
                                             style="display:none;" required>
-                                        <label class="btn btn-success mt-3" for="excelFile" id="fileLabel">
+                                        <label class="btn btn-success mt-3" id="fileLabel">
                                             <i class="fas fa-file-excel mr-2"></i> Seleccionar archivo
                                         </label>
                                         <div id="file-info" class="mt-2 font-weight-bold text-success text-sm"
@@ -223,36 +223,63 @@
         letter-spacing: 0.5px;
     }
 </style>
-
 <script>
-    document.getElementById('excelFile').addEventListener('change', function (e) {
-        const file = e.target.files[0];
+    const fileInput = document.getElementById('excelFile');
+    const fileInfo = document.getElementById('file-info');
+    const fileLabel = document.getElementById('fileLabel');
+    const btnImport = document.getElementById('btnImport');
+    const dropZone = document.getElementById('drop-zone');
+
+    function updateUI(file) {
         if (file) {
-            const fileName = file.name;
-            const fileInfo = document.getElementById('file-info');
-            fileInfo.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Archivo listo: ${fileName}`;
+            fileInfo.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Archivo listo: ${file.name}`;
             fileInfo.style.display = 'block';
-            document.getElementById('fileLabel').innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Cambiar archivo';
-            document.getElementById('btnImport').disabled = false;
-            document.getElementById('drop-zone').classList.add('bg-light');
+            fileLabel.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Cambiar archivo';
+            btnImport.disabled = false;
+            dropZone.classList.add('bg-light');
         }
+    }
+
+    fileInput.addEventListener('change', function (e) {
+        updateUI(e.target.files[0]);
     });
 
-    // Simple Drag & Drop visual effect
-    const dropZone = document.getElementById('drop-zone');
-    dropZone.onclick = () => document.getElementById('excelFile').click();
+    // Click to select
+    dropZone.onclick = (e) => {
+        if (e.target !== fileInput) {
+            fileInput.click();
+        }
+    };
 
+    // Drag & Drop logic
     ['dragenter', 'dragover'].forEach(eventName => {
         dropZone.addEventListener(eventName, (e) => {
             e.preventDefault();
+            e.stopPropagation();
             dropZone.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+            dropZone.style.borderColor = '#218838';
         }, false);
     });
 
-    ['dragleave', 'drop'].forEach(eventName => {
+    ['dragleave'].forEach(eventName => {
         dropZone.addEventListener(eventName, (e) => {
             e.preventDefault();
+            e.stopPropagation();
             dropZone.style.backgroundColor = '';
+            dropZone.style.borderColor = '#28a745';
         }, false);
     });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.style.backgroundColor = '';
+        dropZone.style.borderColor = '#28a745';
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files; // Assign dropped files to input
+            updateUI(files[0]);
+        }
+    }, false);
 </script>

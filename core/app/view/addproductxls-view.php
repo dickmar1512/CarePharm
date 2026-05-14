@@ -19,7 +19,12 @@ function generarCodigoBarras() {
 }
 
 function obtenerCodigoBarrasUnico($conn, $codigoExistente = null) {
-    if (!empty($codigoExistente) && preg_match('/^\d{13}$/', $codigoExistente)) {
+    if (!empty($codigoExistente)) {
+        $codigoExistente = trim($codigoExistente);
+        // Si viene de Excel en notación científica (ej. 7.70212E+13)
+        if (is_numeric($codigoExistente) && stripos($codigoExistente, 'E') !== false) {
+            $codigoExistente = sprintf('%.0f', (float)$codigoExistente);
+        }
         return $codigoExistente;
     }
     
@@ -113,9 +118,14 @@ try {
     $conn->beginTransaction();
 
     foreach ($rows as $fields) {
+        // Ignorar fila de encabezado si no fue eliminada por array_shift
+        if (isset($fields[0]) && strtolower(trim($fields[0])) === 'cod_digemid') {
+            continue;
+        }
+
         // Procesar proveedor
-        $rucproveedor = trim($fields[17]);
-        $proveedor = trim($fields[16]);
+        $rucproveedor = trim($fields[18] ?? '');
+        $proveedor = trim($fields[17] ?? '');
         
         if (empty($rucproveedor)) continue; // Saltar filas sin RUC
 
@@ -152,28 +162,28 @@ try {
         }
 
         // Procesar producto
-        $codigoExistente = !empty($fields[15]) ? $fields[15] : null;
+        $codigoExistente = !empty($fields[16]) ? $fields[16] : null;
         $barcode = obtenerCodigoBarrasUnico($conn, $codigoExistente);
         
         $productData = [
             'image' => 'medgen.png',
             'barcode' => $barcode,
-            'cod_digemid' => !empty($fields[0]) ? trim($fields[0]) : '-',
+            'cod_digemid' => (!empty($fields[0]) && is_numeric(trim($fields[0]))) ? (int)trim($fields[0]) : 0,
             'name' => trim($fields[1]),
             'description' => trim($fields[2]),
             'presentation' => trim($fields[3]),
-            'stock' => !empty($fields[7]) ? (int)$fields[7] : 0,
+            'stock' => !empty($fields[8]) ? (int)$fields[8] : 0,
             'is_stock' => 1,
             'inventary_min' => 10,
-            'price_in' => !empty($fields[10]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[10]) : 0,
-            'price_out' => !empty($fields[13]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[13]) : 0,
-            'price_may' => !empty($fields[14]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[14]) : 0,
+            'price_in' => !empty($fields[11]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[11]) : 0,
+            'price_out' => !empty($fields[14]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[14]) : 0,
+            'price_may' => !empty($fields[15]) ? (float)str_replace(['S/', ' ', ','], ['', '', ''], $fields[15]) : 0,
             'unit' => $idunidad,
             'user_id' => $_SESSION["user_id"],
             'category_id' => 1,
-            'fecha_venc' => !empty($fields[5]) ? $fields[5] : null,
+            'fecha_venc' => !empty($fields[6]) ? $fields[6] : null,
             'laboratorio' => !empty($fields[4]) ? trim($fields[4]) : '-',
-            'reg_san' => !empty($fields[20]) ? trim($fields[20]) : '-',
+            'reg_san' => !empty($fields[5]) ? trim($fields[5]) : '-',
             'created_at' => date('Y-m-d H:i:s'),
             'is_active' => 1
         ];
@@ -208,7 +218,7 @@ try {
         }
        
         // Procesar compra (Header)
-        $comprobante_input = trim($fields[11]);
+        $comprobante_input = trim($fields[12]);
         $parts = explode('-', $comprobante_input);
         $serie = trim($parts[0] ?? '');
         $numcom = trim($parts[1] ?? '');
@@ -219,15 +229,15 @@ try {
         if ($compraExistente) {
             $idcompra = $compraExistente['id'];
         } else {
-            $fechcompra = trim($fields[19]);
+            $fechcompra = trim($fields[20]);
             $fecha_emi = date('Y-m-d');
             if (!empty($fechcompra)) {
                 $fechaObj = DateTime::createFromFormat('d/m/Y', $fechcompra);
                 if ($fechaObj !== false) $fecha_emi = $fechaObj->format('Y-m-d');
             }
             
-            $nro_guia = trim($fields[12] ?? '');
-            $sede = trim($fields[18] ?? '');
+            $nro_guia = trim($fields[13] ?? '');
+            $sede = trim($fields[19] ?? '');
             $observacion = "GUIA: $nro_guia | SEDE: $sede";
 
             $stmtInsertCompra->execute([
@@ -255,7 +265,7 @@ try {
         }
         
         // Insertar lote si no existe para esta compra/producto
-        $numLote = !empty($fields[8]) ? trim($fields[8]) : 'S/L';
+        $numLote = !empty($fields[9]) ? trim($fields[9]) : 'S/L';
         $stmtSelectLoteExistente->execute([$idproducto, $numLote, $idcompra]);
         if (!$stmtSelectLoteExistente->fetch()) {
             $stmtInsertLote->execute([$idproducto, $numLote, $idcompra, $_SESSION["user_id"]]);

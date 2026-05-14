@@ -430,6 +430,18 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                <a href="./?view=combinarduplicados" class="nav-link" data-view="combinarduplicados">
+                                                    <i class="nav-icon far fa-circle text-danger"></i>
+                                                    <p>Combinar Duplica.</p>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="./?view=mergedhistory" class="nav-link" data-view="mergedhistory">
+                                                    <i class="nav-icon far fa-circle text-info"></i>
+                                                    <p>Historial Combina.</p>
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
                                                     <i class="nav-icon far fa-circle text-info"></i>
                                                     <p>Listado Paquetes</p>
