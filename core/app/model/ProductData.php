@@ -226,7 +226,7 @@ class ProductData
 
 	public static function getLike($p)
 	{
-		$sql = "select * from " . self::$tablename . " where is_active = 1 and (barcode like '%$p%' or name like '%$p%' or id like '%$p%')";
+		$sql = "select * from " . self::$tablename . " where is_active = 1 and (barcode like '%$p%' or name like '%$p%' or id like '%$p%' or principio_activo like '%$p%')";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new ProductData());
 	}
