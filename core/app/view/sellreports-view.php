@@ -54,6 +54,11 @@ foreach ($operations as $op) {
 }
 
 $avg_ticket = ($count_v > 0) ? ($total_v_final / $count_v) : 0;
+
+// Ordenar por importe total final (descendente)
+uasort($grouped_ops, function($a, $b) {
+    return $b['total_final'] <=> $a['total_final'];
+});
 ?>
 
 <!-- Content Header -->
@@ -211,9 +216,9 @@ $avg_ticket = ($count_v > 0) ? ($total_v_final / $count_v) : 0;
                                         <td class="text-center py-2">
                                             <span class="badge badge-light border px-2 py-1"><?php echo $data['docs_count']; ?> docs</span>
                                         </td>
-                                        <td class="text-right py-2 text-muted">S/ <?php echo number_format($data['total_neto'], 2); ?></td>
-                                        <td class="text-right py-2 text-warning">-S/ <?php echo number_format($data['total_desc'], 2); ?></td>
-                                        <td class="text-right pr-4 py-2 font-weight-bold text-dark" style="font-size: 1rem;">
+                                        <td class="text-right py-2 text-muted" data-order="<?php echo $data['total_neto']; ?>">S/ <?php echo number_format($data['total_neto'], 2); ?></td>
+                                        <td class="text-right py-2 text-warning" data-order="<?php echo $data['total_desc']; ?>">-S/ <?php echo number_format($data['total_desc'], 2); ?></td>
+                                        <td class="text-right pr-4 py-2 font-weight-bold text-dark" style="font-size: 1rem;" data-order="<?php echo $data['total_final']; ?>">
                                             S/ <?php echo number_format($data['total_final'], 2); ?>
                                         </td>
                                     </tr>
@@ -355,6 +360,10 @@ $avg_ticket = ($count_v > 0) ? ($total_v_final / $count_v) : 0;
                 "language": { "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json" },
                 "pageLength": 50,
                 "ordering": true,
+                "order": [[4, "desc"]], // Columna 4 es 'Importe Final'
+                "columnDefs": [
+                    { "type": "num", "targets": [1, 2, 3, 4] } // Forzar tipo numérico en estas columnas
+                ],
                 "responsive": true,
                 "dom": '<"row d-flex justify-content-between mx-2 py-3"<"col-sm-6"B><"col-sm-6"f>>rtip',
                 "buttons": [
