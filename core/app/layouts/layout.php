@@ -324,311 +324,53 @@
 
                     <!-- Sidebar Menu -->
                     <nav class="mt-2">
-                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                            data-accordion="false">
-                            <?php
-                            $admin = UserData::getById($_SESSION["user_id"])->is_admin;
-                            $dirtec = UserData::getById($_SESSION["user_id"])->is_dirtec;
-                            $caja = UserData::getById($_SESSION["user_id"])->is_caja;
-                            $motonmax = UserData::getById($_SESSION["user_id"])->montomax;
-                            if (isset($_SESSION["user_id"])): ?>
-                                <li class="nav-item">
-                                    <a href="./?view=home" class="nav-link">
-                                        <i class='fa fa-home'></i>
-                                        <p>Inicio</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class='fa fa-shopping-cart'></i>
-                                        <p>Venta</p>
-                                        <i class="right fas fa-angle-left"></i>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="./?view=sell" class="nav-link" data-view="sell">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Generar Venta</p>
-                                            </a>
-                                        </li>                                       
-                                        <li class="nav-item">
-                                            <a href="./?view=sells" class="nav-link" data-view="sells">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Registro Venta</p>
-                                            </a>
-                                        </li>    
-                                    </ul>
-                                </li>
-                                <?php if ($admin == 1 || $dirtec == 1) { ?>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="bx bxs-shopping-bag"></i>
-                                            <p>Compras</p>
-                                            <i class="right fas fa-angle-left"></i>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="./?view=re" class="nav-link" data-view="re">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Nueva Compra</p>
-                                                </a>
-                                            </li>                                            
-                                            <li>
-                                                <a href="./?view=importarexcel" class="nav-link" data-view="importarexcel">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Nueva Compra Excel</p>
-                                                </a>
-                                            </li>                                            
-                                            <li class="nav-item">
-                                                <a href="./?view=res" class="nav-link" data-view="res">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Registro Compra</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=resanuladas" class="nav-link" data-view="resanuladas">
-                                                    <i class="nav-icon far fa-circle text-danger"></i>
-                                                    <p>Compras Anuladas</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                <?php } ?>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class='fa fa-cube'></i>
-                                        <p>Caja</p>
-                                        <i class="right fas fa-angle-left"></i>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="./?view=box" class="nav-link" data-view="box">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Cierre de Caja</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=expenseentry" class="nav-link" data-view="expenseentry">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Ingreso gastos</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <?php if ($admin == 1 || $dirtec == 1) { ?>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class='fas fa-tag'></i>
-                                            <p>Productos/Servicios</p>
-                                            <i class="right fas fa-angle-left"></i>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <li>
-                                                <a href="./?view=products" class="nav-link" data-view="products">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Listado Producto</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="./?view=combinarduplicados" class="nav-link" data-view="combinarduplicados">
-                                                    <i class="nav-icon far fa-circle text-danger"></i>
-                                                    <p>Combinar Duplica.</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="./?view=mergedhistory" class="nav-link" data-view="mergedhistory">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Historial Combina.</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="./?view=paquetes" class="nav-link" data-view="paquetes">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Listado Paquetes</p>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="./?view=salidasdiversas" class="nav-link" data-view="salidasdiversas">
-                                                    <i class="nav-icon far fa-circle text-warning"></i>
-                                                    <p>Salidas Diversas</p>
-                                                </a>
-                                            </li>
-                                        </ul>  
-                                    </li>
-                                <?php } ?>
-                                <?php if ($admin == 1 || $dirtec == 1) { ?>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class='fa fa-database'></i>
-                                            <p>Catalogos</p>
-                                            <i class="right fas fa-angle-left"></i>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="./?view=unidades" class="nav-link" data-view="unidades">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Unidades</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=categories" class="nav-link" data-view="categories">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Categorias</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class='fa fa-area-chart'></i>
-                                            <p>Inventarios</p>
-                                            <i class="right fas fa-angle-left"></i>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <li class="nav-item">
-                                                <a href="./?view=inventary" class="nav-link" data-view="inventary">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Inventario</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=reports" class="nav-link" data-view="reports">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Reporte Inventario</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=kardexbyproducto" class="nav-link">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Kardex</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                <?php } ?>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class='fa fa-bar-chart'></i>
-                                        <p>Reportes</p>
-                                        <i class="right fas fa-angle-left"></i>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="./?view=sellreports" class="nav-link" data-view="sellreports">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>VENTA POR CLIENTE</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=bincartreport" class="nav-link" data-view="bincartreport">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>REPORTE BINCART</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=reportecomparativoingresos" class="nav-link" data-view="reportecomparativoingresos">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>REP. VENTA GENERAL</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=systemlog" class="nav-link" data-view="systemlog">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>LOGS DE ACCIONES</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=sellreportsProducts" class="nav-link" data-view="sellreportsProducts">
-                                                <i class="nav-icon far fa-circle text-info"></i> 
-                                                <p>VENTA DETAL. PROD.</p>
-                                            </a>
-                                        </li> 
-                                        <li class="nav-item">
-                                            <a href="./?view=salesbyproductstock" class="nav-link" data-view="salesbyproductstock">
-                                                <i class="nav-icon far fa-circle text-info"></i> 
-                                                <p>REPO. VENTA X PROD.</p>
-                                            </a>
-                                        </li>                                        
-                                        <li class="nav-item">
-                                            <a href="./?view=monthlyreport" class="nav-link" data-view="monthlyreport">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                REPO. VENTA MENSUAL
-                                            </a>
-                                        </li> 
-                                        <li class="nav-item">
-                                            <a href="./?view=sellsRepostNotaVenta" class="nav-link" data-view="sellsRepostNotaVenta">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>Registro Nota Venta</p>
-                                            </a>
-                                        </li>
-                                        <?php if($admin ==1 || $dirtec ==1) {?>
-                                        <li class="nav-item">
-                                            <a href="./?view=reportsboleta" class="nav-link" data-view="reportsboleta">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                Boletas
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=reportsfactura" class="nav-link" data-view="reportsfactura">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                Factura
-                                            </a>
-                                        </li>
-                                        <?php }?>
-                                        <li class="nav-item">
-                                            <a href="./?view=reportsnotascredito" class="nav-link" data-view="reportsnotascredito">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>N.C. Factura</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="./?view=reportsnotascreditoboleta" class="nav-link" data-view="reportsnotascreditoboleta">
-                                                <i class="nav-icon far fa-circle text-info"></i>
-                                                <p>N.C. Boleta</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <?php if ($admin == 1 || $dirtec == 1) { ?>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class='fa fa-cog'></i>
-                                            <p>Administracion</p>
-                                            <i class="right fas fa-angle-left"></i>
-                                        </a>
-                                        <ul class="nav nav-treeview">
-                                            <?php if ($admin == 1) { ?>
-                                            <li class="nav-item">
-                                                <a href="./?view=users" class="nav-link" da>
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Usuarios</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=settings" class="nav-link">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Empresa</p>
-                                                </a>
-                                            </li> 
-                                            
-                                            <?php } ?>                                           
-                                            <li class="nav-item">
-                                                <a href="./?view=clients" class="nav-link">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Clientes</p>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="./?view=providers" class="nav-link">
-                                                    <i class="nav-icon far fa-circle text-info"></i>
-                                                    <p>Proveedores</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                <?php } ?>
-                            <?php endif; ?>
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <?php if (isset($_SESSION["user_id"])): 
+                                $user_id = $_SESSION["user_id"];
+                                $parents = ModuleData::getAllParents();
+                                foreach($parents as $parent):
+                                    // Verificar si el usuario tiene acceso al padre (o si es un contenedor de submenús)
+                                    $access = UserAccessData::getByUserModule($user_id, $parent->id);
+                                    
+                                    // Si es un menú con submenús, verificamos si tiene acceso a al menos un hijo
+                                    $children = ModuleData::getChildrenByParentId($parent->id);
+                                    $allowed_children = [];
+                                    if(count($children) > 0){
+                                        foreach($children as $child){
+                                            if(UserAccessData::getByUserModule($user_id, $child->id)){
+                                                $allowed_children[] = $child;
+                                            }
+                                        }
+                                    }
 
+                                    // Si no tiene acceso al padre y no tiene hijos permitidos, saltamos
+                                    if(!$access && count($allowed_children) == 0) continue;
+                            ?>
+                                <li class="nav-item <?php echo count($allowed_children) > 0 ? 'has-treeview' : ''; ?>">
+                                    <a href="<?php echo $parent->view_name == '#' ? '#' : './?view='.$parent->view_name; ?>" class="nav-link" <?php echo $parent->view_name != '#' ? 'data-view="'.$parent->view_name.'"' : ''; ?>>
+                                        <i class="nav-icon <?php echo $parent->icon; ?> mr-2"></i>
+                                        <p>
+                                            <?php echo $parent->name; ?>
+                                            <?php if(count($allowed_children) > 0): ?>
+                                                <i class="right fas fa-angle-left"></i>
+                                            <?php endif; ?>
+                                        </p>
+                                    </a>
+                                    <?php if(count($allowed_children) > 0): ?>
+                                    <ul class="nav nav-treeview">
+                                        <?php foreach($allowed_children as $child): ?>
+                                        <li class="nav-item">
+                                            <a href="./?view=<?php echo $child->view_name; ?>" class="nav-link" data-view="<?php echo $child->view_name; ?>">
+                                                <i class="nav-icon <?php echo $child->icon; ?>"></i>
+                                                <p><?php echo $child->name; ?></p>
+                                            </a>
+                                        </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </nav>
                     <!-- /.sidebar-menu -->

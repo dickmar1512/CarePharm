@@ -222,3 +222,113 @@
 			}
 		});
 	}
+
+    // Gestionar Permisos
+    $(document).on('click', '.manage-permissions', function (e) {
+        e.preventDefault();
+        const userId = $(this).data('id');
+        const userName = $(this).data('name');
+
+        Swal.fire({
+            title: 'Cargando permisos...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: `./?action=getuserpermissions&id=${userId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (modules) {
+                Swal.close();
+                showPermissionsModal(userId, userName, modules);
+            },
+            error: function() {
+                Swal.fire('Error', 'No se pudieron cargar los permisos.', 'error');
+            }
+        });
+    });
+
+    function showPermissionsModal(userId, userName, modules) {
+        let html = '<div class="text-left" style="max-height: 450px; overflow-y: auto; padding: 10px;">';
+        
+        // Agrupar por padres
+        const parents = modules.filter(m => m.parent_id === null);
+        
+        parents.forEach(parent => {
+            const children = modules.filter(m => m.parent_id == parent.id);
+            html += `<div class="card card-outline card-info mb-3 shadow-sm">
+                        <div class="card-header py-2 bg-light">
+                            <h3 class="card-title text-sm">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input module-check" id="mod_${parent.id}" data-id="${parent.id}" ${parent.has_access ? 'checked' : ''}>
+                                    <label class="custom-control-label font-weight-bold" for="mod_${parent.id}">${parent.name}</label>
+                                </div>
+                            </h3>
+                        </div>`;
+            if (children.length > 0) {
+                html += `<div class="card-body py-2 pl-4">
+                            <div class="row">`;
+                children.forEach(child => {
+                    html += `<div class="col-md-6 mb-1">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input module-check" id="mod_${child.id}" data-id="${child.id}" ${child.has_access ? 'checked' : ''}>
+                                    <label class="custom-control-label text-xs" for="mod_${child.id}">${child.name}</label>
+                                </div>
+                             </div>`;
+                });
+                html += `   </div>
+                         </div>`;
+            }
+            html += `</div>`;
+        });
+        html += '</div>';
+
+        Swal.fire({
+            title: `<i class="fas fa-shield-alt mr-2 text-primary"></i> Permisos: ${userName}`,
+            html: html,
+            width: '700px',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-save mr-2"></i> Guardar Cambios',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#28a745',
+            preConfirm: () => {
+                const selected = [];
+                $('.module-check:checked').each(function() {
+                    selected.push($(this).data('id'));
+                });
+                return selected;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Guardando...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                $.ajax({
+                    url: './?action=updateuserpermissions',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        user_id: userId,
+                        permissions: result.value
+                    }),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire('¡Éxito!', 'Permisos actualizados correctamente.', 'success');
+                        } else {
+                            Swal.fire('Error', response.message || 'No se pudieron actualizar los permisos.', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Hubo un fallo en la conexión con el servidor.', 'error');
+                    }
+                });
+            }
+        });
+    }

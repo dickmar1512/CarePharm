@@ -105,8 +105,9 @@
 													<?php endif; ?>													
 													<?php echo $user->montomax; ?>
 												</td>
-												<td style="width:30px;">
-													<a href="#" class="btn btn-warning btn-xs edit-user" data-id="<?php echo $user->id; ?>">Editar</a>
+												<td style="width:130px;">
+													<a href="#" class="btn btn-warning btn-xs edit-user" data-id="<?php echo $user->id; ?>"><i class="fas fa-edit"></i></a>
+													<a href="#" class="btn btn-info btn-xs manage-permissions" data-id="<?php echo $user->id; ?>" data-name="<?php echo $user->name; ?>"><i class="fas fa-lock"></i> Permisos</a>
 												</td>
 											</tr>
 											<?php
