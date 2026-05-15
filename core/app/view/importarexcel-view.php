@@ -69,7 +69,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="pl-3 font-weight-bold text-info">C (2)</td>
-                                                <td>Descripción</td>
+                                                <td>Principio Activo</td>
                                             </tr>
                                             <tr>
                                                 <td class="pl-3 font-weight-bold text-info">D (3)</td>

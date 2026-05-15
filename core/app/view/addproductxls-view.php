@@ -72,9 +72,9 @@ try {
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
     $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (cod_digemid <> '' AND cod_digemid = ?) OR (barcode <> '' AND barcode = ?) OR name = ?");
-    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active, cod_digemid) 
-                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ?, cod_digemid = ? 
+    $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active, cod_digemid, principio_activo) 
+                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ?, cod_digemid = ?, principio_activo = ? 
                                          WHERE id = ?");
     
     $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE comprobante = ? AND serie = ?");
@@ -170,7 +170,8 @@ try {
             'barcode' => $barcode,
             'cod_digemid' => (!empty($fields[0]) && is_numeric(trim($fields[0]))) ? (int)trim($fields[0]) : 0,
             'name' => trim($fields[1]),
-            'description' => trim($fields[2]),
+            'description' => '',
+            'principio_activo' => trim($fields[2]),
             'presentation' => trim($fields[3]),
             'stock' => !empty($fields[8]) ? (int)$fields[8] : 0,
             'is_stock' => 1,
@@ -201,6 +202,7 @@ try {
                 $productData['user_id'],
                 $productData['reg_san'],
                 $productData['cod_digemid'],
+                $productData['principio_activo'],
                 $productoExistente['id']
             ]);
             $idproducto = $productoExistente['id'];
@@ -212,7 +214,7 @@ try {
                 $productData['price_may'], $productData['unit'], $productData['presentation'], 
                 $productData['user_id'], $productData['category_id'], $productData['fecha_venc'],
                 $productData['laboratorio'], $productData['reg_san'], $productData['created_at'], $productData['is_active'],
-                $productData['cod_digemid']
+                $productData['cod_digemid'], $productData['principio_activo']
             ]);
             $idproducto = $conn->lastInsertId();
         }
