@@ -676,6 +676,26 @@ class OperationData
 
 		return $final_operations;
 	}
+
+	public static function getPurchaseProposal($months_to_analyze)
+	{
+		$sd = date("Y-m-d", strtotime("-$months_to_analyze months"));
+		$ed = date("Y-m-d");
+
+		$sql = "SELECT 
+                    p.id, 
+                    p.name as producto, 
+                    p.stock as stock_actual,
+                    COALESCE(SUM(CASE WHEN op.operation_type_id=2 AND op.estado=1 AND DATE(op.created_at) BETWEEN '$sd' AND '$ed' THEN op.q ELSE 0 END), 0) as total_sold
+                FROM product p
+                LEFT JOIN operation op ON p.id = op.product_id
+                WHERE p.is_active = 1
+                GROUP BY p.id
+                HAVING total_sold > 0 OR p.stock < 10";
+
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new OperationData());
+	}
 }
 
 ?>
