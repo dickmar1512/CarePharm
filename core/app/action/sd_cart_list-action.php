@@ -6,6 +6,7 @@ $cart = $_SESSION["cart_sd"] ?? array();
         <thead class="bg-light text-xs uppercase text-muted">
             <tr>
                 <th class="pl-4">Producto</th>
+                <th>Laboratorio</th>
                 <th class="text-center" style="width: 120px;">Cantidad</th>
                 <th class="text-right pr-4" style="width: 100px;">Quitar</th>
             </tr>
@@ -15,6 +16,7 @@ $cart = $_SESSION["cart_sd"] ?? array();
                 <?php foreach($cart as $item): ?>
                 <tr class="text-sm">
                     <td class="pl-4 font-weight-bold"><?php echo $item["name"]; ?></td>
+                    <td><span class="text-xs text-muted text-uppercase"><?php echo $item["laboratorio"] ?? '-'; ?></span></td>
                     <td class="text-center">
                         <span class="badge badge-warning py-1 px-3" style="font-size: 14px;">
                             <?php echo $item["q"]; ?>
@@ -29,7 +31,7 @@ $cart = $_SESSION["cart_sd"] ?? array();
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="3" class="text-center py-5 text-muted italic">
+                    <td colspan="4" class="text-center py-5 text-muted italic">
                         No hay productos en la lista
                     </td>
                 </tr>

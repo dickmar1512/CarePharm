@@ -11,6 +11,7 @@ if(isset($_GET["product"]) && $_GET["product"] != ""):
         <thead class="bg-light text-xs uppercase text-muted">
             <tr>
                 <th class="pl-3">Producto</th>
+                <th>Laboratorio</th>
                 <th class="text-center">Stock Act.</th>
                 <th class="text-right">Cantidad a Salir</th>
                 <th class="text-right pr-3">Acción</th>
@@ -19,7 +20,11 @@ if(isset($_GET["product"]) && $_GET["product"] != ""):
         <tbody>
             <?php foreach($products as $product): ?>
             <tr class="text-sm">
-                <td class="pl-3 font-weight-bold"><?php echo $product->name; ?></td>
+                <td class="pl-3">
+                    <div class="font-weight-bold"><?php echo $product->name; ?></div>
+                    <div class="text-xs text-muted italic"><?php echo $product->principio_activo; ?></div>
+                </td>
+                <td><span class="badge badge-light border text-uppercase text-xs" style="font-weight: 500;"><?php echo $product->laboratorio; ?></span></td>
                 <td class="text-center">
                     <span class="badge <?php echo ($product->stock <= $product->inventary_min) ? 'badge-danger' : 'badge-info'; ?>">
                         <?php echo $product->stock; ?>

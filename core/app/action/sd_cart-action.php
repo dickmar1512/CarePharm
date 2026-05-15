@@ -27,6 +27,7 @@ if($op == "add") {
         $_SESSION["cart_sd"][] = array(
             "product_id" => $product_id,
             "name" => $product->name,
+            "laboratorio" => $product->laboratorio,
             "q" => $q
         );
     }

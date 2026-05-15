@@ -60,6 +60,7 @@ $user = $sell->getUser();
                                     <tr>
                                         <th class="pl-4">Cod. Barra</th>
                                         <th>Producto</th>
+                                        <th>Laboratorio</th>
                                         <th class="text-center">Cantidad</th>
                                         <th class="text-right pr-4">Costo Ref.</th>
                                     </tr>
@@ -75,6 +76,7 @@ $user = $sell->getUser();
                                     <tr class="text-sm">
                                         <td class="pl-4 text-xs"><?php echo $product->barcode; ?></td>
                                         <td class="font-weight-bold"><?php echo $product->name; ?></td>
+                                        <td><span class="text-xs text-muted text-uppercase"><?php echo $product->laboratorio; ?></span></td>
                                         <td class="text-center">
                                             <span class="badge badge-warning"><?php echo $op->q; ?></span>
                                         </td>
@@ -86,7 +88,7 @@ $user = $sell->getUser();
                                 </tbody>
                                 <tfoot class="bg-light">
                                     <tr>
-                                        <td colspan="3" class="text-right font-weight-bold text-xs uppercase">Costo Total Referencial de la Baja:</td>
+                                        <td colspan="4" class="text-right font-weight-bold text-xs uppercase">Costo Total Referencial de la Baja:</td>
                                         <td class="text-right pr-4 font-weight-bold text-danger">S/ <?php echo number_format($total_ref, 2); ?></td>
                                     </tr>
                                 </tfoot>
