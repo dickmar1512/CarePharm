@@ -52,13 +52,17 @@ function openProductModal(action, productData = null) {
                                     <label class="text-xs mb-1">Nombre Comercial*</label>
                                     <input type="text" name="name" id="name" class="form-control form-control-sm" placeholder="Nombre del Producto" value="${productData ? productData.name : ''}" required>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="text-xs mb-1">Principio Activo</label>
                                     <input type="text" name="prin_act" id="prin_act" class="form-control form-control-sm" placeholder="Ej: Paracetamol" value="${productData ? (productData.principio_activo || '') : ''}">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="text-xs mb-1">Presentación / Formas</label>
                                     <input type="text" name="presentacion" id="presentacion" class="form-control form-control-sm" placeholder="Ej: Caja x 100 Tab" value="${productData ? (productData.presentation || '') : ''}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-xs mb-1 font-weight-bold text-info">Laboratorio</label>
+                                    <input type="text" name="laboratorio" id="laboratorio" class="form-control form-control-sm" placeholder="Nombre del Lab" value="${productData ? (productData.laboratorio || '') : ''}">
                                 </div>
                             </div>
                         </div>

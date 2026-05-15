@@ -13,13 +13,14 @@ if (!empty($data))
 	$product->principio_activo = $data["prin_act"];
 	$product->price_in = $data["price_in"];
 	$product->price_may = $data["price_may"];
-	$product->price_out = $data["price_out"];
-	$product->anaquel = $data["anaquel"];
-	$product->unit = $data["selUnidadMedida"];
+	$product->price_out = $data["price_out"] ?? 0;
+	$product->anaquel = $data["anaquel"] ?? "";
+	$product->unit = $data["selUnidadMedida"] ?? "";
 
-  	$product->description = $data["description"];
-  	$product->presentation = $data["presentacion"];
-  	$product->inventary_min = $data["inventary_min"];
+  	$product->description = $data["description"] ?? "";
+  	$product->presentation = $data["presentacion"] ?? "";
+    $product->laboratorio = $data["laboratorio"] ?? "";
+  	$product->inventary_min = $data["inventary_min"] ?? 10;
 
   	$category_id="NULL";
   	if($data["category_id"]!=""){ $category_id=$data["category_id"];}

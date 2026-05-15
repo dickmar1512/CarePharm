@@ -15,9 +15,10 @@ if (!empty($data)) {
     $product->anaquel          = $data["anaquel"];
     $product->stock            = $data["q"];
     $product->unit             = $data["selUnidadMedida"];
-    $product->description      = $data["description"];
-    $product->presentation     = $data["presentacion"];
-    $product->fecha_venc       = $data["fecha_venc"];
+    $product->description      = $data["description"] ?? "";
+    $product->presentation     = $data["presentacion"] ?? "";
+    $product->fecha_venc       = $data["fecha_venc"] ?? "";
+    $product->laboratorio      = $data["laboratorio"] ?? "";
     
     $category_id="NULL";
     if($data["category_id"]!=""){ $category_id = $data["category_id"];}

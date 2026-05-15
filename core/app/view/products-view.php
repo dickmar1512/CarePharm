@@ -47,6 +47,7 @@
 									<th scope="col">Codigo</th>
 									<th>Imagen</th>
 									<th>Nombre</th>
+									<th>Laboratorio</th>
 									<th>Precio Entrada</th>
 									<th>Precio Por Mayor</th>
 									<th>Precio Salida</th>
@@ -65,6 +66,7 @@
 											<?php endif; ?>
 										</td>
 										<td><?php echo $product->name; ?></td>
+										<td><span class="badge badge-light border text-xs"><?php echo $product->laboratorio; ?></span></td>
 										<td><?php echo number_format($product->price_in, 2, '.', ','); ?></td>
 										<td><?php echo number_format($product->price_may, 2, '.', ','); ?></td>
 										<td><?php echo number_format($product->price_out, 2, '.', ','); ?></td>
