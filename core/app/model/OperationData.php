@@ -585,7 +585,7 @@ class OperationData
 			$sql .= " AND s.user_id = $user_id ";
 		}
 		
-		$sql .= " ORDER BY op.created_at ASC, op.id ASC ";
+		$sql .= " ORDER BY p.name ASC, op.created_at ASC, op.id ASC ";
 
 		$query = Executor::doit($sql);
 		$operations = array();
@@ -626,19 +626,55 @@ class OperationData
 			}
 		}
 
-		// Calculate running balance
-		foreach ($operations as &$op) {
+		// Calculate running balance and prepare virtual rows for "Saldo Anterior"
+		$final_operations = array();
+		$opening_balances_added = array();
+
+		// We need to process chronologically to handle the running balance correctly
+		foreach ($operations as $op) {
+			// Ensure q is numeric
+			$op->q = floatval($op->q);
+
+			// If this is the first time we see this product in the loop, 
+			// and it has an initial stock, we add the virtual "Saldo Anterior" row.
+			if (!isset($opening_balances_added[$op->product_id])) {
+				$stock_inicial = floatval($products_involved[$op->product_id]);
+				if ($stock_inicial != 0) {
+					$virtual_op = new OperationData();
+					$virtual_op->fecha = $sd . " 00:00:00";
+					$virtual_op->producto = $op->producto;
+					$virtual_op->estado_op = 1;
+					$virtual_op->tipo_comprobante_id = null;
+					$virtual_op->serie = "";
+					$virtual_op->comprobante = "SALDO ANTERIOR";
+					$virtual_op->usuario = "SISTEMA";
+					$virtual_op->operation_type_id = 1; // Se muestra como Entrada
+					$virtual_op->q = $stock_inicial;
+					$virtual_op->product_id = $op->product_id;
+					$virtual_op->saldo = $stock_inicial;
+					$final_operations[] = $virtual_op;
+				}
+				$opening_balances_added[$op->product_id] = true;
+			}
+
 			if ($op->estado_op == 1) {
-				if ($op->operation_type_id == 1) {
+				// Lógica especial para Notas de Crédito (tipo 3 o 07)
+				// Una Nota de Crédito sobre una venta SIEMPRE es una ENTRADA de inventario.
+				$es_nota_credito = ($op->tipo_comprobante_id == '3' || $op->tipo_comprobante_id == '07');
+
+				if ($op->operation_type_id == 1 || $es_nota_credito) {
 					$products_involved[$op->product_id] += $op->q;
-				} else {
+					// Si es Nota de Crédito, forzamos el tipo visual a 1 para que aparezca en la columna Entrada
+					if ($es_nota_credito) $op->operation_type_id = 1;
+				} else if ($op->operation_type_id == 2) {
 					$products_involved[$op->product_id] -= $op->q;
 				}
 			}
 			$op->saldo = $products_involved[$op->product_id];
+			$final_operations[] = $op;
 		}
 
-		return array_reverse($operations);
+		return $final_operations;
 	}
 }
 

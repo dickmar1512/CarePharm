@@ -79,7 +79,7 @@ function getTipoComprobanteName($id) {
             <div class="card-body">
                 <?php if(count($operations)>0): ?>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover datatable table-sm">
+                        <table class="table table-bordered table-hover table-sm" id="table-bincard">
                             <thead class="bg-dark text-white">
                                 <tr>
                                     <th rowspan="2" class="align-middle text-center">FECHA</th>
@@ -141,3 +141,52 @@ function getTipoComprobanteName($id) {
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        // Usamos un pequeño retraso para asegurar que nuestra configuración 
+        // se aplique después de cualquier script global de la plantilla.
+        setTimeout(function() {
+            if ($.fn.DataTable.isDataTable('#table-bincard')) {
+                $('#table-bincard').DataTable().destroy();
+            }
+            
+            $('#table-bincard').DataTable({
+                "ordering": true,
+                "order": [[1, "asc"]], // Forzar orden por Producto (index 1)
+                "orderCellsTop": true, // Importante para cabeceras con rowspan/colspan
+                "language": {
+                    "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron resultados",
+                    "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sSearch":         "Buscar:",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    }
+                },
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Exportar a Excel',
+                        className: 'btn btn-success btn-sm',
+                        title: 'Reporte_Bincard_<?php echo date("Ymd"); ?>'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Imprimir',
+                        className: 'btn btn-info btn-sm'
+                    }
+                ]
+            });
+        }, 500);
+    });
+</script>
