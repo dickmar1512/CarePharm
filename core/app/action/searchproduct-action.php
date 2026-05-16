@@ -223,10 +223,9 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                         </th>
                     </tr>
                     <tr class="desktop-header">
-                        <th style="width: 35%;">PRODUCTO</th>
-                        <th style="width: 10%;">LABORATORIO</th>
+                        <th style="width: 45%;">PRODUCTO / LABORATORIO</th>
                         <th style="width: 10%;">STOCK</th>
-                        <th style="width: 55%;">
+                        <th style="width: 45%;">
                             <div style="display: flex; gap: 4px; font-size: 0.8em;">
                                 <label style="flex: 1; margin: 0; font-weight: 500;">DESCRIPCIÓN</label>
                                 <label style="width: 70px; margin: 0; font-weight: 500; text-align: center;">PRECIO</label>
@@ -246,10 +245,10 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                     if ($q > 0 or $product->is_stock == 0): ?>
                         <tr class="<?php if ($q <= $product->inventary_min) { echo "table-warning"; } ?>">
                             <td>
-                                <strong class="text-responsive"><?php echo $product->name; ?></strong>
-                            </td>
-                            <td>
-                                <strong class="text-responsive"><?php echo $product->laboratorio; ?></strong>
+                                <div class="font-weight-bold text-primary text-responsive"><?php echo $product->name; ?></div>
+                                <?php if(isset($product->laboratorio) && trim($product->laboratorio) != ""): ?>
+                                    <small class="badge badge-light border text-muted"><?php echo $product->laboratorio; ?></small>
+                                <?php endif; ?>
                             </td>
                             <td class="text-center">
                                 <span class="badge <?php echo ($product->is_stock == 0) ? 'badge-success' : 'badge-info'; ?>">
@@ -322,8 +321,11 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
 
                 if ($q > 0 or $product->is_stock == 0): ?>
                     <div class="mobile-card <?php if ($q <= $product->inventary_min) { echo "border-warning"; } ?>">
-                        <div class="product-name text-responsive">
-                            <?php echo $product->name; ?>
+                        <div class="product-name text-responsive" style="margin-bottom: 4px;">
+                            <div class="font-weight-bold text-primary"><?php echo $product->name; ?></div>
+                            <?php if(isset($product->laboratorio) && trim($product->laboratorio) != ""): ?>
+                                <small class="badge badge-light border text-muted" style="font-size: 0.7em;"><?php echo $product->laboratorio; ?></small>
+                            <?php endif; ?>
                         </div>
                         
                         <div class="stock-badge">
