@@ -629,14 +629,15 @@
                     "responsive": true, 
                     "lengthChange": true, 
                     "autoWidth": false,
+                    "lengthMenu": [[10, 15, 20, 50, 100, -1], [10, 15, 20, 50, 100, "Todos"]],
                     "dom": '<"row"<"col-md-3"l><"col-md-6 text-center"B><"col-md-3"f>>rtip',
                     "buttons": [
-                        { extend: "copy", text: "Copiar" }, 
-                        "csv", 
-                        "excel", 
-                        "pdf", 
-                        "print", 
-                        { extend: "colvis", text: "Visible" }
+                        { extend: "copy", text: "<i class='fas fa-copy'></i>", className: "btn btn-sm btn-outline-primary" }, 
+                        { extend: "csv", text: "<i class='fas fa-file-csv'></i>", className: "btn btn-sm btn-outline-primary" }, 
+                        { extend: "excel", text: "<i class='fas fa-file-excel'></i>", className: "btn btn-sm btn-outline-success" }, 
+                        { extend: "pdf", text: "<i class='fas fa-file-pdf'></i>", className: "btn btn-sm btn-outline-danger" }, 
+                        { extend: "print", text: "<i class='fas fa-print'></i>", className: "btn btn-sm btn-outline-info" }, 
+                        { extend: "colvis", text: "<i class='fas fa-eye'></i>", className: "btn btn-sm btn-outline-secondary" }
                     ],
                     "language": {
                         "sProcessing": "Procesando...",

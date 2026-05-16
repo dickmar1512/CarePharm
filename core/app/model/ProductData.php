@@ -118,7 +118,17 @@ class ProductData
 
 	public function update_stock2($idprod)
 	{
-		$sql = "call insertar_stock($idprod) ";
+		$sql = "UPDATE product p
+                SET p.stock = (
+                    SELECT COALESCE(SUM(CASE 
+                        WHEN op.operation_type_id = 1 THEN op.q 
+                        WHEN op.operation_type_id = 2 THEN -op.q 
+                        ELSE 0 
+                    END), 0)
+                    FROM operation op
+                    WHERE op.product_id = p.id AND op.estado = 1
+                )
+                WHERE p.id = $idprod";
 		return Executor::doit($sql);
 	}
 

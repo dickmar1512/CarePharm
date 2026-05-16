@@ -8,7 +8,11 @@ if(count($_POST)>0){
 if(OperationTypeData::getByName("entrada")->name=="entrada"){
 	$op->sell_id="NULL";
 }
+ $product = ProductData::getById($_POST["product_id"]);
  $op->q= $_POST["q"];
+ $op->cu = $product->price_in;
+ $op->prec_alt = $product->price_in;
+ $op->descuento = 0;
 
 if($_POST["is_oficial"]=="1"){
 	$op->is_oficial = 1;

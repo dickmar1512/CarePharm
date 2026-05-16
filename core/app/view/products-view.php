@@ -3,11 +3,11 @@
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0"><i class="fa fa-list"></i>
-					Lista de Productos y Servicios
-					(<a href="./?view=actstock" class="btn btn-xs btn-info">
-						<i class="fas fa-pencil-alt"></i>
-					</a>)
+				<h1 class="m-0 font-weight-bold">
+					<i class="fa fa-list text-primary"></i> Lista de Productos y Servicios
+					<a href="./?view=actstock" class="btn btn-outline-info btn-sm ml-2" title="Sincronizar Stock Real (Reparar inconsistencias)">
+						<i class="fas fa-sync-alt"></i> Sincronizar
+					</a>
 				</h1>
 			</div><!-- /.col -->
 			<div class="col-sm-6">
@@ -40,63 +40,59 @@
 				<div class="row" style="display: flex; justify-content: center;">
 					<div class="col-md-10">
 						<?php
-						$products = ProductData::getAll2();
+						$products = OperationData::getProductsWithMovement();
 						if (count($products) > 0) { ?>
-							<table class="table table-responsive table-hover table-sm datatable" id="gridProducts">
-								<thead class="thead-dark">
-									<th scope="col">Codigo</th>
-									<th>Imagen</th>
-									<th>Nombre</th>
-									<th>Laboratorio</th>
-									<th>Precio Entrada</th>
-									<th>Precio Por Mayor</th>
-									<th>Precio Salida</th>
-									<th>Anaquel</th>
-									<th>Inventario</th>
-									<th>Minima</th>
-									<th>Activo</th>
-									<th></th>
-								</thead>
-								<?php foreach ($products as $product): ?>
+							<table class="table table-bordered table-striped table-hover table-sm datatable" id="gridProducts" style="width:100%">
+								<thead class="thead-dark text-xs">
 									<tr>
-										<td><?php echo $product->barcode; ?></td>
-										<td>
+										<th>Código</th>
+										<th>Imagen</th>
+										<th>Nombre / Laboratorio</th>
+										<th class="text-center">P. Entrada</th>
+										<th class="text-center">P. Mayor</th>
+										<th class="text-center text-primary">P. Salida</th>
+										<th class="text-center">Anaquel</th>
+										<th class="text-center bg-info">Stock Real</th>
+										<th class="text-center">Min.</th>
+										<th class="text-center">Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php foreach ($products as $product): ?>
+									<tr class="text-sm">
+										<td class="text-xs font-weight-bold"><?=$product->barcode?></td>
+										<td class="text-center">
 											<?php if ($product->image != ""): ?>
-												<img src="storage/products/<?php echo $product->image; ?>" style="width:30px;">
+												<img src="storage/products/<?=$product->image?>" class="img-thumbnail" style="width:35px; height:35px; object-fit: cover;">
+											<?php else: ?>
+												<i class="fas fa-box text-gray"></i>
 											<?php endif; ?>
 										</td>
-										<td><?php echo $product->name; ?></td>
-										<td><span class="badge badge-light border text-xs"><?php echo $product->laboratorio; ?></span></td>
-										<td><?php echo number_format($product->price_in, 2, '.', ','); ?></td>
-										<td><?php echo number_format($product->price_may, 2, '.', ','); ?></td>
-										<td><?php echo number_format($product->price_out, 2, '.', ','); ?></td>
+										<td>
+											<div class="font-weight-bold text-primary"><?=$product->name?></div>
+											<small class="badge badge-light border text-muted"><?=$product->laboratorio?></small>
+										</td>
+										<td class="text-center"><?=number_format($product->price_in, 2)?></td>
+										<td class="text-center"><?=number_format($product->price_may, 2)?></td>
+										<td class="text-center font-weight-bold text-primary"><?=number_format($product->price_out, 2)?></td>
+										<td class="text-center"><?=$product->anaquel?></td>
+										<td class="text-center font-weight-bold <?=$product->stock_real <= $product->inventary_min ? 'text-danger' : 'text-dark'?>">
+											<?=number_format($product->stock_real, 0)?>
+										</td>
+										<td class="text-center text-muted"><?=$product->inventary_min?></td>
 										<td class="text-center">
-											<?php
-											/*$unidad = UnidadMedidaData::getById($product->unit);
-																																																												  echo $unidad->sigla; */
-											echo $product->anaquel;
-											?>
-										</td>
-										<!--td><?php if ($product->category_id != null) {
-											echo $product->getCategory()->name;
-										} else {
-											echo "<center>----</center>";
-										} ?></td-->
-										<td><?php echo $product->stock; ?></td>
-										<td><?php echo $product->inventary_min; ?></td>
-										<td><?php if ($product->is_active): ?><i class="fa fa-check"></i><?php endif; ?>
-										</td>
-
-
-										<td style="width:70px;">
-											<a href="#" class="btn btn-xs btn-warning edit-product" data-id="<?php echo $product->id; ?>">
-												<i class="fas fa-pencil-alt"></i>
-											</a>
-											<a href="#" data-id="<?php echo $product->id; ?>"
-												class="btn btn-xs btn-danger delete-product"><i class="fa fa-trash"></i></a>
+											<div class="btn-group">
+												<button class="btn btn-xs btn-warning edit-product shadow-sm" data-id="<?=$product->id?>" title="Editar">
+													<i class="fas fa-pencil-alt"></i>
+												</button>
+												<button class="btn btn-xs btn-danger delete-product shadow-sm" data-id="<?=$product->id?>" title="Eliminar">
+													<i class="fa fa-trash"></i>
+												</button>
+											</div>
 										</td>
 									</tr>
 								<?php endforeach; ?>
+								</tbody>
 							</table>
 							<div class="clearfix"></div>
 

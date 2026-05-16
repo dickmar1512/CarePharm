@@ -1,200 +1,209 @@
-<div class="row" style="display: flex; justify-content: center;">
-	<div class="col-md-10">
-		<?php
-		if (isset($_GET["product_id"])):
-			$product = ProductData::getById($_GET["product_id"]);
-			$operations = OperationData::getAllByProductId($product->id);
-			?>
-			<div class="row" style="display: flex; justify-content: center;">
-				<div class="col-md-10">
-					<div class="btn-group pull-right">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							<i class="fa fa-download"></i> Descargar <span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="report/history-word.php?id=<?php echo $product->id; ?>">Word 2007 (.docx)</a></li>
-						</ul>
-					</div>
-					<h1><b><?php echo $product->name;?></b> <small>KARDEX</small></h1>
-					<p style="font-size-adjust: 20px;">En esta seccion usted podra descargar el Kardex del mes que desea en
-						formato EXCEL</p>
-				</div>
-			</div>
-			<div class="row" style="display: flex; justify-content: center;">
-				<div class="col-md-4">
-					<?php
-					$itotal = OperationData::GetInputQYesF($product->id);
-					?>
-					<div class="jumbotron">
-						<center>
-							<h2>Entradas</h2>
-							<h1><?php echo $itotal; ?></h1>
-						</center>
-					</div>
-					<br>
-				</div>
-				<div class="col-md-4">
-					<?php
-					$total = OperationData::GetQYesF($product->id);
-					?>
-					<div class="jumbotron">
-						<center>
-							<h2>Disponibles</h2>
-							<h1><?php echo $product->stock; ?></h1>
-						</center>
-					</div>
-					<br>
-				</div>
-				<div class="col-md-4">
-					<?php
-					$ototal = -1 * OperationData::GetOutputQYesF($product->id);
-					?>
-					<div class="jumbotron">
-						<center>
-							<h2>Salidas</h2>
-							<h1><?php echo $ototal; ?></h1>
-						</center>
-					</div>
-					<br>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<?php if (count($operations) > 0): ?>
-						<table class="table table-bordered table-hover">
-							<thead>
-								<th></th>
-								<th>Cantidad</th>
-								<th>Precio Entrada</th>
-								<th>Tipo</th>
-								<th>Fecha</th>
-								<th></th>
-							</thead>
-							<?php foreach ($operations as $operation): ?>
-								<tr>
-									<td></td>
-									<td><?php echo $operation->q; ?></td>
-									<td>S/ <?php echo number_format($operation->cu, 2, ".", ","); ?></td>
-									<td><?php echo $operation->getOperationType()->name; ?></td>
-									<td><?php echo $operation->created_at; ?></td>
-									<td style="width:40px;"><a href="#" id="oper-<?php echo $operation->id; ?>"
-											class="btn tip btn-xs btn-danger" title="Eliminar"><i
-												class="glyphicon glyphicon-trash"></i></a> </td>
-									<script>
-										$("#oper-" + <?php echo $operation->id; ?>).click(function () {
-											x = confirm("Estas seguro que quieres eliminar esto ??");
-											if (x == true) {
-												window.location = "./?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
-											}
-										});
+<?php
+if (!isset($_GET["product_id"])) {
+    print "<script>window.location='./?view=inventary';</script>";
+}
 
-									</script>
-								</tr>
-							<?php endforeach; ?>
-						</table>
-					<?php endif; ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="row pull-left">
-						<form action="excel_kardex.php" method="POST" onsubmit="return enviado3()">
-							<div class="col-md-4">
-								<div class="form-group">
-									<input type="hidden" name="id_producto" value="<?php echo $_GET["product_id"] ?>"
-										id="id_producto">
-									<select class="form-control" width="30px" id="selMes" name="selMes">
-										<option value="">::Mes::</option>
-										<option value="1">Enero</option>
-										<option value="2">Febrero</option>
-										<option value="3">Marzo</option>
-										<option value="4">Abril</option>
-										<option value="5">Mayo</option>
-										<option value="6">Junio</option>
-										<option value="7">Julio</option>
-										<option value="8">Agosto</option>
-										<option value="9">Setiembre</option>
-										<option value="10">Octubre</option>
-										<option value="11">Noviembre</option>
-										<option value="12">Diciembre</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<select class="form-control" width="30px" id="selAnio" name="selAnio">
-										<option value="2018">2018</option>
-										<option value="2019">2019</option>
-										<option value="2020">2020</option>
-										<option value="2021">2021</option>
-										<option value="2022">2022</option>
-										<option value="2023">2023</option>
-										<option value="2024">2024</option>
-										<option value="2025">2025</option>
-										<option value="2026">2026</option>
-										<option value="2027">2027</option>
-										<option value="2028">2028</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<button type="submit" class="btn btn-success" id="btnGenerarKardex"><i
-											class="fa fa-download"></i> Descargar Kardex</button>
-									<!-- <a href="excel_kardex.php?id_producto=<?php echo $_GET["product_id"] ?>" class="btn btn-success" id="generar_excel"><i class="fa fa-download"></i> Descargar Kardex</a> -->
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="hide">
-						<?php if (count($operations) > 0): ?>
-							<table class="table table-bordered table-hover">
-								<thead>
-									<th></th>
-									<th>Cantidad</th>
-									<th>Tipo</th>
-									<th>Fecha</th>
-									<th></th>
-								</thead>
-								<?php foreach ($operations as $operation): ?>
-									<tr>
-										<td></td>
-										<td><?php echo $operation->q; ?></td>
-										<td><?php echo $operation->getOperationType()->name; ?></td>
-										<td><?php echo $operation->created_at; ?></td>
-										<td style="width:40px;"><a href="#" id="oper-<?php echo $operation->id; ?>"
-												class="btn tip btn-xs btn-danger hide" title="Eliminar"><i
-													class="glyphicon glyphicon-trash"></i></a> </td>
-										<script>
-											$("#oper-" + <?php echo $operation->id; ?>).click(function () {
-												x = confirm("Estas seguro que quieres eliminar esto ??");
-												if (x == true) {
-													window.location = "./?view=deleteoperation&ref=history&pid=<?php echo $operation->product_id; ?>&opid=<?php echo $operation->id; ?>";
-												}
-											});
-										</script>
-									</tr>
-								<?php endforeach; ?>
-							</table>
-						<?php endif; ?>
-					</div>
-				</div>
-			</div>
+$product = ProductData::getById($_GET["product_id"]);
+if (!$product) {
+    print "<script>window.location='./?view=inventary';</script>";
+}
 
-		<?php endif; ?>
-	</div>
+$operations = OperationData::getAllByProductId($product->id);
+
+// Totales
+$itotal = OperationData::GetInputQYesF($product->id);
+$ototal = -1 * OperationData::GetOutputQYesF($product->id);
+$disponible = $product->stock;
+?>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 font-weight-bold">
+                    <i class="fas fa-history text-success mr-2"></i> Historial de Inventario
+                </h1>
+                <p class="text-muted mb-0">Producto: <span class="text-dark font-weight-bold"><?= $product->name ?></span></p>
+            </div>
+            <div class="col-sm-6 text-right">
+                <ol class="breadcrumb float-sm-right bg-transparent p-0 mt-2">
+                    <li class="breadcrumb-item"><a href="./?view=home">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="./?view=inventary">Inventario</a></li>
+                    <li class="breadcrumb-item active">Historial</li>
+                </ol>
+            </div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript">
-	var cuenta = 0;
 
-	function enviado3() {
-		var selMes = $('#selMes').val();
-		var selAnio = $('#selAnio').val();
+<section class="content">
+    <div class="container-fluid">
+        
+        <!-- Tarjetas de Resumen -->
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-arrow-circle-down"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Entradas Totales</span>
+                        <span class="info-box-number h4 mb-0"><?= number_format($itotal, 0) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-arrow-circle-up"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Salidas Totales</span>
+                        <span class="info-box-number h4 mb-0"><?= number_format($ototal, 0) ?></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="info-box shadow-sm">
+                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-boxes"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Stock Disponible</span>
+                        <span class="info-box-number h4 mb-0"><?= number_format($disponible, 0) ?></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		if (selMes == "" || selAnio == "") {
-			alert('Campos mes y año');
+        <div class="row mt-3">
+            <!-- Columna de Movimientos -->
+            <div class="col-md-8">
+                <div class="card card-outline card-success shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold"><i class="fas fa-list mr-1"></i> Detalle de Movimientos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover datatable" style="width:100%" data-order='[[ 0, "desc" ]]'>
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Fecha / Hora</th>
+                                        <th class="text-center">Tipo</th>
+                                        <th class="text-center text-info">Cantidad</th>
+                                        <th class="text-right">P. Unitario</th>
+                                        <th>Descripción</th>
+                                        <th class="text-center">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($operations as $op): 
+                                        $type_name = $op->getOperationType()->name;
+                                        $is_input = ($op->operation_type_id == 1);
+                                        $badge_class = $is_input ? 'badge-success' : 'badge-danger';
+                                        $type_icon = $is_input ? 'fa-arrow-down' : 'fa-arrow-up';
+                                    ?>
+                                    <tr>
+                                        <td class="text-xs"><?= date("d/m/Y H:i", strtotime($op->created_at)) ?></td>
+                                        <td class="text-center">
+                                            <span class="badge <?=$badge_class?> px-2">
+                                                <i class="fas <?=$type_icon?> mr-1 text-xs"></i> <?= strtoupper($type_name) ?>
+                                            </span>
+                                        </td>
+                                        <td class="text-center font-weight-bold <?= $is_input ? 'text-success' : 'text-danger' ?>">
+                                            <?= $is_input ? '+' : '-' ?> <?= number_format($op->q, 0) ?>
+                                        </td>
+                                        <td class="text-right font-weight-bold text-primary">
+                                            S/ <?= number_format($op->prec_alt, 2) ?>
+                                        </td>
+                                        <td class="text-xs text-muted"><?= $op->descripcion ?></td>
+                                        <td class="text-center">
+                                            <button onclick="confirmDelete(<?= $op->id ?>, <?= $op->product_id ?>)" class="btn btn-xs btn-outline-danger shadow-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			return false;
-		}
-	}
+            <!-- Columna de Descargas -->
+            <div class="col-md-4">
+                <div class="card card-outline card-primary shadow-sm mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold"><i class="fas fa-file-excel mr-1 text-success"></i> Descargar Kardex Mensual</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="excel_kardex.php" method="POST" id="formKardex">
+                            <input type="hidden" name="id_producto" value="<?= $product->id ?>">
+                            
+                            <div class="form-group">
+                                <label class="text-xs font-weight-bold mb-1">Seleccionar Mes:</label>
+                                <select class="form-control form-control-sm select2bs4" name="selMes" id="selMes" required>
+                                    <option value="">:: Seleccione Mes ::</option>
+                                    <?php 
+                                    $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                                    foreach($meses as $i => $m): ?>
+                                        <option value="<?= $i+1 ?>" <?= (date('m')==$i+1)?'selected':'' ?>><?= $m ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="text-xs font-weight-bold mb-1">Seleccionar Año:</label>
+                                <select class="form-control form-control-sm select2bs4" name="selAnio" id="selAnio" required>
+                                    <?php 
+                                    $anio_actual = date('Y');
+                                    for($a = $anio_actual-3; $a <= $anio_actual+1; $a++): ?>
+                                        <option value="<?= $a ?>" <?= ($a==$anio_actual)?'selected':'' ?>><?= $a ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-block shadow-sm mt-3">
+                                <i class="fas fa-download mr-2"></i> Generar Excel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card card-outline card-secondary shadow-sm">
+                    <div class="card-header py-2">
+                        <h3 class="card-title text-sm"><i class="fas fa-info-circle mr-1"></i> Información</h3>
+                    </div>
+                    <div class="card-body p-3 text-xs text-muted">
+                        <p>Los movimientos marcados como <b>ENTRADA</b> aumentan el stock actual, mientras que las <b>SALIDAS</b> lo disminuyen.</p>
+                        <p>Si elimina un movimiento, el stock del producto se recalculará automáticamente para mantener la consistencia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    function confirmDelete(opid, pid) {
+        Swal.fire({
+            title: '¿Eliminar movimiento?',
+            text: "Esta acción afectará el stock actual del producto. ¿Deseas continuar?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = `./?view=deleteoperation&ref=history&pid=${pid}&opid=${opid}`;
+            }
+        })
+    }
+
+    $(document).ready(function() {
+        // Inicializar Select2 si está disponible
+        if ($.fn.select2) {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            });
+        }
+    });
 </script>

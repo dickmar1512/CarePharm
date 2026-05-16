@@ -55,18 +55,48 @@ class OperationData
 	{
 		$sql = "insert into " . self::$tablename . " (product_id,q,cu, prec_alt,descuento, operation_type_id,sell_id,created_at, descripcion,idpaquete,estado) ";
 		$sql .= "value (\"$this->product_id\",\"$this->q\", $this->cu,$this->prec_alt,$this->descuento, $this->operation_type_id,$this->sell_id,\"$this->created_at\", \"$this->descripcion\",\"$this->idpaquete\",1)";
-		return Executor::doit($sql);
+		$res = Executor::doit($sql);
+		
+		// Sincronización en tiempo real del stock del producto
+		if($res[0]){
+			$p = new ProductData();
+			$p->update_stock2($this->product_id);
+		}
+		
+		return $res;
 	}
 
 	public static function delById($id)
 	{
+		// Obtenemos el product_id antes de borrar para poder sincronizar
+		$sql_get = "SELECT product_id FROM " . self::$tablename . " WHERE id=$id";
+		$query = Executor::doit($sql_get);
+		$product_id = null;
+		if($query[0]->num_rows > 0){
+			$row = $query[0]->fetch_array();
+			$product_id = $row['product_id'];
+		}
+
 		$sql = "update " . self::$tablename . " set estado=0 where id=$id";
-		Executor::doit($sql);
+		$res = Executor::doit($sql);
+
+		if($product_id){
+			$p = new ProductData();
+			$p->update_stock2($product_id);
+		}
+		return $res;
 	}
+
 	public function del()
 	{
 		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
-		Executor::doit($sql);
+		$res = Executor::doit($sql);
+		
+		if($this->product_id){
+			$p = new ProductData();
+			$p->update_stock2($this->product_id);
+		}
+		return $res;
 	}
 
 	public function cancel()
@@ -691,7 +721,58 @@ class OperationData
                 LEFT JOIN operation op ON p.id = op.product_id
                 WHERE p.is_active = 1
                 GROUP BY p.id
-                HAVING total_sold > 0 OR p.stock < 10";
+                HAVING total_sold > 0";
+
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new OperationData());
+	}
+
+	public static function getInventoryReport()
+	{
+		$sql = "SELECT 
+                    p.id, 
+                    p.barcode, 
+                    p.image,
+                    p.name, 
+                    p.inventary_min, 
+                    p.is_stock,
+                    p.stock as stock_tab,
+                    p.stock as stock_real,
+                    p.price_in,
+                    p.price_may,
+                    p.price_out,
+                    p.laboratorio,
+                    p.anaquel,
+                    p.is_active
+                FROM product p
+                WHERE p.is_active = 1
+                ORDER BY p.name ASC";
+
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new OperationData());
+	}
+
+	public static function getProductsWithMovement()
+	{
+		$sql = "SELECT 
+                    p.id, 
+                    p.barcode, 
+                    p.image,
+                    p.name, 
+                    p.inventary_min, 
+                    p.is_stock,
+                    p.stock as stock_tab,
+                    p.stock as stock_real,
+                    p.price_in,
+                    p.price_may,
+                    p.price_out,
+                    p.laboratorio,
+                    p.anaquel,
+                    p.is_active
+                FROM product p
+                WHERE p.is_active = 1
+                AND EXISTS (SELECT 1 FROM operation op WHERE op.product_id = p.id AND op.estado = 1)
+                ORDER BY p.name ASC";
 
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
