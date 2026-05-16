@@ -233,11 +233,18 @@ if (count($_POST) > 0) {
 			$descripcion_producto = $product->name;
 
 			// Store the product info before creating a new one or reuse it
-			if ($product->is_stock != 0) {
+			if ($producto->is_stock != 0) {
 				$p_sumar = new ProductData();
 				$p_sumar->name = $descripcion_producto;
 				$p_sumar->stock = $cantidad;
 				$p_sumar->sumar_stock_name();
+
+				$op = new OperationData();
+				$op->product_id = $producto->id;
+				$op->operation_type_id = 1;
+				$op->sell_id = $SELLID;
+				$op->q = $cantidad;
+				$op->add();
 			}
 
 			$mtoValorVentaItem = $cantidad * $precio_unitario;
@@ -367,6 +374,13 @@ if (count($_POST) > 0) {
 					// If the original product managed stock, return it
 					if ($product->is_stock != 0) {
 						$producto2->sumar_stock_name();
+
+						$op = new OperationData();
+						$op->product_id = $product->id;
+						$op->operation_type_id = 1;
+						$op->sell_id = $SELLID;
+						$op->q = $cantidad;
+						$op->add();
 					}
 
 					// If the new description matches another product that manages stock, rest it? 
@@ -750,6 +764,13 @@ if (count($_POST) > 0) {
 						$producto_sumar->name = $descripcion_producto;
 						$producto_sumar->stock = $cantidad;
 						$producto_sumar->sumar_stock_name();
+
+						$op = new OperationData();
+						$op->product_id = $product->id;
+						$op->operation_type_id = 1;
+						$op->sell_id = $SELLID;
+						$op->q = $cantidad;
+						$op->add();
 					}
 
 					$mtoValorVentaItem = $cantidad * $precio_unitario;

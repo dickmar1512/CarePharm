@@ -229,6 +229,13 @@
 					$p_sumar->id = $product->id;
 					$p_sumar->stock = $product->stock + $cantidad;
 					$p_sumar->update_stock();
+
+					$op = new OperationData();
+					$op->product_id = $product->id;
+					$op->operation_type_id = 1;
+					$op->sell_id = $SELLID;
+					$op->q = $cantidad;
+					$op->add();
 				}
 				
 				$mtoValorVentaItem = $cantidad * $precio_unitario;
@@ -360,6 +367,13 @@
 						$p_sumar->id = $product->id;
 						$p_sumar->stock = $product->stock + $cantidad;
 						$p_sumar->update_stock();
+
+						$op = new OperationData();
+						$op->product_id = $product->id;
+						$op->operation_type_id = 1;
+						$op->sell_id = $SELLID;
+						$op->q = $cantidad;
+						$op->add();
 					}
 					
 					$mtoValorVentaItem = $cantidad * $precio_unitario;
@@ -749,6 +763,13 @@
 						$p_sumar->id = $product->id;
 						$p_sumar->stock = $product->stock + $cantidad;
 						$p_sumar->update_stock();
+
+						$op = new OperationData();
+						$op->product_id = $product->id;
+						$op->operation_type_id = 1;
+						$op->sell_id = $SELLID;
+						$op->q = $cantidad;
+						$op->add();
 					}
 
 					$mtoValorVentaItem = $cantidad * $precio_unitario;

@@ -128,8 +128,8 @@ window.addEventListener('load', function() {
                 
                 // Cambiar placeholders según tipo
                 if(val == '60') {
-                    $('input[name="serie"]').attr('placeholder', 'INTERNO');
-                    $('input[name="comprobante"]').attr('placeholder', '0001');
+                    $('input[name="serie"]').attr('placeholder', 'ID01');
+                    $('input[name="comprobante"]').attr('placeholder', '000001');
                 } else if(val == '1') {
                     $('input[name="serie"]').attr('placeholder', 'F001');
                     $('input[name="comprobante"]').attr('placeholder', '000001');

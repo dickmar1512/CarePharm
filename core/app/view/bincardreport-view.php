@@ -84,7 +84,7 @@ function getTipoComprobanteName($id) {
                                 <tr>
                                     <th rowspan="2" class="align-middle text-center">FECHA</th>
                                     <th rowspan="2" class="align-middle text-center">PRODUCTO</th>
-                                    <th rowspan="2" class="align-middle text-center">ESTADO</th>
+                                    <th rowspan="2" class="align-middle text-center">TIPO MOVIMIENTO</th>
                                     <th colspan="2" class="text-center">COMPROBANTE</th>
                                     <th rowspan="2" class="align-middle text-center">USUARIO</th>
                                     <th colspan="3" class="text-center bg-info">MOVIMIENTOS</th>
@@ -100,7 +100,6 @@ function getTipoComprobanteName($id) {
                             <tbody>
                                 <?php foreach($operations as $op): 
                                     $is_inactivo = ($op->estado_op == 0);
-                                    $estado_lbl = $is_inactivo ? '<span class="badge badge-danger">INACTIVO</span>' : '<span class="badge badge-success">ACTIVO</span>';
                                     
                                     // Row styling for cancelled operations
                                     $tr_class = $is_inactivo ? 'text-muted bg-light' : '';
@@ -115,6 +114,24 @@ function getTipoComprobanteName($id) {
                                     }
                                     
                                     $comprobante = $op->serie ? $op->serie.'-'.str_pad($op->comprobante, 8, "0", STR_PAD_LEFT) : $op->comprobante;
+
+                                    // Determinar Tipo de Movimiento
+                                    $serie_op = strtoupper(trim($op->serie ?? ''));
+                                    $tipo_comp = $op->tipo_comprobante_id ?? '';
+                                    if ($op->operation_type_id == 1) {
+                                        // Entradas
+                                        if ($serie_op === 'ID01' || $serie_op === 'ID02' || $tipo_comp == '60') {
+                                            $tipo_mov = '<span class="badge badge-secondary"><i class="fas fa-exchange-alt mr-1"></i>INGRESO DIVERSO</span>';
+                                        } else {
+                                            $tipo_mov = '<span class="badge badge-success"><i class="fas fa-cart-arrow-down mr-1"></i>COMPRA</span>';
+                                        }
+                                    } else {
+                                        // Salidas
+                                        $tipo_mov = '<span class="badge badge-danger"><i class="fas fa-shopping-cart mr-1"></i>VENTA</span>';
+                                    }
+                                    if ($is_inactivo) {
+                                        $tipo_mov = '<span class="badge badge-dark"><i class="fas fa-ban mr-1"></i>ANULADO</span>';
+                                    }
                                 ?>
                                 <tr class="<?=$tr_class?>">
                                     <td class="text-center align-middle"><?=date("d/m/Y", strtotime($op->fecha))?></td>
@@ -123,8 +140,11 @@ function getTipoComprobanteName($id) {
                                         <?php if(isset($op->laboratorio) && trim($op->laboratorio) != ""): ?>
                                             <small class="badge badge-light border text-muted"><?=$op->laboratorio?></small>
                                         <?php endif; ?>
+                                        <?php if(isset($op->barcode) && trim($op->barcode) != ""): ?>
+                                            <small class="badge badge-light border text-muted"><i class="fas fa-barcode"></i> <?=$op->barcode?></small>
+                                        <?php endif; ?>
                                     </td>
-                                    <td class="text-center align-middle"><?=$estado_lbl?></td>
+                                    <td class="text-center align-middle"><?=$tipo_mov?></td>
                                     <td class="text-center align-middle"><?=getTipoComprobanteName($op->tipo_comprobante_id)?></td>
                                     <td class="text-center align-middle"><?=$comprobante?></td>
                                     <td class="text-center align-middle"><?=$op->usuario?></td>

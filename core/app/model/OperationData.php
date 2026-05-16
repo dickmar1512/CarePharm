@@ -596,6 +596,7 @@ class OperationData
 					op.created_at as fecha,
 					p.name as producto,
 					p.laboratorio,
+					p.barcode,
 					op.estado as estado_op,
 					s.tipo_comprobante as tipo_comprobante_id,
 					s.serie,
@@ -625,6 +626,7 @@ class OperationData
 			$op->fecha = $r['fecha'];
 			$op->producto = $r['producto'];
 			$op->laboratorio = $r['laboratorio'];
+			$op->barcode = $r['barcode'];
 			$op->estado_op = $r['estado_op'];
 			$op->tipo_comprobante_id = $r['tipo_comprobante_id'];
 			$op->serie = $r['serie'];
@@ -648,10 +650,17 @@ class OperationData
 
 		if (count($products_involved) > 0) {
 			$prod_ids = implode(",", array_keys($products_involved));
-			$sql_stock = "SELECT product_id, SUM(CASE WHEN operation_type_id=1 THEN q ELSE -q END) as stock_inicial 
-						  FROM operation 
-						  WHERE DATE(created_at) < '$sd' AND estado=1 AND product_id IN ($prod_ids) 
-						  GROUP BY product_id";
+			$sql_stock = "SELECT op.product_id, SUM(
+							CASE 
+								WHEN op.operation_type_id = 1 THEN op.q 
+								WHEN s.tipo_comprobante = '07' THEN op.q 
+								ELSE -op.q 
+							END
+						  ) as stock_inicial 
+						  FROM operation op
+						  LEFT JOIN sell s ON op.sell_id = s.id
+						  WHERE DATE(op.created_at) < '$sd' AND op.estado=1 AND op.product_id IN ($prod_ids) 
+						  GROUP BY op.product_id";
 			$query_stock = Executor::doit($sql_stock);
 			while ($r = $query_stock[0]->fetch_array()) {
 				$products_involved[$r['product_id']] = $r['stock_inicial'];
@@ -675,6 +684,8 @@ class OperationData
 					$virtual_op = new OperationData();
 					$virtual_op->fecha = $sd . " 00:00:00";
 					$virtual_op->producto = $op->producto;
+					$virtual_op->laboratorio = $op->laboratorio;
+					$virtual_op->barcode = $op->barcode;
 					$virtual_op->estado_op = 1;
 					$virtual_op->tipo_comprobante_id = null;
 					$virtual_op->serie = "";
