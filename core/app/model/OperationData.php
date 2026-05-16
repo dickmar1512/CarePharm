@@ -205,7 +205,7 @@ class OperationData
 
 		if ($start == $end) {
 			$sql = "select  product_id,sum(q) AS VENTAS from " . self::$tablename . " 
-				where date(created_at) = \"$start\" and
+				where estado = 1 and date(created_at) = \"$start\" and
  				operation_type_id = 2
  				group by product_id 
  				order by VENTAS desc  LIMIT 5";
@@ -298,7 +298,7 @@ class OperationData
 
 	public static function getAllByProductIdCutIdOficial($product_id, $cut_id)
 	{
-		$sql = "select * from " . self::$tablename . " where product_id=$product_id and cut_id=$cut_id order by created_at desc";
+		$sql = "select * from " . self::$tablename . " where estado=1 and product_id=$product_id and cut_id=$cut_id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
 	}
@@ -313,7 +313,7 @@ class OperationData
 
 	public static function getAllProductsBySellIdAll($sell_id)
 	{
-		$sql = "select * from " . self::$tablename . " where sell_id=$sell_id order by created_at desc";
+		$sql = "select * from " . self::$tablename . " where estado=1 and sell_id=$sell_id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
 	}
@@ -322,12 +322,12 @@ class OperationData
 	{
 		$sql = "SELECT product_id,q,prec_alt,descuento,created_at,idpaquete 
 			FROM operation 
-			WHERE sell_id=$sell_id
+			WHERE estado=1 AND sell_id=$sell_id
 			AND idpaquete= 'X' 
 			UNION
 			SELECT '0' product_id,'1' q,SUM(prec_alt*q) prec_alt,SUM(descuento*q) descuento,created_at,idpaquete
 			FROM operation
-			WHERE sell_id=$sell_id
+			WHERE estado=1 AND sell_id=$sell_id
 			AND idpaquete <> 'X'
 			GROUP BY created_at,idpaquete";
 		$query = Executor::doit($sql);
@@ -337,7 +337,7 @@ class OperationData
 
 	public static function getAllByProductIdCutIdYesF($product_id, $cut_id)
 	{
-		$sql = "select * from " . self::$tablename . " where product_id=$product_id and cut_id=$cut_id order by created_at desc";
+		$sql = "select * from " . self::$tablename . " where estado=1 and product_id=$product_id and cut_id=$cut_id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new OperationData());
 		//return $array;
@@ -609,7 +609,7 @@ class OperationData
 				INNER JOIN product p ON op.product_id = p.id
 				LEFT JOIN sell s ON op.sell_id = s.id
 				LEFT JOIN user u ON s.user_id = u.id
-				WHERE DATE(op.created_at) BETWEEN '$sd' AND '$ed' ";
+				WHERE op.estado = 1 AND DATE(op.created_at) BETWEEN '$sd' AND '$ed' ";
 		
 		if ($user_id != 0) {
 			$sql .= " AND s.user_id = $user_id ";
@@ -690,7 +690,7 @@ class OperationData
 			if ($op->estado_op == 1) {
 				// Lógica especial para Notas de Crédito (tipo 3 o 07)
 				// Una Nota de Crédito sobre una venta SIEMPRE es una ENTRADA de inventario.
-				$es_nota_credito = ($op->tipo_comprobante_id == '3' || $op->tipo_comprobante_id == '07');
+				$es_nota_credito = ($op->tipo_comprobante_id == '07');
 
 				if ($op->operation_type_id == 1 || $es_nota_credito) {
 					$products_involved[$op->product_id] += $op->q;

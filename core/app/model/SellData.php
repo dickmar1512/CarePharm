@@ -96,8 +96,25 @@ class SellData
 
 	public static function delById($id)
 	{
+		// 1. Marcar venta como anulada
 		$sql = "update " . self::$tablename . " set estado=0 where id=$id";
 		Executor::doit($sql);
+		
+		// 2. Obtener productos involucrados antes de anular operaciones
+		$ops_sql = "select product_id from operation where sell_id=$id";
+		$query = Executor::doit($ops_sql);
+		
+		// 3. Anular operaciones en cascada
+		$sql_op = "update operation set estado=0 where sell_id=$id";
+		Executor::doit($sql_op);
+
+		// 4. Sincronizar stock de los productos afectados
+		if($query[0]->num_rows > 0){
+			$p = new ProductData();
+			while($row = $query[0]->fetch_array()){
+				$p->update_stock2($row['product_id']);
+			}
+		}
 	}
 
 	public static function getLastBySerie($serie, $tipo = null)
@@ -118,14 +135,12 @@ class SellData
 
 	public function del()
 	{
-		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
-		Executor::doit($sql);
+		self::delById($this->id);
 	}
 
 	public function cancel()
 	{
-		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
-		Executor::doit($sql);
+		self::delById($this->id);
 	}
 
 	public function update_box()
@@ -170,7 +185,7 @@ class SellData
 
 	public static function getSells($inicio, $fin, $user_id)
 	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante!=70 AND estado IN (0,1) ";
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante!=70 AND estado = 1 ";
 
 		if ($user_id != 0) {
 			$sql .= " and user_id = $user_id ";
@@ -268,14 +283,14 @@ class SellData
 
 	public static function getSellsUnBoxed()
 	{
-		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado IN (0,1) and operation_type_id=2 and box_id is NULL order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
 
 	public static function getByBoxId($id)
 	{
-		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado IN (0,1) and operation_type_id=2 and box_id=$id order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 and box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
@@ -358,7 +373,7 @@ class SellData
 
 	public static function getAllByDateBCOp($clientid, $start, $end, $op)
 	{
-		$sql = "select * from " . self::$tablename . " where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op order by created_at desc";
+		$sql = "select * from " . self::$tablename . " where estado=1 and date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$clientid  and operation_type_id=$op order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 
@@ -368,7 +383,7 @@ class SellData
 	{
 		$sql = "select a.serie,a.comprobante,a.total, b.q, b.product_id, GetFullNameProduct(b.product_id) prod,b.prec_alt, b.created_at, a.user_id, GetFullNameUser(a.user_id) AS vendedor
          from " . self::$tablename . " a, operation b 
-         where date(a.created_at) >= \"$start\" 
+         where a.estado=1 and b.estado=1 and date(a.created_at) >= \"$start\" 
          and date(a.created_at) <= \"$end\" 
           and a.operation_type_id=$op 
          AND a.id = b.sell_id ";
@@ -391,7 +406,7 @@ class SellData
 			"(CASE a.operation_type_id WHEN 2 THEN 'VENTA' ELSE 'COMPRA' END) tipo, " .
 			"a.q,a.prec_alt,a.descuento,a.cu,a.created_at " .
 			"from operation a, " . self::$tablename . " b " .
-			"where a.sell_id = b.id " .
+			"where a.sell_id = b.id and a.estado=1 and b.estado=1 " .
 			"and date(a.created_at) >= '$start' " .
 			"and date(a.created_at) <= '$end' " .
 			"and a.product_id='$idprod'  " .

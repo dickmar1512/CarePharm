@@ -49,7 +49,7 @@ function getTipoComprobanteName($id) {
         <div class="card card-outline card-primary shadow-sm">
             <div class="card-header">
                 <form method="GET" action="./">
-                    <input type="hidden" name="view" value="bincartreport">
+                    <input type="hidden" name="view" value="bincardreport">
                     <div class="row">
                         <div class="col-md-3">
                             <label><i class="fa fa-calendar-alt text-muted"></i> Desde:</label>
