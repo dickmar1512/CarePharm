@@ -118,7 +118,12 @@ function getTipoComprobanteName($id) {
                                 ?>
                                 <tr class="<?=$tr_class?>">
                                     <td class="text-center align-middle"><?=date("d/m/Y", strtotime($op->fecha))?></td>
-                                    <td class="align-middle"><b><?=$op->producto?></b></td>
+                                    <td class="align-middle">
+                                        <div class="font-weight-bold"><?=$op->producto?></div>
+                                        <?php if(isset($op->laboratorio) && trim($op->laboratorio) != ""): ?>
+                                            <small class="badge badge-light border text-muted"><?=$op->laboratorio?></small>
+                                        <?php endif; ?>
+                                    </td>
                                     <td class="text-center align-middle"><?=$estado_lbl?></td>
                                     <td class="text-center align-middle"><?=getTipoComprobanteName($op->tipo_comprobante_id)?></td>
                                     <td class="text-center align-middle"><?=$comprobante?></td>

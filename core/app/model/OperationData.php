@@ -595,6 +595,7 @@ class OperationData
 		$sql = "SELECT 
 					op.created_at as fecha,
 					p.name as producto,
+					p.laboratorio,
 					op.estado as estado_op,
 					s.tipo_comprobante as tipo_comprobante_id,
 					s.serie,
@@ -623,6 +624,7 @@ class OperationData
 			$op = new OperationData();
 			$op->fecha = $r['fecha'];
 			$op->producto = $r['producto'];
+			$op->laboratorio = $r['laboratorio'];
 			$op->estado_op = $r['estado_op'];
 			$op->tipo_comprobante_id = $r['tipo_comprobante_id'];
 			$op->serie = $r['serie'];
