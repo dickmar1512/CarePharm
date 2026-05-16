@@ -89,7 +89,11 @@ try {
     $data = [];
     foreach ($products as $sell) {
         $usuario = UserData::getById($sell->user_id);
-        $cliente = PersonData::getById($sell->person_id);
+        
+        $cliente = null;
+        if (!empty($sell->person_id)) {
+            $cliente = PersonData::getById($sell->person_id);
+        }
 
         $notacomprobar = $sell->serie . "-" . $sell->comprobante; 
 		$probar = Not_1_2Data::getByIdComprobado($notacomprobar);
@@ -202,7 +206,7 @@ try {
             'verComprobante' => $verComprobanteLink,
             'verNotaCredito' => $verNotaCreditoLink,
             'comprobante' => $sell->serie.'-'.$sell->comprobante,
-            'cliente' => $cliente->name . ' ' . $cliente->lastname,
+            'cliente' => $cliente ? $cliente->name . ' ' . $cliente->lastname : 'PÚBLICO GENERAL',
             'importe' => $total,
             'medioPago' => $medioPago,
             'fecha' => $fechaFormateada,
