@@ -67,6 +67,7 @@ $(document).ready(function() {
         'c10': 0.1,
         'yape': 1, // Placeholder for Yape
         'plin': 1, // Placeholder for Plin
+        'tdebito': 1, // Placeholder for Tarjeta de Débito
         'tcredito': 1 // Placeholder for Tarjeta de Crédito
     };
     
