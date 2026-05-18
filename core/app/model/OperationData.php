@@ -102,7 +102,12 @@ class OperationData
 	public function cancel()
 	{
 		$sql = "update " . self::$tablename . " set estado=0 where id=$this->id";
-		Executor::doit($sql);
+		$res = Executor::doit($sql);
+		if($this->product_id){
+			$p = new ProductData();
+			$p->update_stock2($this->product_id);
+		}
+		return $res;
 	}
 
 	// partiendo de que ya tenemos creado un objecto OperationData previamente utilizamos el contexto

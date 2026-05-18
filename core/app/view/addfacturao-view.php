@@ -241,17 +241,7 @@
 			$precio_unitario = $item->prec_alt;
 			$descripcion_producto = addslashes($product->name);
 
-			if($orden->tipo_servicio == 2)
-			{
-				if($product->is_stock == 1)
-				{
-					$product2 = new ProductData();
-					$product2->stock = $cantidad;
-					$product2->id = $product->id;
 
-					$product2->restar_stock();
-				}				
-			}
 
 			$mtoValorVentaItem = $cantidad * $precio_unitario;
 			$mtoPrecioVentaUnitario = $precio_unitario;

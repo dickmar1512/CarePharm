@@ -53,14 +53,6 @@ if(count($_POST) > 0 && isset($_SESSION["cart_sd"]) && count($_SESSION["cart_sd"
                 $op->idpaquete = "X";
                 $op->descripcion = "SALIDA DIVERSA: " . $observacion;
                 $op->add();
-
-                // Restar Stock
-                if($product->is_stock == 1) {
-                    $product_obj = new ProductData();
-                    $product_obj->id = $product_id;
-                    $product_obj->stock = $q;
-                    $product_obj->restar_stock();
-                }
             }
 
             unset($_SESSION["cart_sd"]);

@@ -65,11 +65,10 @@ if(isset($_SESSION["reabastecer"]))
 
 				if($product->is_stock == 1)
 				{
-					$product2 = new ProductData();
-					$product2->stock = $c["q"];
-					$product2->fecha_venc=$c["fec_venc"];
-					$product2->id = $op->product_id;
-					$product2->sumar_stock();
+					if ($c["fec_venc"] != "") {
+						$sql_venc = "UPDATE product SET fecha_venc = '" . $c["fec_venc"] . "' WHERE id = " . $op->product_id;
+						Executor::doit($sql_venc);
+					}
 
 				    $lote = new LoteData();
 				    $lote->id_prod  = $c["product_id"];

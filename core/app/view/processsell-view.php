@@ -111,12 +111,6 @@
 					}
 
 					$add = $op->add();
-
-					$product2 = new ProductData();
-					$product2->stock = $c["q"];
-					$product2->id = $c["product_id"];
-
-					$product2->restar_stock();
 					
 				}
 

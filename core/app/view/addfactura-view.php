@@ -233,15 +233,6 @@
 
 						$add = $op->add();
 
-						if($product->is_stock == 1)
-						{
-							$product2 = new ProductData();
-							$product2->stock = $c["q"];
-							$product2->id = $c["product_id"];
-
-							$product2->restar_stock();
-						}
-
 						unset($_SESSION["cart"]);
 						setcookie("selled","selled");
 					}
