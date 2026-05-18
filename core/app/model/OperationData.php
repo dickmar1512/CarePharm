@@ -36,6 +36,7 @@ class OperationData
 	public $comprobante;
 	public $usuario;
 	public $saldo;
+	public $laboratorio;
 
 	public function OperationData()
 	{
