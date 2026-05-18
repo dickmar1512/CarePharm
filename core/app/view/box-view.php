@@ -61,6 +61,7 @@
 						$total_total = 0;
                         $yape_val = 0;
                         $plin_val = 0;
+						$tdebito_val = 0;
                         $tcredito_val = 0;
 
                         $dbPath = '../efact1.3.4/bd/BDFacturador.db';
@@ -123,9 +124,10 @@
 											echo "<b> " . number_format($total, 2, ".", ",") . "</b>";
                                             
                                             if ($total > 0) {
-                                                if ($sell->tipo_pago == 3) $yape_val += $total;
                                                 if ($sell->tipo_pago == 2) $plin_val += $total;
-                                                if ($sell->tipo_pago == 4) $tcredito_val += $total;
+                                                if ($sell->tipo_pago == 3) $yape_val += $total;
+                                                if ($sell->tipo_pago == 4) $tdebito_val += $total;
+                                                if ($sell->tipo_pago == 5) $tcredito_val += $total;
                                             }
 											?>
 										</td>	
@@ -226,6 +228,17 @@
 									endif;
 									?>
 									<td style="text-align: center;"><input type="number" name="plin" id="plin" class="form-control-sm" style="max-width: 50%; text-align: right;" value="<?=$plin?>"></td>
+								</tr>
+								<tr>
+									<td><label for="tdebito">T.Debito</label></td>
+									<?php 
+									if ($tdebito_val > 0): 
+										$tdebito = number_format($tdebito_val, 2, '.', '');
+									else:
+										$tdebito = "0.00";
+									endif;
+									?>
+									<td style="text-align: center;"><input type="number" name="tdebito" id="tdebito" class="form-control-sm" style="max-width: 50%; text-align: right;" value="<?=$tdebito?>"></td>
 								</tr>
 								<tr>
 									<td><label for="tcredito">T.Credito</label></td>
