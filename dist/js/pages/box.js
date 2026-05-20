@@ -1,161 +1,106 @@
 $(document).ready(function() {
-    // Obtener elementos del DOM
-    const $denominationInputs = $('#denominations input[type="number"]');
-    const $processButton = $('#procesarVentasBtn');
-    const totalVentas = parseFloat($('#totalVentas').val()) || 0;
-    
-    // Crear el elemento para mostrar la diferencia
-    const $differenceContainer = $('<div>', {
-        class: 'difference-container',
-        css: {
-            marginTop: '20px',
-            textAlign: 'center'
-        }
-    });
-    
-    const $differenceLabel = $('<label>', {
-        text: 'Diferencia: ',
-        css: {
-            fontWeight: 'bold',
-            marginRight: '10px'
-        }
-    });
-    
-    const $differenceInput = $('<input>', {
-        type: 'text',
-        id: 'difference',
-        class: 'form-control-sm',
-        css: {
-            textAlign: 'center',
-            fontWeight: 'bold',
-            width: '100px',
-            border: '2px solid #dc3545',
-            color: '#dc3545',
-            marginRight: '10px'
-        }
-    }).val('-' + totalVentas.toFixed(2)).prop('readOnly', true);
-
-    // Label para mostrar Faltante/Sobrante
-    const $statusLabel = $('<span>', {
-        id: 'difference-status',
-        css: {
-            fontWeight: 'bold',
-            fontSize: '16px'
-        }
-    });
-    
-    $differenceContainer.append($differenceLabel, $differenceInput, $statusLabel);
-    
-    // Insertar el elemento después de la tabla de billetes y monedas
-    $('.col-md-3 table').after($differenceContainer);
-    
-    // Desactivar el botón al inicio
-    $processButton.addClass('disabled');
-    
-    // Valores de las denominaciones
-    const denominations = {
-        'b200': 200,
-        'b100': 100,
-        'b50': 50,
-        'b20': 20,
-        'b10': 10,
-        'm5': 5,
-        'm2': 2,
-        'm1': 1,
-        'c50': 0.5,
-        'c20': 0.2,
-        'c10': 0.1,
-        'yape': 1, // Placeholder for Yape
-        'plin': 1, // Placeholder for Plin
-        'tdebito': 1, // Placeholder for Tarjeta de Débito
-        'tcredito': 1 // Placeholder for Tarjeta de Crédito
-    };
-    
-    // Función para calcular el total de efectivo
-    function calculateCashTotal() {
-        let total = 0;
+    // Función para calcular e ilustrar el arqueo de caja en tiempo real
+    function calculateTotal() {
+        var b200 = parseInt($('#b200').val()) || 0;
+        var b100 = parseInt($('#b100').val()) || 0;
+        var b50  = parseInt($('#b50').val()) || 0;
+        var b20  = parseInt($('#b20').val()) || 0;
+        var b10  = parseInt($('#b10').val()) || 0;
         
-        $denominationInputs.each(function() {
-            const value = parseFloat($(this).val()) || 0;
-            console.log($(this).attr('id'), value);
-            const denominationValue = denominations[$(this).attr('id')];
-            console.log('Denomination Value:', denominationValue);
-            total += value * denominationValue;
-        });
-        return total;
-    }
-    
-    // Función para actualizar la diferencia
-    function updateDifference() {
-        const cashTotal = calculateCashTotal();
-        const difference = (cashTotal - totalVentas).toFixed(2);
-        const absoluteDifference = Math.abs(difference);
+        var m5   = parseInt($('#m5').val()) || 0;
+        var m2   = parseInt($('#m2').val()) || 0;
+        var m1   = parseInt($('#m1').val()) || 0;
         
-        $differenceInput.val(difference);
+        var c50  = parseInt($('#c50').val()) || 0;
+        var c20  = parseInt($('#c20').val()) || 0;
+        var c10  = parseInt($('#c10').val()) || 0;
         
-        // Cambiar color según la diferencia
-        if (difference < 0) {
-            $differenceInput.css({
-                'border': '2px solid #dc3545',
-                'color': '#dc3545'
+        var yape     = parseFloat($('#yape').val()) || 0;
+        var plin     = parseFloat($('#plin').val()) || 0;
+        var tdebito  = parseFloat($('#tdebito').val()) || 0;
+        var tcredito = parseFloat($('#tcredito').val()) || 0;
+        
+        var totalBilletes = (b200 * 200) + (b100 * 100) + (b50 * 50) + (b20 * 20) + (b10 * 10);
+        var totalMonedas = (m5 * 5) + (m2 * 2) + (m1 * 1) + (c50 * 0.5) + (c20 * 0.2) + (c10 * 0.1);
+        
+        var totalEfectivo = totalBilletes + totalMonedas;
+        var totalDigital = yape + plin + tdebito + tcredito;
+        var totalArqueo = totalEfectivo + totalDigital;
+        
+        var expectedTotal = parseFloat($('#totalVentas').val()) || 0;
+        var difference = totalArqueo - expectedTotal;
+        
+        // Actualizar la interfaz con los valores formateados
+        $('#totalEfectivoText').text('S/ ' + totalEfectivo.toFixed(2));
+        $('#totalDigitalText').text('S/ ' + totalDigital.toFixed(2));
+        $('#totalArqueoText').text('S/ ' + totalArqueo.toFixed(2));
+        
+        var diffText = $('#differenceText');
+        diffText.text('S/ ' + difference.toFixed(2));
+        
+        // Validar si la diferencia cuadra perfectamente (Diferencia = 0.00)
+        if (Math.abs(difference) < 0.01 && expectedTotal > 0) {
+            diffText.removeClass('text-danger text-warning').addClass('text-success font-weight-bold');
+            $('#differenceContainer').css({
+                'border-color': '#28a745',
+                'background-color': '#e8f5e9',
+                'border-style': 'solid'
             });
-            $statusLabel.text('Faltante: ' + absoluteDifference.toFixed(2))
-                     .css('color', '#dc3545');
-        } else if (difference > 0) {
-            $differenceInput.css({
-                'border': '2px solid #ffc107',
-                'color': '#ffc107'
-            });
-            $statusLabel.text('Sobrante: ' + absoluteDifference.toFixed(2))
-                     .css('color', '#ffc107');
+            $('#procesarVentasBtn').prop('disabled', false).removeClass('disabled');
         } else {
-            $differenceInput.css({
-                'border': '2px solid #28a745',
-                'color': '#28a745'
+            diffText.removeClass('text-success text-warning').addClass('text-danger font-weight-bold');
+            $('#differenceContainer').css({
+                'border-color': '#dc3545',
+                'background-color': '#fde8e8',
+                'border-style': 'dashed'
             });
-            $statusLabel.text('Correcto')
-                     .css('color', '#28a745');
+            $('#procesarVentasBtn').prop('disabled', true).addClass('disabled');
         }
-        
-        // Habilitar o deshabilitar el botón
-        if (parseFloat(difference) === 0 && totalVentas > 0) {
-            $processButton.prop('disabled', false);
-            $processButton.removeClass('disabled');
-        } else {
-            $processButton.prop('disabled', true);
-            $processButton.addClass('disabled');
-        }
-    }
-
-    // Función para recolectar datos de denominaciones
-    function getDenominationsData() {
-        const data = {};
-        $denominationInputs.each(function() {
-            const id = $(this).attr('id');
-            const value = parseFloat($(this).val()) || 0;
-            data[id] = value;
-        });
-        return data;
     }
     
-    // Manejador del click para procesar ventas
+    // Listeners para los inputs de denominaciones
+    $('#denominations input').on('input change', function() {
+        calculateTotal();
+    });
+    
+    // Ejecutar inicialmente
+    calculateTotal();
+    
+    // Manejo de la acción de procesar ventas
     $('#procesarVentasBtn').click(function(e) {
         e.preventDefault();
         
-        if ($(this).hasClass('disabled')) return;
+        if ($(this).hasClass('disabled') || $(this).prop('disabled')) {
+            return;
+        }
         
-        // Mostrar loading
         const originalText = $(this).html();
-        $(this).html('<i class="fa fa-spinner fa-spin"></i> Procesando...');
-        $(this).prop('disabled', true);
+        $(this).html('<i class="fa fa-spinner fa-spin mr-1"></i> Procesando...');
+        $(this).prop('disabled', true).addClass('disabled');
         
-        // Recolectar datos
+        // Construir datos de denominación y acción para enviar al backend
         const postData = {
-            denominations: getDenominationsData(),
+            denominations: {
+                b200: parseInt($('#b200').val()) || 0,
+                b100: parseInt($('#b100').val()) || 0,
+                b50: parseInt($('#b50').val()) || 0,
+                b20: parseInt($('#b20').val()) || 0,
+                b10: parseInt($('#b10').val()) || 0,
+                m5: parseInt($('#m5').val()) || 0,
+                m2: parseInt($('#m2').val()) || 0,
+                m1: parseInt($('#m1').val()) || 0,
+                c50: parseInt($('#c50').val()) || 0,
+                c20: parseInt($('#c20').val()) || 0,
+                c10: parseInt($('#c10').val()) || 0,
+                yape: parseFloat($('#yape').val()) || 0,
+                plin: parseFloat($('#plin').val()) || 0,
+                tdebito: parseFloat($('#tdebito').val()) || 0,
+                tcredito: parseFloat($('#tcredito').val()) || 0
+            },
             action: 'process_box'
         };
         
-        // Enviar por AJAX
+        // Envío AJAX
         $.ajax({
             url: './?action=processbox',
             type: 'POST',
@@ -163,25 +108,16 @@ $(document).ready(function() {
             data: postData,
             success: function(response) {
                 if (response.success) {
-                    // Redirigir si todo está bien
-                    console.log(response);
                     window.location.href = './?view=box&id=' + response.box_id;
                 } else {
-                    // Mostrar error
                     alert('Error: ' + response.message);
-                    $('#procesarVentasBtn').html(originalText).prop('disabled', false);
+                    $('#procesarVentasBtn').html(originalText).prop('disabled', false).removeClass('disabled');
                 }
             },
             error: function(xhr, status, error) {
                 alert('Error al procesar: ' + error);
-                $('#procesarVentasBtn').html(originalText).prop('disabled', false);
+                $('#procesarVentasBtn').html(originalText).prop('disabled', false).removeClass('disabled');
             }
         });
     });
-    
-    // Event listeners para los inputs
-    $denominationInputs.on('input', updateDifference);
-    
-    // Actualizar al cargar la página
-    updateDifference();
 });
