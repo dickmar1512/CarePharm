@@ -4,6 +4,39 @@
 class Det_1_2Data
 {
 	public static $tablename = "det";
+	public $id;
+	public $TIPO_DOC;
+	public $ID_TIPO_DOC;
+	public $codUnidadMedida;
+	public $ctdUnidadItem;
+	public $codProducto;
+	public $codProductoSUNAT;
+	public $desItem;
+	public $mtoValorUnitario;
+	public $sumTotTributosItem;
+	public $codTriIGV;
+	public $mtoIgvItem;
+	public $mtoBaseIgvItem;
+	public $nomTributoIgvItem;
+	public $codTipTributoIgvItem;
+	public $tipAfeIGV;
+	public $porIgvItem;
+	public $codTriISC;
+	public $mtoIscItem;
+	public $mtoBaseIscItem;
+	public $nomTributoIscItem;
+	public $codTipTributoIscItem;
+	public $tipSisISC;
+	public $porIscItem;
+	public $codTriOtroItem;
+	public $mtoTriOtroItem;
+	public $mtoBaseTriOtroItem;
+	public $nomTributoIOtroItem;
+	public $codTipTributoIOtroItem;
+	public $porTriOtroItem;
+	public $mtoPrecioVentaUnitario;
+	public $mtoValorVentaItem;
+	public $mtoValorReferencialUnitario;
 
 	public function Det_1_2Data()
 	{
@@ -42,62 +75,46 @@ class Det_1_2Data
 
 	public static function getById($id, $tipo)
 	{
-
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id) || $tipo === null || $tipo === "" || $tipo === "NULL" || !is_numeric($tipo)) {
+			return array();
+		}
+		$id_val = intval($id);
+		$tipo_val = intval($tipo);
 		$sql = "SELECT ctdUnidadItem, mtoValorUnitario, desItem, mtoValorVentaItem, codTriIGV, mtoIgvItem 
 			FROM " . self::$tablename . "
-			WHERE ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+			WHERE ID_TIPO_DOC=$id_val and TIPO_DOC=$tipo_val";
 
 		$query = Executor::doit($sql);
 
 		return Model::many($query[0], new Det_1_2Data());
-
 	}
 
 	public static function getByIdNota($id, $tipo)
 	{
-
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id) || $tipo === null || $tipo === "" || $tipo === "NULL" || !is_numeric($tipo)) {
+			return array();
+		}
+		$id_val = intval($id);
+		$tipo_val = intval($tipo);
 		$sql = "SELECT * FROM " . self::$tablename . "
-			WHERE ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+			WHERE ID_TIPO_DOC=$id_val and TIPO_DOC=$tipo_val";
 
 		$query = Executor::doit($sql);
 
 		return Model::many($query[0], new Det_1_2Data());
-
 	}
 
 	public static function getByNroDoc($nro)
 	{
-
-		$sql = "SELECT * FROM " . self::$tablename . "
+		$nro_clean = preg_replace('/[^A-Za-z0-9\-]/', '', $nro);
+		$sql = "SELECT d.* FROM " . self::$tablename . " d
 			INNER JOIN 1_2_factura_yaqha f ON d.ID_TIPO_DOC=f.id
-			WHERE CONCAT(f.SERIE,'-',f.COMPROBANTE)=$nro";
+			WHERE CONCAT(f.SERIE,'-',f.COMPROBANTE)='$nro_clean'";
 
 		$query = Executor::doit($sql);
 
 		return Model::many($query[0], new Det_1_2Data());
-
 	}
-
-	// public static function getById($id,$tipo){
-	// 	$sql = "select * from ".self::$tablename." where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
-	// 	$query = Executor::doit($sql);
-	// 	$found = null;
-	// 	$data = new Det_1_1Data();
-	// 	while($r = $query[0]->fetch_array()){
-	// 		$data->id = $r['id'];
-	// 		$data->TIPO_DOC = $r['TIPO_DOC'];
-	// 		$data->ID_TIPO_DOC= $r['ID_TIPO_DOC'];
-	// 		$data->ctdUnidadItem = $r['ctdUnidadItem'];
-	// 		$data->mtoValorUnitario = $r['mtoValorUnitario'];
-	// 		$data->desItem = $r['desItem'];
-	// 		$data->mtoValorVentaItem = $r['mtoValorVentaItem'];
-	// 		$data->codTriIGV = $r['codTriIGV'];
-	// 		$data->mtoIgvItem = $r['mtoIgvItem'];
-	// 		$found = $data;
-	// 		break;
-	// 	}
-	// 	return $found;
-	// }
 }
 
 ?>

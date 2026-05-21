@@ -90,10 +90,14 @@ class Not_1_2Data
 
 	public static function getByIdComprobado($m)
 	{
-		$serie = explode("-", $m)[0];
+		$m_clean = preg_replace('/[^A-Za-z0-9\-]/', '', $m);
+		if (empty($m_clean) || strpos($m_clean, '-') === false) {
+			return null;
+		}
+		$serie = explode("-", $m_clean)[0];
 		$tblComprobante = $serie == "B001" ? "boleta" : "factura";
 		$sql = "SELECT NC.*, FT.SERIE, FT.COMPROBANTE FROM " . self::$tablename . " AS NC ";
-		$sql .= "INNER JOIN " . $tblComprobante . " AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m' AND NC.ESTADO = 1";
+		$sql .= "INNER JOIN " . $tblComprobante . " AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m_clean' AND NC.ESTADO = 1";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new Boleta2Data();
@@ -136,10 +140,12 @@ class Not_1_2Data
 
 	public static function getById($id, $tipo)
 	{
-
-		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
-
-		// echo $sql; exit();
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id) || $tipo === null || $tipo === "" || $tipo === "NULL" || !is_numeric($tipo)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$tipo_val = intval($tipo);
+		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id_val and TIPO_DOC=$tipo_val";
 
 		$query = Executor::doit($sql);
 		$found = null;

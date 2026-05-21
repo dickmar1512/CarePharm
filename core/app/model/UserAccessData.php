@@ -28,29 +28,52 @@ class UserAccessData {
 	}
 
     public static function del($user_id, $module_id){
-		$sql = "update ".self::$tablename." set is_active=0, updated_at=NOW() where user_id=$user_id and module_id=$module_id";
+		if ($user_id === null || $user_id === "" || $user_id === "NULL" || !is_numeric($user_id) || $module_id === null || $module_id === "" || $module_id === "NULL" || !is_numeric($module_id)) {
+			return null;
+		}
+		$u_id = intval($user_id);
+		$m_id = intval($module_id);
+		$sql = "update ".self::$tablename." set is_active=0, updated_at=NOW() where user_id=$u_id and module_id=$m_id";
 		return Executor::doit($sql);
 	}
 
     public static function delAllByUserId($user_id){
-		$sql = "update ".self::$tablename." set is_active=0, updated_at=NOW() where user_id=$user_id";
+		if ($user_id === null || $user_id === "" || $user_id === "NULL" || !is_numeric($user_id)) {
+			return null;
+		}
+		$u_id = intval($user_id);
+		$sql = "update ".self::$tablename." set is_active=0, updated_at=NOW() where user_id=$u_id";
 		return Executor::doit($sql);
 	}
 
 	public static function getByUserModule($user_id, $module_id){
-		$sql = "select * from ".self::$tablename." where user_id=$user_id and module_id=$module_id and is_active=1";
+		if ($user_id === null || $user_id === "" || $user_id === "NULL" || !is_numeric($user_id) || $module_id === null || $module_id === "" || $module_id === "NULL" || !is_numeric($module_id)) {
+			return null;
+		}
+		$u_id = intval($user_id);
+		$m_id = intval($module_id);
+		$sql = "select * from ".self::$tablename." where user_id=$u_id and module_id=$m_id and is_active=1";
 		$query = Executor::doit($sql);
 		return Model::one($query[0],new UserAccessData());
 	}
 
     public static function getAnyByUserModule($user_id, $module_id){
-		$sql = "select * from ".self::$tablename." where user_id=$user_id and module_id=$module_id";
+		if ($user_id === null || $user_id === "" || $user_id === "NULL" || !is_numeric($user_id) || $module_id === null || $module_id === "" || $module_id === "NULL" || !is_numeric($module_id)) {
+			return null;
+		}
+		$u_id = intval($user_id);
+		$m_id = intval($module_id);
+		$sql = "select * from ".self::$tablename." where user_id=$u_id and module_id=$m_id";
 		$query = Executor::doit($sql);
 		return Model::one($query[0],new UserAccessData());
 	}
 
 	public static function getAllByUserId($user_id){
-		$sql = "select * from ".self::$tablename." where user_id=$user_id and is_active=1";
+		if ($user_id === null || $user_id === "" || $user_id === "NULL" || !is_numeric($user_id)) {
+			return array();
+		}
+		$u_id = intval($user_id);
+		$sql = "select * from ".self::$tablename." where user_id=$u_id and is_active=1";
 		$query = Executor::doit($sql);
 		return Model::many($query[0],new UserAccessData());
 	}

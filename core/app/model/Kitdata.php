@@ -7,6 +7,17 @@
 class KitData
 {
 	public static $tablename = "paquete";
+	public $idpaquete;
+	public $imagen;
+	public $barcode;
+	public $nombre;
+	public $descripcion;
+	public $precio;
+	public $fecha_cre;
+	public $fecha_fin;
+	public $user_id;
+	public $estado;
+
 	function Kitdata()
 	{
 		$this->idpaquete = "";
@@ -44,25 +55,33 @@ class KitData
 
 	public static function getAllByPage($start_from, $limit)
 	{
-		$sql = "select * from " . self::$tablename . " where idpaquete>=$start_from limit $limit";
+		if (!is_numeric($start_from) || !is_numeric($limit)) {
+			return array();
+		}
+		$start_val = intval($start_from);
+		$limit_val = intval($limit);
+		$sql = "select * from " . self::$tablename . " where idpaquete>=$start_val limit $limit_val";
 		$query = Executor::doit($sql);
-		return Model::many($query[0], new kitData());
+		return Model::many($query[0], new KitData());
 	}
 
 	public static function getById($id)
 	{
-		$sql = "select * from " . self::$tablename . " where idpaquete=$id";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$sql = "select * from " . self::$tablename . " where idpaquete=$id_val";
 		$query = Executor::doit($sql);
 		return Model::one($query[0], new KitData());
-
 	}
 
 	public static function getLike($str)
 	{
-		$sql = "select * from " . self::$tablename . " where barcode like '%$str%' or nombre like '%$str%' ";
+		$str_clean = addslashes($str);
+		$sql = "select * from " . self::$tablename . " where barcode like '%$str_clean%' or nombre like '%$str_clean%' ";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new KitData());
-
 	}
 
 	public static function getBarcode()
@@ -83,6 +102,7 @@ class KitData
 		$sql = "update " . self::$tablename . " set estado=\"$this->estado\", fecha_fin=\"$this->fecha_fin\" where idpaquete=$this->idpaquete";
 		Executor::doit($sql);
 	}
+
 	public function update_image()
 	{
 		$sql = "update " . self::$tablename . " set imagen=\"$this->imagen\" where idpaquete=$this->idpaquete";

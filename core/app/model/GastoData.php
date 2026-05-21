@@ -72,7 +72,11 @@ class GastoData
 
     public static function getById($id)
     {
-        $sql = "SELECT * FROM " . self::$tablename . " WHERE id = " . $id . " LIMIT 1";
+        if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id)) {
+            return null;
+        }
+        $id_val = intval($id);
+        $sql = "SELECT * FROM " . self::$tablename . " WHERE id = $id_val LIMIT 1";
         $query = Executor::doit($sql);
         return Model::one($query[0], new GastoData());
     }

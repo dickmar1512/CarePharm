@@ -23,6 +23,12 @@ class Cab_1_2Data
 	public $sumImpVenta;
 	public $ublVersionId;
 	public $customizationId;
+	public $RUC;
+	public $TIPO;
+	public $SERIE;
+	public $COMPROBANTE;
+	public $TIPO_DOC;
+	public $ID_TIPO_DOC;
 
 	public function Cab_1_2Data()
 	{
@@ -35,8 +41,12 @@ class Cab_1_2Data
 
 	public static function getById($id, $tipo)
 	{
-
-		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id) || $tipo === null || $tipo === "" || $tipo === "NULL" || !is_numeric($tipo)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$tipo_val = intval($tipo);
+		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id_val and TIPO_DOC=$tipo_val";
 
 		$query = Executor::doit($sql);
 		$found = null;

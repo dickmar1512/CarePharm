@@ -23,7 +23,11 @@ class Det_kit
 
 	public static function getById($id)
 	{
-		$sql = "select a.iddetalle,a.idpaquete,a.idprod,b.barcode,b.name,a.precio,a.descuento,a.cantidad from " . self::$tablename . " a, product b where a.idprod = b.id and a.idpaquete=$id and a.estado=1";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id)) {
+			return array();
+		}
+		$id_val = intval($id);
+		$sql = "select a.iddetalle,a.idpaquete,a.idprod,b.barcode,b.name,a.precio,a.descuento,a.cantidad from " . self::$tablename . " a, product b where a.idprod = b.id and a.idpaquete=$id_val and a.estado=1";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new Det_kit());
 

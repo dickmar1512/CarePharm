@@ -205,10 +205,13 @@ class ProductData
 
 	public static function getById($id)
 	{
-		$sql = "select id,image,barcode,name,principio_activo,description,stock,is_stock,inventary_min,price_in,price_out,unit,presentation,laboratorio,reg_san,user_id,category_id,created_at,fecha_venc,is_active,price_may,anaquel,is_may from " . self::$tablename . " where id=$id";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$sql = "select id,image,barcode,name,principio_activo,description,stock,is_stock,inventary_min,price_in,price_out,unit,presentation,laboratorio,reg_san,user_id,category_id,created_at,fecha_venc,is_active,price_may,anaquel,is_may from " . self::$tablename . " where id=$id_val";
 		$query = Executor::doit($sql);
 		return Model::one($query[0], new ProductData());
-
 	}
 
 	public static function getAlertasInventario()

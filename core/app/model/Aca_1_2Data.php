@@ -5,10 +5,14 @@ class Aca_1_2Data
 {
 	public static $tablename = "aca";
 	public $desDireccionCliente;
+	public $id;
+	public $RUC;
+	public $TIPO;
+	public $SERIE;
+	public $COMPROBANTE;
 
 	public function Aca_1_2Data()
 	{
-		//CABECERA CAB
 		$this->RUC = "";
 		$this->TIPO = "";
 		$this->SERIE = "";
@@ -18,8 +22,12 @@ class Aca_1_2Data
 
 	public static function getById($id, $tipo)
 	{
-
-		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id and TIPO_DOC=$tipo";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id) || $tipo === null || $tipo === "" || $tipo === "NULL" || !is_numeric($tipo)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$tipo_val = intval($tipo);
+		$sql = "select * from " . self::$tablename . " where ID_TIPO_DOC=$id_val and TIPO_DOC=$tipo_val";
 
 		$query = Executor::doit($sql);
 		$found = null;

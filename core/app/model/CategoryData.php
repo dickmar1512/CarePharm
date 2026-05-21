@@ -54,7 +54,11 @@ class CategoryData
 
 	public static function getById($id)
 	{
-		$sql = "select * from " . self::$tablename . " where id=$id";
+		if ($id === null || $id === "" || $id === "NULL" || !is_numeric($id)) {
+			return null;
+		}
+		$id_val = intval($id);
+		$sql = "select * from " . self::$tablename . " where id=$id_val";
 		$query = Executor::doit($sql);
 		$found = null;
 		$data = new CategoryData();
