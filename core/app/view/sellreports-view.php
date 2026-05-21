@@ -288,10 +288,7 @@ uasort($grouped_ops, function($a, $b) {
                                         <tr class="text-sm">
                                             <td class="pl-4"><?php echo date("d/m/Y H:i", strtotime($item->created_at)); ?></td>
                                             <td class="font-weight-bold">
-                                                <?php 
-                                                $tipodoc = ($item->tipo_comprobante == 2) ? 3 : 1; 
-                                                ?>
-                                                <a href="./?view=onesell&id=<?php echo $item->id; ?>&tipodoc=<?php echo $tipodoc; ?>" target="_blank" class="text-info">
+                                                <a href="./?view=onesell&id=<?php echo $item->id; ?>&tipodoc=<?php echo $item->tipo_comprobante; ?>" target="_blank" class="text-info">
                                                     <?php echo $item->serie . "-" . $item->comprobante; ?>
                                                 </a>
                                             </td>
