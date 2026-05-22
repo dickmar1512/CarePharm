@@ -57,9 +57,11 @@
 
 								// Comprobante
 								$comp = "N/A";
-								if($log['tipo_comprobante'] == 1) $comp = "FACTURA";
-								else if($log['tipo_comprobante'] == 2) $comp = "BOLETA";
-								else if($log['tipo_comprobante'] == 3) $comp = "TICKET";
+								if($log['tipo_comprobante'] == 1) $comp = "FE"; //Factura Electronica
+								else if($log['tipo_comprobante'] == 3) $comp = "BE"; //Boleta Electronica
+								else if($log['tipo_comprobante'] == 60) $comp = "ID"; //Ingreso Diversa
+								else if($log['tipo_comprobante'] == 65) $comp = "SD"; //Salida Diversa
+								else if($log['tipo_comprobante'] == 70) $comp = "NV"; //Nota de venta
 								
 								// Estado
 								if($log['estado'] == 0) {
@@ -73,7 +75,7 @@
 								<td class="text-center font-weight-bold"><?php echo date("d/m/Y h:i A", strtotime($log['created_at'])); ?></td>
 								<td><i class="fas fa-user-circle mr-1 text-muted"></i> <?php echo strtoupper($log['name'] . " " . $log['lastname']); ?></td>
 								<td><span class="badge <?php echo $badge; ?>" style="font-size: 13px;"><i class="<?php echo $icon; ?>"></i> <?php echo $accion; ?></span></td>
-								<td class="text-center"><?php echo $comp . " #" . $log['id']; ?></td>
+								<td class="text-center"><?php echo $comp . " " . $log['serie'].'-'.$log['comprobante']; ?></td>
 								<td class="text-right font-weight-bold text-success">S/ <?php echo number_format($log['total'], 2); ?></td>
 								<td class="text-center"><?php echo $estadoStr; ?></td>
 							</tr>

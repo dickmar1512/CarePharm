@@ -14,8 +14,10 @@ if(count($_POST) > 0 && isset($_SESSION["cart_sd"]) && count($_SESSION["cart_sd"
 
         // 1. Crear Registro en SELL (como documento interno)
         $sell = new SellData();
+        $sell->person_id = $user_id;
+        $sell->operacion_type_id = 2;
         $sell->user_id = $user_id;
-        $sell->tipo_comprobante = 60; // Salida Diversa
+        $sell->tipo_comprobante = 65; // Salida Diversa
         $sell->serie = $serie;
         $sell->comprobante = $comprobante;
         $sell->total = 0; // No tiene valor monetario de venta

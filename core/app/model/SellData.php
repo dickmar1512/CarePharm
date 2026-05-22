@@ -638,7 +638,7 @@ class SellData
 
 	public static function getSystemLog()
 	{
-		$sql = "SELECT s.id, s.created_at, u.name, u.lastname, s.operation_type_id, s.estado, s.total, s.tipo_comprobante 
+		$sql = "SELECT s.id, s.created_at, u.name, u.lastname, s.operation_type_id, s.estado, s.total, s.tipo_comprobante, s.serie, s.comprobante 
 				FROM " . self::$tablename . " s
 				LEFT JOIN user u ON s.user_id = u.id
 				ORDER BY s.created_at DESC LIMIT 1000";
