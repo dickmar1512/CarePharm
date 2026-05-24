@@ -159,8 +159,15 @@ class SellData
 	}
 	public function update_pagoParcial()
 	{
-		$sql = "update pago_parcial set importe=$this->importepp where sellid=$this->id";
-		Executor::doit($sql);
+		$sql_check = "select * from pago_parcial where sellid=$this->id";
+		$query = Executor::doit($sql_check);
+		if ($query[0]->num_rows > 0) {
+			$sql = "update pago_parcial set importe=$this->importepp where sellid=$this->id";
+			Executor::doit($sql);
+		} else {
+			$sql = "insert into pago_parcial (sellid, tipoPago, importe) value ($this->id, 1, $this->importepp)";
+			Executor::doit($sql);
+		}
 	}
 
 	public function update_proforma_venta()
