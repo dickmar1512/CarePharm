@@ -102,7 +102,7 @@ $selected = isset($sell->tipo_pago) ? $sell->tipo_pago : null;
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="importeParcial">Pago Parcial</label>
+                    <label class="form-label" for="importeParcial">Pago Parcial Efectivo</label>
                     <input type="text" id="importeParcial" name="importeParcial" class="form-control" placeholder="0.00" value="<?= number_format($datoPagoParcial['importepp'], 2, '.', ',') ?>">
                 </div>
 

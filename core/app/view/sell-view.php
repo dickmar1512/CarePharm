@@ -396,7 +396,7 @@ $empresa = EmpresaData::getDatos();
                                             <div class="row">
                                                 <div class="col-md-4"><div class="form-group"><label>DESCUENTO:</label><input type="number" name="discount" id="discount" class="form-control form-control-sm" required value="<?= $dsctotal ?>" step="any"></div></div>
                                                 <div class="col-md-4"><div class="form-group"><label>CASH CLIENTE:</label><input type="number" name="money" id="money" required class="form-control form-control-sm" step="any" value="<?php echo $total; ?>"></div></div>
-                                                <div class="col-md-4"><div class="form-group"><label>PAGO PARCIAL:</label><input type="number" name="pagoParcial" class="form-control form-control-sm" step="any" value="0"></div></div>
+                                                <div class="col-md-4"><div class="form-group"><label>PAGO PARCIAL EFECTIVO:</label><input type="number" name="pagoParcial" id="pagoParcial" class="form-control form-control-sm" step="any" value="0"></div></div>
                                             </div>
                                         </div>
                                     </div>
