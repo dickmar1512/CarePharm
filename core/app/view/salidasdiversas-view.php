@@ -25,7 +25,7 @@
             <div class="card-body">
                 <?php
                 // Tipo comprobante 60 = Salida Diversa, Serie 004
-                $sql = "SELECT * FROM sell WHERE tipo_comprobante='60' AND serie='004' ORDER BY created_at DESC";
+                $sql = "SELECT * FROM sell WHERE tipo_comprobante='65' AND serie='004' ORDER BY created_at DESC";
                 $query = Executor::doit($sql);
                 $salidas = Model::many($query[0], new SellData());
                 
