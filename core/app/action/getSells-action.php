@@ -106,6 +106,16 @@ try {
 			case 5: $medioPago = "TARJETA CREDITO"; break;	
 			default: $medioPago = "OTRO MEDIO DE PAGO"; break;				
 		}
+
+        $pago_parcial_data = SellData::getImportePagoParcial($sell->id);
+        $importe_pp = 0;
+        if (!empty($pago_parcial_data)) {
+            $importe_pp = floatval($pago_parcial_data[0]->importepp);
+        }
+
+        if ($importe_pp > 0 && $sell->tipo_pago != 1) {
+            $medioPago = $medioPago . " / EFECTIVO";
+        }
 								
         $documento = false;
         if ($sqliteDb) {
@@ -192,12 +202,14 @@ try {
         $tv += $total;
         
         if (!$isInvalid && in_array($sell->tipo_comprobante, [1, 3])) {
+            $monto_principal = $total - $importe_pp;
+            
             switch ($sell->tipo_pago) {
                 case 1: $efectivo += $total; break;
-                case 2: $plin += $total; break;
-                case 3: $yape += $total; break;
-                case 4: $tdebito += $total; break;
-                case 5: $tcredito += $total; break;
+                case 2: $plin += $monto_principal; $efectivo += $importe_pp; break;
+                case 3: $yape += $monto_principal; $efectivo += $importe_pp; break;
+                case 4: $tdebito += $monto_principal; $efectivo += $importe_pp; break;
+                case 5: $tcredito += $monto_principal; $efectivo += $importe_pp; break;
             }
         }
         
