@@ -77,7 +77,7 @@ try {
     $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ?, cod_digemid = ?, principio_activo = ? 
                                          WHERE id = ?");
     
-    $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE comprobante = ? AND serie = ?");
+    $stmtSelectCompra = $conn->prepare("SELECT id FROM sell WHERE estado = 1 and comprobante = ? AND serie = ? ");
     $stmtInsertCompra = $conn->prepare("INSERT INTO sell (person_id, tipo_comprobante, serie, comprobante, fecha_emi, user_id, operation_type_id, created_at, total, cash, discount, observacion) 
                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");     
     $stmtInsertOperacion = $conn->prepare("INSERT INTO operation (product_id, q, prec_alt, descuento, operation_type_id, sell_id, created_at, descripcion, idpaquete) 
@@ -90,7 +90,7 @@ try {
     $stmtInsertUnidad = $conn->prepare("INSERT INTO unidad_medida (name,sigla) VALUES (?,'-')");                                    
 
     // Nuevas sentencias para evitar duplicados y actualizar totales
-    $stmtSelectOperacion = $conn->prepare("SELECT id, q FROM operation WHERE product_id = ? AND sell_id = ?");
+    $stmtSelectOperacion = $conn->prepare("SELECT id, q FROM operation WHERE estado = 1 and product_id = ? AND sell_id = ?");
     $stmtUpdateOperacion = $conn->prepare("UPDATE operation SET q = q + ?, prec_alt = ? WHERE id = ?");
     
     $stmtSelectLoteExistente = $conn->prepare("SELECT id FROM lote WHERE id_prod = ? AND num_lot = ? AND id_sell = ?");
