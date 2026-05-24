@@ -1,5 +1,11 @@
 <?php
 $empresa = EmpresaData::getDatos();
+
+// Generar correlativo para Ingreso Diverso (tipo 60)
+$sql = "SELECT MAX(CAST(comprobante AS UNSIGNED)) as max_comp FROM sell WHERE tipo_comprobante='60' AND serie='I001'";
+$query = Executor::doit($sql);
+$r = $query[0]->fetch_array();
+$next_comprobante_60 = $r['max_comp'] ? sprintf("%06d", $r['max_comp'] + 1) : "000001";
 ?>
 <style>
 .compact-form .card-header {
@@ -59,7 +65,7 @@ $empresa = EmpresaData::getDatos();
                         </div>
                         <div class="icheck-danger d-inline">
                             <input type="radio" id="optRe60" name="optTipoRe" value="60">
-                            <label for="optRe60"><i class="fas fa-clipboard-list"></i> NOTA INGRESO DIVERSO</label>
+                            <label for="optRe60"><i class="fas fa-clipboard-list"></i> INGRESO DIVERSO</label>
                         </div>
                     </div>
                 </div>
@@ -128,14 +134,14 @@ window.addEventListener('load', function() {
                 
                 // Cambiar placeholders según tipo
                 if(val == '60') {
-                    $('input[name="serie"]').attr('placeholder', 'ID01');
-                    $('input[name="comprobante"]').attr('placeholder', '000001');
+                    $('input[name="serie"]').val('I001').attr('placeholder', 'I001');
+                    $('input[name="comprobante"]').val('<?php echo $next_comprobante_60; ?>').attr('placeholder', '<?php echo $next_comprobante_60; ?>');
                 } else if(val == '1') {
-                    $('input[name="serie"]').attr('placeholder', 'F001');
-                    $('input[name="comprobante"]').attr('placeholder', '000001');
+                    $('input[name="serie"]').val('').attr('placeholder', 'F001');
+                    $('input[name="comprobante"]').val('').attr('placeholder', '000001');
                 } else {
-                    $('input[name="serie"]').attr('placeholder', 'B001');
-                    $('input[name="comprobante"]').attr('placeholder', '000001');
+                    $('input[name="serie"]').val('').attr('placeholder', 'B001');
+                    $('input[name="comprobante"]').val('').attr('placeholder', '000001');
                 }
             });
 

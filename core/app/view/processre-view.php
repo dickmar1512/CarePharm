@@ -48,6 +48,14 @@ if(isset($_SESSION["reabastecer"]))
 			 	$op->sell_id = $s[1];
 			 	$op->descuento= 0;
 			 	$op->q = $c["q"];
+				
+				if($tipo_comprobante == 60)
+				{
+					$op->descripcion = "INGRESO DIVERSO: Por Inventario de produtos";
+				}
+				
+				$fecha_actual = date('Y-m-d H:i:s');
+				$op->created_at = $fecha_actual;
 
 				$op2->id = $c["product_id"];
 				$op2->reg_san=$c["rs"];				
