@@ -71,7 +71,7 @@ try {
     $stmtInsertProveedor = $conn->prepare("INSERT INTO person (tipo_persona, numero_documento, name, lastname, address1, email1, phone1, kind, created_at) 
                                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
-    $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (cod_digemid <> '' AND cod_digemid = ?) OR (barcode <> '' AND barcode = ?) OR name = ?");
+    $stmtSelectProducto = $conn->prepare("SELECT id FROM product WHERE (cod_digemid <> '' AND cod_digemid = ?) OR (barcode <> '' AND barcode = ?) ");
     $stmtInsertProducto = $conn->prepare("INSERT INTO product (image, barcode, name, description, stock, is_stock, inventary_min, price_in, price_out, price_may, unit, presentation, user_id, category_id, fecha_venc, laboratorio, reg_san, created_at, is_active, cod_digemid, principio_activo) 
                                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmtUpdateProducto = $conn->prepare("UPDATE product SET stock = stock + ? , price_in = ?, price_out = ?, price_may = ?, fecha_venc = ?, user_id = ?, reg_san = ?, cod_digemid = ?, principio_activo = ? 
@@ -189,7 +189,7 @@ try {
             'is_active' => 1
         ];
 
-        $stmtSelectProducto->execute([$productData['cod_digemid'], $barcode, $productData['name']]);
+        $stmtSelectProducto->execute([$productData['cod_digemid'], $barcode]);
         $productoExistente = $stmtSelectProducto->fetch(PDO::FETCH_ASSOC);
         
         if ($productoExistente) {
