@@ -126,9 +126,16 @@
 												echo "<b>" . number_format($total, 2, ".", ",") . "</b>";
                                                 
                                                 if ($total > 0) {
-                                                    if ($sell->tipo_pago == 3) $yape_val += $total;
-                                                    if ($sell->tipo_pago == 2) $plin_val += $total;
-                                                    if ($sell->tipo_pago == 4) $tcredito_val += $total;
+                                                    $pago_parcial_data = SellData::getImportePagoParcial($sell->id);
+                                                    $importe_pp = 0;
+                                                    if (!empty($pago_parcial_data)) {
+                                                        $importe_pp = floatval($pago_parcial_data[0]->importepp);
+                                                    }
+                                                    $monto_principal = $total - $importe_pp;
+
+                                                    if ($sell->tipo_pago == 3) $yape_val += $monto_principal;
+                                                    if ($sell->tipo_pago == 2) $plin_val += $monto_principal;
+                                                    if ($sell->tipo_pago == 4) $tcredito_val += $monto_principal;
                                                 }
 												?>
 

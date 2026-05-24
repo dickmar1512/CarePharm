@@ -294,14 +294,14 @@ class SellData
 
 	public static function getSellsUnBoxed()
 	{
-		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 AND tipo_comprobante NOT IN (60, 70) and box_id is NULL order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 AND tipo_comprobante NOT IN (60,65,70) and box_id is NULL order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
 
 	public static function getByBoxId($id)
 	{
-		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 AND tipo_comprobante NOT IN (60, 70) and box_id=$id order by created_at desc";
+		$sql = "select id, serie, comprobante, total, created_at, estado, tipo_pago, tipo_comprobante, GetUserName(user_id) as user from " . self::$tablename . " where estado = 1 and operation_type_id=2 AND tipo_comprobante NOT IN (60,65,70) and box_id=$id order by created_at desc";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
