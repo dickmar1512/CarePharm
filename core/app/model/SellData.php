@@ -189,7 +189,7 @@ class SellData
 
 	public static function getSells($inicio, $fin, $user_id)
 	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante NOT IN (60, 70) AND estado = 1 ";
+		$sql = "select * from " . self::$tablename . " where operation_type_id=2 AND tipo_comprobante NOT IN (60, 65, 70) AND estado = 1 ";
 
 		if ($user_id != 0) {
 			$sql .= " and user_id = $user_id ";
