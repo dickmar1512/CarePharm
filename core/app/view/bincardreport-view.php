@@ -16,13 +16,15 @@ if (isset($_GET["sd"]) && isset($_GET["ed"])) {
 // Mapear el ID de tipo de comprobante a su nombre (Factura, Boleta, etc.)
 function getTipoComprobanteName($id) {
     if ($id == '1' || $id == '01') return 'FACTURA';
-    if ($id == '2' || $id == '03') return 'BOLETA';
-    if ($id == '3' || $id == '07') return 'NOTA DE CRÉDITO';
-    if ($id == '4' || $id == '08') return 'NOTA DE DÉBITO';
+    if ($id == '3' || $id == '03') return 'BOLETA';
+    if ($id == '7' || $id == '07') return 'NOTA DE CRÉDITO';
+    if ($id == '8' || $id == '08') return 'NOTA DE DÉBITO';
+    if ($id == '60') return 'INGRESO DIVERSO';
+    if ($id == '65') return 'SALIDA DIVERSA';
     if ($id == '70') return 'ORDEN DE VENTA';
     
     // Si no tiene tipo asignado, puede ser una operación de ajuste de stock o anulación general
-    if (empty($id)) return 'AJUSTE / OTROS';
+    if (empty($id)) return 'SALDO';
     return 'DOC-'.$id;
 }
 ?>
@@ -120,14 +122,24 @@ function getTipoComprobanteName($id) {
                                     $tipo_comp = $op->tipo_comprobante_id ?? '';
                                     if ($op->operation_type_id == 1) {
                                         // Entradas
-                                        if ($serie_op === 'ID01' || $serie_op === 'ID02' || $tipo_comp == '60') {
-                                            $tipo_mov = '<span class="badge badge-secondary"><i class="fas fa-exchange-alt mr-1"></i>INGRESO DIVERSO</span>';
+                                        if ($tipo_comp == '60') {
+                                            $tipo_mov = '<span class="badge badge-secondary"><i class="fas fa-exchange-alt mr-1"></i>INGRESO</span>';
                                         } else {
-                                            $tipo_mov = '<span class="badge badge-success"><i class="fas fa-cart-arrow-down mr-1"></i>COMPRA</span>';
+                                            if ($tipo_comp == '1' || $tipo_comp == '3') {
+                                                $tipo_mov = '<span class="badge badge-success"><i class="fas fa-cart-arrow-down mr-1"></i>COMPRA</span>';
+                                            } else{
+                                                $tipo_mov = '<span class="badge badge-info"><i class="fas fa-rotate mr-1"></i>SALDO</span>';
+                                            }    
                                         }
                                     } else {
                                         // Salidas
-                                        $tipo_mov = '<span class="badge badge-danger"><i class="fas fa-shopping-cart mr-1"></i>VENTA</span>';
+                                        if ($tipo_comp == '65') {
+                                            $tipo_mov = '<span class="badge badge-warning"><i class="fas fa-exchange-alt mr-1"></i>SALIDA</span>';
+                                        }elseif($tipo_comp == '70'){
+                                            $tipo_mov = '<span class="badge badge-warning"><i class="fas fa-shopping-cart mr-1"></i>NOTA</span>';
+                                        }else{        
+                                            $tipo_mov = '<span class="badge badge-danger"><i class="fas fa-shopping-cart mr-1"></i>VENTA</span>';
+                                        }
                                     }
                                     if ($is_inactivo) {
                                         $tipo_mov = '<span class="badge badge-dark"><i class="fas fa-ban mr-1"></i>ANULADO</span>';
