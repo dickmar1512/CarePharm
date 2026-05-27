@@ -11,7 +11,6 @@
  *
  */
 
-#[AllowDynamicProperties]
 class NumeroLetras
 {
     private static $UNIDADES = [
@@ -37,6 +36,7 @@ class NumeroLetras
         'DIECINUEVE ',
         'VEINTE '
     ];
+
     private static $DECENAS = [
         'VENTI',
         'TREINTA ',
@@ -48,6 +48,7 @@ class NumeroLetras
         'NOVENTA ',
         'CIEN '
     ];
+
     private static $CENTENAS = [
         'CIENTO ',
         'DOSCIENTOS ',
@@ -59,6 +60,7 @@ class NumeroLetras
         'OCHOCIENTOS ',
         'NOVECIENTOS '
     ];
+
     public static function convertir($number, $moneda = '', $centimos = '', $forzarCentimos = false)
     {
         $converted = '';
@@ -80,11 +82,13 @@ class NumeroLetras
         } else if (count($div_decimales) == 1 && $forzarCentimos) {
             $decimales = '00 ';
         }
+
         $numberStr = (string) $number;
         $numberStrFill = str_pad($numberStr, 9, '0', STR_PAD_LEFT);
         $millones = substr($numberStrFill, 0, 3);
         $miles = substr($numberStrFill, 3, 3);
         $cientos = substr($numberStrFill, 6);
+
         if (intval($millones) > 0) {
             if ($millones == '001') {
                 $converted .= 'UN MILLON ';
@@ -92,6 +96,7 @@ class NumeroLetras
                 $converted .= sprintf('%sMILLONES ', self::convertGroup($millones));
             }
         }
+
         if (intval($miles) > 0) {
             if ($miles == '001') {
                 $converted .= 'MIL ';
@@ -99,6 +104,7 @@ class NumeroLetras
                 $converted .= sprintf('%sMIL ', self::convertGroup($miles));
             }
         }
+
         if (intval($cientos) > 0) {
             if ($cientos == '001') {
                 $converted .= 'UN ';
@@ -106,6 +112,12 @@ class NumeroLetras
                 $converted .= sprintf('%s ', self::convertGroup($cientos));
             }
         }
+
+        // Protección para montos menores a 1 (ej: 0.50)
+        if (empty(trim($converted))) {
+            $converted = 'CERO ';
+        }
+
         if (empty($decimales)) {
             $valor_convertido = $converted . strtoupper($moneda) . ' CON 00/100 SOLES';
         } else {
@@ -114,6 +126,7 @@ class NumeroLetras
         }
         return $valor_convertido;
     }
+
     private static function convertGroup($n)
     {
         $output = '';
@@ -122,7 +135,9 @@ class NumeroLetras
         } else if ($n[0] !== '0') {
             $output = self::$CENTENAS[$n[0] - 1];
         }
+
         $k = intval(substr($n, 1));
+
         if ($k <= 20) {
             $output .= self::$UNIDADES[$k];
         } else {
