@@ -36,6 +36,30 @@ class OperationData
 	public $saldo;
 	public $laboratorio;
 
+	// Dynamic properties to prevent PHP 8.2+ dynamic property deprecation warnings
+	public $image;
+	public $inventary_min;
+	public $is_stock;
+	public $stock_tab;
+	public $stock_real;
+	public $price_in;
+	public $price_may;
+	public $price_out;
+	public $anaquel;
+	public $is_active;
+	public $stock;
+	public $total_qty;
+	public $total_amount;
+	public $months_list;
+	public $total_months;
+	public $avg_qty_month;
+	public $anio;
+	public $mes;
+	public $cantidad_total;
+	public $total_venta;
+	public $stock_actual;
+	public $total_sold;
+
 	public function OperationData()
 	{
 		$this->name = "";
