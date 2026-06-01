@@ -76,6 +76,12 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 			</div>
 			<!-- /.card-header -->
 			<div class="card-body">
+				<?php if ($product === null): ?>
+					<div class="alert alert-warning alert-dismissible" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+						<h5><i class="icon fas fa-exclamation-triangle"></i> ¡Atención!</h5>
+						No se encontró ninguna Factura asociada al ID de venta <b><?php echo htmlspecialchars($_GET["id"] ?? ""); ?></b>. Asegúrese de que la venta existe y tiene un comprobante de tipo Factura generado.
+					</div>
+				<?php endif; ?>
 				<div class="row">
 					<div class="col-md-12">
 						<fieldset class="content-group">
@@ -95,7 +101,11 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 								<div class="content_debito_credito" style="display: block;">
 									<div class="form-group col-md-4">
 										<label><i class="icon-file-text position-left"></i> N° Doc. Modificado:</label>
-										<input type="text" name="num_comprobante_modificado" id="num_comprobante_modificado" class="form-control" readonly="readonly" value="<?php echo $product->SERIE."-".$product->COMPROBANTE; ?>">
+										<?php if ($product): ?>
+											<input type="text" name="num_comprobante_modificado" id="num_comprobante_modificado" class="form-control" readonly="readonly" value="<?php echo $product->SERIE."-".$product->COMPROBANTE; ?>">
+										<?php else: ?>
+											<input style="background:orange; color:black;" type="text" name="num_comprobante_modificado" id="num_comprobante_modificado" class="form-control" readonly="readonly" value="DOCUMENTO NO ENCONTRADO">
+										<?php endif; ?>
 									</div>
 										<div class="form-group has-feedback has-feedback-left col-md-5">
 											<label class="col-md-12"><i class="icon-profile position-left"></i>Tipo <span class="text-danger">*</span></label>
@@ -122,7 +132,7 @@ $product = Factura2Data::getByExtra($_GET["id"]);
 								</div>
 								<div class="form-group has-feedback has-feedback-left col-md-12">
 								<center>
-								<button type="submit" class="btn btn-primary" id="buscar" name="buscar">Continuar</button>
+								<button type="submit" class="btn btn-primary" id="buscar" name="buscar" <?php if (!$product) echo "disabled"; ?>>Continuar</button>
 								</center>
 								</div>
 						</fieldset>
