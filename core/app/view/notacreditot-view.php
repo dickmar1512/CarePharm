@@ -1,15 +1,30 @@
 <?php
 	$product = Factura2Data::getByNumDoc($_GET["num"]);
-	$comp_cab = Not_1_2Data::getById($product->id, 7);
-	// $comp_aca = Aca_1_2Data::getById($product->id, 1);
-	$detalles = Det_1_2Data::getById($product->id, 7);
-	$comp_tri = Tri_1_2Data::getById($product->id, 7);
-	$comp_ley = Ley_1_2Data::getById($product->id, 7);
+	$comp_cab = null;
+	$detalles = [];
+	$comp_tri = null;
+	$comp_ley = null;
+	$sell = null;
+	$cajero = null;
 
-	$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
-    $cajero= null;
-    $cajero = UserData::getById($sell->user_id);
-    $empresa = EmpresaData::getDatos();
+	if ($product) {
+		$comp_cab = Not_1_2Data::getById($product->id, 7);
+		$detalles = Det_1_2Data::getById($product->id, 7);
+		if (!$detalles) {
+			$detalles = [];
+		}
+		$comp_tri = Tri_1_2Data::getById($product->id, 7);
+		$comp_ley = Ley_1_2Data::getById($product->id, 7);
+
+		if ($comp_cab && !empty($comp_cab->serieDocModifica)) {
+			$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
+		}
+	}
+
+	if ($sell && isset($sell->user_id)) {
+		$cajero = UserData::getById($sell->user_id);
+	}
+	$empresa = EmpresaData::getDatos();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,7 +80,7 @@
                     <div style="margin: 6px 0;">
                         <label style="font-size: 0.9rem; font-weight: bold; color: #dc3545;">NOTA DE CRÉDITO ELECTRÓNICA</label>
                     </div>
-                    <div class="document-number"><?php echo $product->SERIE . "-" . $product->COMPROBANTE; ?></div>
+                    <div class="document-number"><?php echo $product ? ($product->SERIE . "-" . $product->COMPROBANTE) : ""; ?></div>
                     <div class="badge-nota mt-2">
                         <?php 
                             $motivos = [
@@ -77,7 +92,7 @@
                                 6 => "Devolución total",
                                 7 => "Devolución por item"
                             ];
-                            echo $motivos[$comp_cab->codTipoNota] ?? "Otros";
+                            echo ($comp_cab && isset($comp_cab->codTipoNota)) ? ($motivos[$comp_cab->codTipoNota] ?? "Otros") : "Otros";
                         ?>
                     </div>
                 </div>
@@ -88,19 +103,19 @@
                 <span class="modifica-label">Documento que modifica</span>
                 <div class="info-row">
                     <span class="info-label">FACTURA</span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->serieDocModifica; ?></span>
+                    <span class="info-value"><?php echo ": " . ($comp_cab ? $comp_cab->serieDocModifica : ""); ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">DOC. CLIENTE</span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->numDocUsuario; ?></span>
+                    <span class="info-value"><?php echo ": " . ($comp_cab ? $comp_cab->numDocUsuario : ""); ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">CLIENTE</span>
-                    <span class="info-value"><?php echo ": " . $comp_cab->rznSocialUsuario; ?></span>
+                    <span class="info-value"><?php echo ": " . ($comp_cab ? $comp_cab->rznSocialUsuario : ""); ?></span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">MOTIVO</span>
-                    <span class="info-value text-bold"><?php echo ": " . $comp_cab->descMotivo; ?></span>
+                    <span class="info-value text-bold"><?php echo ": " . ($comp_cab ? $comp_cab->descMotivo : ""); ?></span>
                 </div>
             </div>
 
@@ -137,8 +152,8 @@
                 <div class="user-info">
                     <i class="fas fa-user-tie" style="color: #dc3545;"></i>
                     <div>
-                        <div><strong>Cajero:</strong> <?php echo $cajero->username; ?></div>
-                        <small style="color: #666;">Fecha: <?php echo date("d/m/Y H:i", strtotime($comp_cab->fecEmision)); ?></small>
+                        <div><strong>Cajero:</strong> <?php echo $cajero ? $cajero->username : ""; ?></div>
+                        <small style="color: #666;">Fecha: <?php echo ($comp_cab && isset($comp_cab->fecEmision)) ? date("d/m/Y H:i", strtotime($comp_cab->fecEmision)) : ""; ?></small>
                     </div>
                 </div>
 

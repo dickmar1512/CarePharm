@@ -1,19 +1,39 @@
 <?php
-	
 	$product = Factura2Data::getByNumDoc($_GET["num"]);
-	$comp_cab = Not_1_2Data::getById($product->id, 7);
-	// $comp_aca = Aca_1_2Data::getById($product->id, 1);
-	$detalles = Det_1_2Data::getById($product->id, 7);
-	$comp_tri = Tri_1_2Data::getById($product->id, 7);
-	$comp_ley = Ley_1_2Data::getById($product->id, 7);
+	$comp_cab = null;
+	$detalles = [];
+	$comp_tri = null;
+	$comp_ley = null;
+	$sell = null;
+	$cajero = '';
 
-	$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
-    $cajero= '';
-    $cajero = UserData::getById($sell->user_id)->username;
-    $empresa = EmpresaData::getDatos();
+	if ($product) {
+		$comp_cab = Not_1_2Data::getById($product->id, 7);
+		$detalles = Det_1_2Data::getById($product->id, 7);
+		if (!$detalles) {
+			$detalles = [];
+		}
+		$comp_tri = Tri_1_2Data::getById($product->id, 7);
+		$comp_ley = Ley_1_2Data::getById($product->id, 7);
 
-	$fechaObj = new DateTime($comp_cab->fecEmision);
-	$fechaFormateada = $fechaObj->format('d/m/Y');
+		if ($comp_cab && !empty($comp_cab->serieDocModifica)) {
+			$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
+		}
+	}
+
+	if ($sell && isset($sell->user_id)) {
+		$user_obj = UserData::getById($sell->user_id);
+		if ($user_obj) {
+			$cajero = $user_obj->username;
+		}
+	}
+	$empresa = EmpresaData::getDatos();
+
+	$fechaFormateada = "";
+	if ($comp_cab && isset($comp_cab->fecEmision)) {
+		$fechaObj = new DateTime($comp_cab->fecEmision);
+		$fechaFormateada = $fechaObj->format('d/m/Y');
+	}
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -83,16 +103,16 @@
 														<div style="background-color: black; color: #fff;">
 															<b>NOTA DE CRÉDITO</b>
 														</div>
-														<b><?php echo $product->SERIE."-".$product->COMPROBANTE; ?></b>
+														<b><?php echo $product ? ($product->SERIE . "-" . $product->COMPROBANTE) : ""; ?></b>
 														<div style=" color: red">
 																<b>
-																	<?php 	if($comp_cab->codTipoNota==1){ echo("Anulación en la Operación");} 
-																				else if($comp_cab->codTipoNota==2){ echo("Anulación por error en el RUC");}  
-																				else if($comp_cab->codTipoNota==3){ echo("Correción por error en la descripción");} 
-																				else if($comp_cab->codTipoNota==4){ echo("Descuento global");} 
-																				else if($comp_cab->codTipoNota==5){ echo("Descuento por item");} 
-																				else if($comp_cab->codTipoNota==6){ echo("Devolución total");} 
-																				else if($comp_cab->codTipoNota==7){ echo("Devolución por item");} ?>
+																	<?php 	if($comp_cab && $comp_cab->codTipoNota==1){ echo("Anulación en la Operación");} 
+																				else if($comp_cab && $comp_cab->codTipoNota==2){ echo("Anulación por error en el RUC");}  
+																				else if($comp_cab && $comp_cab->codTipoNota==3){ echo("Correción por error en la descripción");} 
+																				else if($comp_cab && $comp_cab->codTipoNota==4){ echo("Descuento global");} 
+																				else if($comp_cab && $comp_cab->codTipoNota==5){ echo("Descuento por item");} 
+																				else if($comp_cab && $comp_cab->codTipoNota==6){ echo("Devolución total");} 
+																				else if($comp_cab && $comp_cab->codTipoNota==7){ echo("Devolución por item");} ?>
 																</b>
 														</div>
 												</td>
@@ -106,7 +126,7 @@
 													<b>FECHA EMISIÓN</b>
 												</td>												
 												<td>	
-													 <b><?php echo ": ".$fechaFormateada."  ".$comp_cab->horEmision; ?></b>
+													 <b><?php echo ": ".$fechaFormateada."  " . ($comp_cab ? $comp_cab->horEmision : ""); ?></b>
 												</td>
 											</tr>
 										</table>	
@@ -117,7 +137,7 @@
 														<b>Factura Electrónica</b>
 												</td>
 												<td>
-													<b><?php echo ": ". $comp_cab->serieDocModifica; ?></b>
+													<b><?php echo ": ". ($comp_cab ? $comp_cab->serieDocModifica : ""); ?></b>
 												</td>
 											</tr>
 											<tr>	
@@ -125,7 +145,7 @@
 														<b>RUC</b>
 												</td>
 												<td>
-													<b><?php echo ": ".$comp_cab->numDocUsuario; ?></b>
+													<b><?php echo ": " . ($comp_cab ? $comp_cab->numDocUsuario : ""); ?></b>
 												</td>
 											</tr>
 											<tr>
@@ -133,7 +153,7 @@
 														<b>Razón Social</b>
 												</td>
 												<td>
-													<b><?php echo ": ".$comp_cab->rznSocialUsuario; ?></b>
+													<b><?php echo ": " . ($comp_cab ? $comp_cab->rznSocialUsuario : ""); ?></b>
 												</td>
 											</tr>
 										</table>
@@ -143,7 +163,7 @@
 														<b>Motivo</b>
 												</td>
 												<td>
-													<b><?php echo ": ".$comp_cab->descMotivo; ?></b>
+													<b><?php echo ": " . ($comp_cab ? $comp_cab->descMotivo : ""); ?></b>
 												</td>
 											</tr>
 										</table>
@@ -190,7 +210,7 @@
 														</tr>
 														<tr>
 															<td>OPERACIÓN EXONERADA</td>
-															<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6|| $comp_cab->codTipoNota==7){  echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?>
+															<td><?php if($comp_cab && ($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6|| $comp_cab->codTipoNota==7)){  echo number_format($total, 2, '.', ',');} else if($comp_cab && $comp_cab->codTipoNota==3){ echo("S/ 0.00");} else { echo "S/ 0.00"; }?>
 															</td>
 														</tr>
 														<tr>
@@ -207,7 +227,7 @@
 														</tr>
 														<tr>
 															<td>MONTO TOTAL</td>
-															<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6 || $comp_cab->codTipoNota==7){  echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?>
+															<td><?php if($comp_cab && ($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6 || $comp_cab->codTipoNota==7)){  echo number_format($total, 2, '.', ',');} else if($comp_cab && $comp_cab->codTipoNota==3){ echo("S/ 0.00");} else { echo "S/ 0.00"; }?>
 															</td>
 														</tr>
 													</table>

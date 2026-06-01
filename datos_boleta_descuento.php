@@ -48,11 +48,11 @@ No se encontraron registros
 <script type="text/javascript">
 
 $("#fin").click(function () {
-		var numDoc = $("#num_comprobante_modificado").val();
-		var tipo = $("#notacredito_motivo_id").val();
-		var serie = $("#serie_comprobante").val();
-		var comp = $("#numero_comprobante").val();
-		var motivo = $("#motivo").val();
+		var numDoc = $("#num_comprobante_modificadob").val();
+		var tipo = $("#notacredito_motivo_idb").val();
+		var serie = $("#serie_comprobanteb").val();
+		var comp = $("#numero_comprobanteb").val();
+		var motivo = $("#motivob").val();
 
 		var cont=$("#cont").val();
 
@@ -77,8 +77,8 @@ $("#fin").click(function () {
 				    url: './?view=addnotacreditoboleta',
 
 			    	success : function(data){
-			    			$("#datos").html('');
-		            		$("#datos").html(data);   		
+			    			$("#datosb").html('');
+		            		$("#datosb").html(data);   		
 			    	},
 			});
 	});

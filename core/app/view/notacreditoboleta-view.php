@@ -1,22 +1,25 @@
 <?php
-	
 	$product = Boleta2Data::getByNumDoc($_GET["num"]);
-	$comp_cab = Not_1_2Data::getById($product->id, 7);
-	// $comp_aca = Aca_1_2Data::getById($product->id, 1);
-	$detalles = Det_1_2Data::getById($product->id, 7);
-	$comp_tri = Tri_1_2Data::getById($product->id, 7);
-	$comp_ley = Ley_1_2Data::getById($product->id, 7);
+	$comp_cab = null;
+	$detalles = [];
+	$comp_tri = null;
+	$comp_ley = null;
+	$sell = null;
 
-	// print_r($comp_cab );
-	// print_r($detalles );
-	// print_r($comp_tri );
-	// print_r($comp_ley );
+	if ($product) {
+		$comp_cab = Not_1_2Data::getById($product->id, 7);
+		$detalles = Det_1_2Data::getById($product->id, 7);
+		if (!$detalles) {
+			$detalles = [];
+		}
+		$comp_tri = Tri_1_2Data::getById($product->id, 7);
+		$comp_ley = Ley_1_2Data::getById($product->id, 7);
 
-	$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
-    //$mesero = UserData::getById($sell->mesero_id);
-    //$cajero= null;
-    //$cajero = UserData::getById($sell->user_id);
-    $empresa = EmpresaData::getDatos();
+		if ($comp_cab && !empty($comp_cab->serieDocModifica)) {
+			$sell = SellData::getByNroDoc($comp_cab->serieDocModifica);
+		}
+	}
+	$empresa = EmpresaData::getDatos();
 ?>
 <div class="row" style="margin-top: 0px; padding-top: 0px; background: #fff">
 	<div class="col-md-10 col-md-offset-1">
@@ -39,7 +42,7 @@
 					      	<p style="margin: 2px;"><?php echo $empresa->Emp_Direccion ?></p>
 					      	<p style="margin: 2px;">Cel.: <?php echo $empresa->Emp_Celular?></p>
 					      	<h5  style="margin-top: 2px;">SOFTWARE YAQHA v1.2 - SUNAT v1.2 - UBL 2.1</h5>
-					      	<h5 style="">FEC. EMIS.: <?php echo ": ".$comp_cab->fecEmision." | ".$comp_cab->horEmision; ?></h5>
+					      	<h5 style="">FEC. EMIS.: <?php echo ": " . ($comp_cab ? ($comp_cab->fecEmision . " | " . $comp_cab->horEmision) : ""); ?></h5>
 						</td>
 						<td style="text-align: center; width: 230px; border-color: #222; border-width: 20px; margin-top: 0px; padding-top: 0px">
 							<div class="row" >
@@ -47,9 +50,9 @@
 					      	<div style="font-size: 20px;">
 					      		<b>NOTA DE CRÉDITO</b>
 					      	</div>
-					      	<div><h2><?php echo $product->SERIE."-".$product->COMPROBANTE; ?></h2></div>
+					      	<div><h2><?php echo $product ? ($product->SERIE . "-" . $product->COMPROBANTE) : ""; ?></h2></div>
 					      	</div>
-					      	<div style=" color: red"><h5><b><?php if($comp_cab->codTipoNota==1){ echo("Anulación en la Operación");} else if($comp_cab->codTipoNota==2){ echo("Anulación por error en el RUC");}  else if($comp_cab->codTipoNota==3){ echo("Correción por error en la descripción");} else if($comp_cab->codTipoNota==4){ echo("Descuento global");} else if($comp_cab->codTipoNota==5){ echo("Descuento por item");} else if($comp_cab->codTipoNota==6){ echo("Devolución total");} else if($comp_cab->codTipoNota==7){ echo("Devolución por item");} ?></b></h5></div>
+					      	<div style=" color: red"><h5><b><?php if($comp_cab && $comp_cab->codTipoNota==1){ echo("Anulación en la Operación");} else if($comp_cab && $comp_cab->codTipoNota==2){ echo("Anulación por error en el RUC");}  else if($comp_cab && $comp_cab->codTipoNota==3){ echo("Correción por error en la descripción");} else if($comp_cab && $comp_cab->codTipoNota==4){ echo("Descuento global");} else if($comp_cab && $comp_cab->codTipoNota==5){ echo("Descuento por item");} else if($comp_cab && $comp_cab->codTipoNota==6){ echo("Devolución total");} else if($comp_cab && $comp_cab->codTipoNota==7){ echo("Devolución por item");} ?></b></h5></div>
 					      	</div>
 				  		</td>
 					</tr>
@@ -62,15 +65,15 @@
 							</div></td>
 						<td>
 						<td><div class="container" style="width: 130px">
-								<p><b>:<?php echo $comp_cab->serieDocModifica; ?></b></p>
+								<p><b>:<?php echo $comp_cab ? $comp_cab->serieDocModifica : ""; ?></b></p>
 							</div></td>
 						<td>
-							<div class="container" style="width: 60px">
+						<td><div class="container" style="width: 60px">
 								<p><b>DNI</b></p>
 							</div>
 				    	</td>
 						<td class="container" style="width: 120px">
-							<p><?php echo ": ".$comp_cab->numDocUsuario; ?></p>
+							<p><?php echo ": " . ($comp_cab ? $comp_cab->numDocUsuario : ""); ?></p>
 						</td>
 				        <td>
 				        	<div class="container" style="width: 120px">
@@ -78,7 +81,7 @@
 				        	</div>
 				    	</td>
 				        <td class="container" style="width: 130px">
-				        	<p><?php echo ": ".$comp_cab->rznSocialUsuario; ?></p>
+				        	<p><?php echo ": " . ($comp_cab ? $comp_cab->rznSocialUsuario : ""); ?></p>
 				        </td>	        
 					</tr>
 				</table>
@@ -88,7 +91,7 @@
 								<p><b>Motivo</b></p>
 							</div></td>
 						 <td class="container" style="width: 400px">
-				        	<p><?php echo ": ".$comp_cab->descMotivo; ?></p>
+				        	<p><?php echo ": " . ($comp_cab ? $comp_cab->descMotivo : ""); ?></p>
 				        </td>	        
 					</tr>
 				</table>
@@ -120,7 +123,7 @@
 					<thead style="align-content: center; text-align: center; border-style: none">
 						<th style="align-content: center; text-align: center;">
 							<table>
-								<tr scope="col"><td><b><?php echo $comp_ley->desLeyenda; ?></b></td></tr>
+								<tr scope="col"><td><b><?php echo $comp_ley ? $comp_ley->desLeyenda : ""; ?></b></td></tr>
 								<tr><td style="font-size: 11px">Consulte y/o descargue su comprobante electronico en www.sunat.gob.pe, utilizando su clave SOL</td></tr>
 								<tr><td style="font-size: 11px"><p>Autorizado para ser emisor electrónico mediante la Resolución de Superintendencia N° 155-2017</p></td></tr>
 							</table>
@@ -132,7 +135,7 @@
 									<td style="min-width: 190px">S/ 0.00</td></tr>
 								<tr>
 									<td>OP. EXONERADA</td>
-									<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6|| $comp_cab->codTipoNota==7){  echo('S/'); echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?></td></tr>
+									<td><?php if($comp_cab && ($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6|| $comp_cab->codTipoNota==7)){  echo('S/'); echo number_format($total, 2, '.', ',');} else if($comp_cab && $comp_cab->codTipoNota==3){ echo("S/ 0.00");} else { echo "S/ 0.00"; }?></td></tr>
 								<tr>
 									<td>OP. INAFECTA</td>
 									<td>S/ 0.00</td></tr>
@@ -144,7 +147,7 @@
 									<td>S/ 0.00</td></tr>
 								<tr>
 									<td>MONTO TOTAL</td>
-									<td><?php if($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6 || $comp_cab->codTipoNota==7){  echo('S/'); echo number_format($total, 2, '.', ',');} else if($comp_cab->codTipoNota==3){ echo("S/ 0.00");}?></td>
+									<td><?php if($comp_cab && ($comp_cab->codTipoNota==1 || $comp_cab->codTipoNota==2 || $comp_cab->codTipoNota==4 || $comp_cab->codTipoNota==5 || $comp_cab->codTipoNota==6 || $comp_cab->codTipoNota==7)){  echo('S/'); echo number_format($total, 2, '.', ',');} else if($comp_cab && $comp_cab->codTipoNota==3){ echo("S/ 0.00");} else { echo "S/ 0.00"; }?></td>
 								</tr>				
 							</table>
 						</th>
