@@ -100,7 +100,7 @@ class Not_1_2Data
 		$sql .= "INNER JOIN " . $tblComprobante . " AS FT ON(FT.id = NC.ID_TIPO_DOC AND FT.ESTADO = 1) where NC.serieDocModifica='$m_clean' AND NC.ESTADO = 1";
 		$query = Executor::doit($sql);
 		$found = null;
-		$data = new Boleta2Data();
+		$data = new Not_1_2Data();
 		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->TIPO_DOC = $r['TIPO_DOC'];

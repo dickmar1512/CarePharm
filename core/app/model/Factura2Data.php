@@ -55,7 +55,7 @@ class Factura2Data
 		$sql = "select * from " . self::$tablename . " where EXTRA1=$id";
 		$query = Executor::doit($sql);
 		$found = null;
-		$data = new Boleta2Data();
+		$data = new Factura2Data();
 		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->RUC = $r['RUC'];

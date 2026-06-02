@@ -76,8 +76,13 @@ class OperationData
 
 	public function add()
 	{
+		$cu_val = ($this->cu !== "" && $this->cu !== null) ? $this->cu : 0;
+		$prec_alt_val = ($this->prec_alt !== "" && $this->prec_alt !== null) ? $this->prec_alt : 0;
+		$descuento_val = ($this->descuento !== "" && $this->descuento !== null) ? $this->descuento : 0;
+		$created_at_val = ($this->created_at === "NOW()" || $this->created_at === null || $this->created_at === "") ? date("Y-m-d H:i:s") : $this->created_at;
+
 		$sql = "insert into " . self::$tablename . " (product_id,q,cu, prec_alt,descuento, operation_type_id,sell_id,created_at, descripcion,idpaquete,estado) ";
-		$sql .= "value (\"$this->product_id\",\"$this->q\", $this->cu,$this->prec_alt,$this->descuento, $this->operation_type_id,$this->sell_id,\"$this->created_at\", \"$this->descripcion\",\"$this->idpaquete\",1)";
+		$sql .= "value (\"$this->product_id\",\"$this->q\", $cu_val,$prec_alt_val,$descuento_val, $this->operation_type_id,$this->sell_id,\"$created_at_val\", \"$this->descripcion\",\"$this->idpaquete\",1)";
 		$res = Executor::doit($sql);
 		
 		// Sincronización en tiempo real del stock del producto

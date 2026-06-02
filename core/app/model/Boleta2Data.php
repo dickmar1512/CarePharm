@@ -109,7 +109,7 @@ class Boleta2Data
 		$sql = "select * from " . self::$tablename . " where CONCAT(SERIE,'-',COMPROBANTE)='$num'";
 		$query = Executor::doit($sql);
 		$found = null;
-		$data = new Factura2Data();
+		$data = new Boleta2Data();
 		while ($r = $query[0]->fetch_array()) {
 			$data->id = $r['id'];
 			$data->RUC = $r['RUC'];
@@ -143,7 +143,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 	public static function get_boletas_x_fecha2($fecha_inicio, $fecha_fin)
 	{
@@ -157,7 +157,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 
 	public static function get_notas_credito_x_fecha($fecha_inicio, $fecha_fin, $selSerie, $comprobante)
@@ -207,7 +207,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 
 	public static function get_series()
@@ -217,7 +217,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 
 	public static function get_series_notas_credito()
@@ -227,7 +227,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 
 	public static function get_series_notas_debito()
@@ -237,7 +237,7 @@ class Boleta2Data
 
 		$query = Executor::doit($sql);
 
-		return Model::many($query[0], new Factura2Data());
+		return Model::many($query[0], new Boleta2Data());
 	}
 
 
