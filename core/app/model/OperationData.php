@@ -59,6 +59,7 @@ class OperationData
 	public $total_venta;
 	public $stock_actual;
 	public $total_sold;
+	public $cod_digemid;
 
 	public function OperationData()
 	{
@@ -805,7 +806,8 @@ class OperationData
 	public static function getProductsWithMovement()
 	{
 		$sql = "SELECT 
-                    p.id, 
+                    p.id,
+					p.cod_digemid, 
                     p.barcode, 
                     p.image,
                     p.name, 

@@ -45,7 +45,7 @@
 							<table class="table table-bordered table-striped table-hover table-sm datatable" id="gridProducts" style="width:100%">
 								<thead class="thead-dark text-xs">
 									<tr>
-										<th>Código</th>
+										<th>Cód Digemid</th>
 										<th>Imagen</th>
 										<th>Nombre / Laboratorio</th>
 										<th class="text-center">P. Entrada</th>
@@ -60,7 +60,7 @@
 								<tbody>
 								<?php foreach ($products as $product): ?>
 									<tr class="text-sm">
-										<td class="text-xs font-weight-bold"><?=$product->barcode?></td>
+										<td class="text-xs font-weight-bold"><?=$product->cod_digemid?></td>
 										<td class="text-center">
 											<?php if ($product->image != ""): ?>
 												<img src="storage/products/<?=$product->image?>" class="img-thumbnail" style="width:35px; height:35px; object-fit: cover;">
