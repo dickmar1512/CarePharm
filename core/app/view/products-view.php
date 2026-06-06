@@ -46,12 +46,12 @@
 								<thead class="thead-dark text-xs">
 									<tr>
 										<th>Cód Digemid</th>
-										<th>Imagen</th>
+										<!-- <th>Imagen</th> -->
 										<th>Nombre / Laboratorio</th>
-										<th class="text-center">P. Entrada</th>
-										<th class="text-center">P. Mayor</th>
-										<th class="text-center text-primary">P. Salida</th>
-										<th class="text-center">Anaquel</th>
+										<!-- <th class="text-center">P. Entrada</th> -->
+										<th class="text-center">P. Caja</th>
+										<th class="text-center text-primary">P. Unitario</th>
+										<!-- <th class="text-center">Anaquel</th> -->
 										<th class="text-center bg-info">Stock Real</th>
 										<th class="text-center">Min.</th>
 										<th class="text-center">Acciones</th>
@@ -61,21 +61,21 @@
 								<?php foreach ($products as $product): ?>
 									<tr class="text-sm">
 										<td class="text-xs font-weight-bold"><?=$product->cod_digemid?></td>
-										<td class="text-center">
+										<!--<td class="text-center">
 											<?php if ($product->image != ""): ?>
 												<img src="storage/products/<?=$product->image?>" class="img-thumbnail" style="width:35px; height:35px; object-fit: cover;">
 											<?php else: ?>
 												<i class="fas fa-box text-gray"></i>
 											<?php endif; ?>
-										</td>
+										</td> -->
 										<td>
 											<div class="font-weight-bold text-primary"><?=$product->name?></div>
 											<small class="badge badge-light border text-muted"><?=$product->laboratorio?></small>
 										</td>
-										<td class="text-center"><?=number_format($product->price_in, 2)?></td>
+										<!-- <td class="text-center"><?=number_format($product->price_in, 2)?></td> -->
 										<td class="text-center"><?=number_format($product->price_may, 2)?></td>
 										<td class="text-center font-weight-bold text-primary"><?=number_format($product->price_out, 2)?></td>
-										<td class="text-center"><?=$product->anaquel?></td>
+										<!-- <td class="text-center"><?=$product->anaquel?></td> -->
 										<td class="text-center font-weight-bold <?=$product->stock_real <= $product->inventary_min ? 'text-danger' : 'text-dark'?>">
 											<?=number_format($product->stock_real, 0)?>
 										</td>

@@ -80,7 +80,7 @@ function openProductModal(action, productData = null) {
                                     <input type="number" step="any" name="price_out" id="price_out" class="form-control form-control-sm font-weight-bold" value="${productData ? productData.price_out : ''}" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="text-xs mb-1 text-info">Precio Mayor*</label>
+                                    <label class="text-xs mb-1 text-info">Precio Caja*</label>
                                     <input type="number" step="any" name="price_may" id="price_may" class="form-control form-control-sm" value="${productData ? productData.price_may : ''}" required>
                                 </div>
                             </div>
