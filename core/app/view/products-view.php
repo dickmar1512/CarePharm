@@ -26,13 +26,36 @@
 	<div class="container-fluid">
 		<div class="card card-default">
 			<div class="card-header">
-				<div class="btn-group float-sm-right">
-					<!-- <a href="./?view=newproduct" class="btn btn-primary"><i class="fas fa-box-open"></i> Agregar
-						Producto o Servicio</a> -->
-					<button id="openModalNuevoProducto" class="btn btn-primary">
-						<i class="fas fa-box-open"></i>
-						Agregar Producto o Servicio
-					</button>	
+				<div class="row align-items-center">
+					<!-- ===== FILTRO POR TIPO DE PRODUCTO (izquierda) ===== -->
+					<div class="col">
+						<div class="d-flex align-items-center flex-wrap gap-2" id="filtroTipoProducto">
+							<span class="text-xs font-weight-bold text-muted mr-2">
+								<i class="fas fa-filter"></i> Filtrar por tipo:
+							</span>
+							<button class="btn btn-sm btn-primary shadow-sm filtro-btn active" id="filtro-todos" data-filtro="todos">
+								<i class="fas fa-list"></i> Todos
+							</button>
+							<button class="btn btn-sm btn-outline-success shadow-sm filtro-btn" id="filtro-medicamentos" data-filtro="medicamento">
+								<i class="fas fa-pills"></i> Medicamentos
+								<span class="badge badge-light ml-1" id="badge-medicamentos">-</span>
+							</button>
+							<button class="btn btn-sm btn-outline-secondary shadow-sm filtro-btn" id="filtro-otros" data-filtro="otro">
+								<i class="fas fa-box"></i> Otros / Servicios
+								<span class="badge badge-light ml-1" id="badge-otros">-</span>
+							</button>
+						</div>
+					</div>
+					<!-- ===== FIN FILTRO ===== -->
+
+					<!-- ===== BOTÓN NUEVO PRODUCTO (derecha) ===== -->
+					<div class="col-auto">
+						<button id="openModalNuevoProducto" class="btn btn-primary">
+							<i class="fas fa-box-open"></i>
+							Agregar Producto o Servicio
+						</button>
+					</div>
+					<!-- ===== FIN BOTÓN ===== -->
 				</div>
 			</div>
 			<!-- /.card-header -->
@@ -59,7 +82,12 @@
 								</thead>
 								<tbody>
 								<?php foreach ($products as $product): ?>
-									<tr class="text-sm">
+									<?php
+										$cod = trim((string)$product->cod_digemid);
+										$esMedicamento = (!empty($cod) && $cod !== '0');
+										$tipoProd = $esMedicamento ? 'medicamento' : 'otro';
+									?>
+									<tr class="text-sm fila-producto" data-tipo="<?= $tipoProd ?>">
 										<td class="text-xs font-weight-bold"><?=$product->cod_digemid?></td>
 										<!--<td class="text-center">
 											<?php if ($product->image != ""): ?>
@@ -95,6 +123,82 @@
 								</tbody>
 							</table>
 							<div class="clearfix"></div>
+
+							<script>
+							$(document).ready(function () {
+								window._filtroProductoActivo = 'todos';
+
+								// Registrar el filtro en el motor de DataTables de forma segura
+								if (window.jQuery && $.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.search) {
+									var filterExists = false;
+									for (var i = 0; i < $.fn.dataTable.ext.search.length; i++) {
+										if ($.fn.dataTable.ext.search[i].isProductTypeFilter) {
+											filterExists = true;
+											break;
+										}
+									}
+									if (!filterExists) {
+										var productFilter = function(settings, data, dataIndex, rowData, counter) {
+											// Solo aplica a la tabla #gridProducts
+											if (settings.nTable.id !== 'gridProducts') return true;
+											if (window._filtroProductoActivo === 'todos') return true;
+
+											// Leer el data-tipo del <tr> correspondiente o calcularlo de forma segura
+											var row = settings.aoData[dataIndex].nTr;
+											var tipo = row ? row.getAttribute('data-tipo') : null;
+											if (!tipo) {
+												var cod = (data[0] || '').trim();
+												var esMedicamento = (cod !== '' && cod !== '0');
+												tipo = esMedicamento ? 'medicamento' : 'otro';
+											}
+											return tipo === window._filtroProductoActivo;
+										};
+										productFilter.isProductTypeFilter = true;
+										$.fn.dataTable.ext.search.push(productFilter);
+									}
+								}
+
+								// Contar por tipo (lectura directa del DOM)
+								var contMed = 0, contOtro = 0;
+								$('#gridProducts tbody tr.fila-producto').each(function() {
+									var tipo = $(this).data('tipo') || $(this).attr('data-tipo');
+									if (tipo === 'medicamento') contMed++;
+									else contOtro++;
+								});
+								$('#badge-medicamentos').text(contMed);
+								$('#badge-otros').text(contOtro);
+
+								// Manejar clics en los botones de filtro
+								$('.filtro-btn').off('click').on('click', function() {
+									var filtro = $(this).data('filtro');
+									window._filtroProductoActivo = filtro;
+
+									// Estilos activos / inactivos
+									$('.filtro-btn').each(function() {
+										var f = $(this).data('filtro');
+										$(this).removeClass('active btn-primary btn-success btn-secondary btn-outline-primary btn-outline-success btn-outline-secondary');
+										if (f === filtro) {
+											$(this).addClass('active ' + (
+												f === 'todos'       ? 'btn-primary'   :
+												f === 'medicamento' ? 'btn-success'   :
+												'btn-secondary'
+											));
+										} else {
+											$(this).addClass(
+												f === 'todos'       ? 'btn-outline-primary'   :
+												f === 'medicamento' ? 'btn-outline-success'   :
+												'btn-outline-secondary'
+											);
+										}
+									});
+
+									// Disparar redibujado del DataTable → actualiza paginado automáticamente
+									if ($.fn.DataTable && $.fn.DataTable.isDataTable('#gridProducts')) {
+										$('#gridProducts').DataTable().draw();
+									}
+								});
+							});
+							</script>
 
 							<?php
 						} else {
