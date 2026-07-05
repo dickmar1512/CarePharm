@@ -262,7 +262,10 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                                             $fecha_formateada = date('d/m/Y', $fecha_venc);
                                             
                                             // Determinar clase del badge y mensaje según días restantes
-                                            if ($dias_restantes <= 90) {
+                                            if ($dias_restantes <= 0) {
+                                                $badge_class = 'danger';
+                                                $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Vencido!, hace '.abs($dias_restantes).' dias';
+                                            }elseif ($dias_restantes <= 90) {
                                                 $badge_class = 'danger';
                                                 $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
                                             } elseif ($dias_restantes <= 120) {

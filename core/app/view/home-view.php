@@ -268,20 +268,50 @@ if (date("m") == 12) {
           <div class="card-body">
             <?php
             $products = ProductData::getAlertasInventario();
+            $item = 0;
 
             if (count($products) > 0) {
               ?>
               <table id="gridAbastecer" class="table table-bordered table-striped datatable">
                 <thead class="thead-dark">
-                  <th>Codigo</th>
+                  <th>#</th>
                   <th>Nombre del producto</th>
                   <th>En Stock</th>
+                  <th>Fecha Vencimiento</th>
                   <th>Estado</th>
                 </thead>
                 <tbody>
                   <?php
                   foreach ($products as $product) {
                     $q = $product->stock;
+                    $item++;
+                    // Verificar si la fecha es nula o vacía
+                    if (empty($product->fecha_venc)) {
+                        $fecha_venc = strtotime('2099-01-31 00:00:00');
+                        $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                        $badge_class = 'secondary';
+                        $mensaje = 'Sin fecha de vencimiento';
+                        $fecha_formateada = '31/01/2099';
+                    } else {
+                        $fecha_venc = strtotime($product->fecha_venc);
+                        $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                        $fecha_formateada = date('d/m/Y', $fecha_venc);
+                        
+                        // Determinar clase del badge y mensaje según días restantes
+                        if($dias_restantes <= 0) {
+                            $badge_class = 'danger';
+                            $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Vencido!, hace '.abs($dias_restantes).' dias';
+                        }elseif ($dias_restantes <= 90) {
+                            $badge_class = 'danger';
+                            $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                        } elseif ($dias_restantes <= 120) {
+                            $badge_class = 'warning';
+                            $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                        } else {
+                            $badge_class = 'success';
+                            $mensaje = 'Vence: ' . $fecha_formateada;
+                        }
+                    }
                     ?>
                     <tr class="<?php if ($q == 0) {
                       echo "bg-gradient-danger";
@@ -290,9 +320,14 @@ if (date("m") == 12) {
                     } else if ($q <= $product->inventary_min) {
                       echo "bg-gradient-info";
                     } ?>">
-                      <td><?php echo $product->barcode; ?></td>
+                      <td><?php echo $item; ?></td>
                       <td><?php echo $product->name; ?></td>
                       <td><?php echo $product->stock; ?></td>
+                      <td>
+                        <small class="badge badge-<?php echo $badge_class; ?> border text-<?php echo ($badge_class == 'warning' ? 'dark' : 'white'); ?>">
+                          <?php echo $mensaje; ?>
+                        </small>
+                      </td>
                       <td>
                         <?php
                         if ($product->stock == 0) {
