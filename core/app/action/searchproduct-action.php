@@ -248,6 +248,36 @@ if (isset($_GET["product"]) && $_GET["product"] != ""):
                                 <div class="font-weight-bold text-primary text-responsive"><?php echo $product->name; ?></div>
                                 <?php if(isset($product->laboratorio) && trim($product->laboratorio) != ""): ?>
                                     <small class="badge badge-light border text-muted"><?php echo $product->laboratorio; ?></small>
+                                    <?php
+                                        // Verificar si la fecha es nula o vacía
+                                        if (empty($product->fecha_venc)) {
+                                            $fecha_venc = strtotime('2099-01-31 00:00:00');
+                                            $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                                            $badge_class = 'secondary';
+                                            $mensaje = 'Sin fecha de vencimiento';
+                                            $fecha_formateada = '31/01/2099';
+                                        } else {
+                                            $fecha_venc = strtotime($product->fecha_venc);
+                                            $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                                            $fecha_formateada = date('d/m/Y', $fecha_venc);
+                                            
+                                            // Determinar clase del badge y mensaje según días restantes
+                                            if ($dias_restantes <= 90) {
+                                                $badge_class = 'danger';
+                                                $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                                            } elseif ($dias_restantes <= 120) {
+                                                $badge_class = 'warning';
+                                                $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                                            } else {
+                                                $badge_class = 'success';
+                                                $mensaje = 'Vence: ' . $fecha_formateada;
+                                            }
+                                        }
+                                        ?>
+
+                                        <small class="badge badge-<?php echo $badge_class; ?> border text-<?php echo ($badge_class == 'warning' ? 'dark' : 'white'); ?>">
+                                            <?php echo $mensaje; ?>
+                                        </small>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
