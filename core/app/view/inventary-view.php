@@ -76,6 +76,35 @@ $inventory = OperationData::getProductsWithMovement();
                                         <td class="font-weight-bold text-muted text-xs"><?=$p->barcode?></td>
                                         <td>
                                             <span class="font-weight-bold"><?=$p->name?></span>
+                                            <?php
+                                            // Verificar si la fecha es nula o vacía
+                                            if (empty($p->fecha_venc)) {
+                                                $fecha_venc = strtotime('2099-01-31 00:00:00');
+                                                $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                                                $badge_class = 'secondary';
+                                                $mensaje = 'Sin fecha de vencimiento';
+                                                $fecha_formateada = '31/01/2099';
+                                            } else {
+                                                $fecha_venc = strtotime($p->fecha_venc);
+                                                $dias_restantes = ceil(($fecha_venc - time()) / (60 * 60 * 24));
+                                                $fecha_formateada = date('d/m/Y', $fecha_venc);
+                                                
+                                                // Determinar clase del badge y mensaje según días restantes
+                                                if ($dias_restantes <= 90) {
+                                                    $badge_class = 'danger';
+                                                    $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                                                } elseif ($dias_restantes <= 120) {
+                                                    $badge_class = 'warning';
+                                                    $mensaje = 'Vence: ' . $fecha_formateada. ' - ¡Faltan ' . $dias_restantes . ' días para vencer!';
+                                                } else {
+                                                    $badge_class = 'success';
+                                                    $mensaje = 'Vence: ' . $fecha_formateada;
+                                                }
+                                            }
+                                            ?>
+                                            <small class="badge badge-<?php echo $badge_class; ?> border text-<?php echo ($badge_class == 'warning' ? 'dark' : 'white'); ?>">
+                                                <?php echo $mensaje; ?>
+                                            </small>
                                         </td>
                                         <td class="text-center text-muted">
                                             <?=$p->is_stock == 1 ? $p->inventary_min : '-'?>

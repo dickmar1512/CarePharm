@@ -60,6 +60,7 @@ class OperationData
 	public $stock_actual;
 	public $total_sold;
 	public $cod_digemid;
+	public $fecha_venc;
 
 	public function OperationData()
 	{
@@ -820,7 +821,8 @@ class OperationData
                     p.price_out,
                     p.laboratorio,
                     p.anaquel,
-                    p.is_active
+                    p.is_active,
+                    p.fecha_venc
                 FROM product p
                 WHERE p.is_active = 1
                 AND EXISTS (SELECT 1 FROM operation op WHERE op.product_id = p.id AND op.estado = 1)
