@@ -32,6 +32,9 @@ $inventory = OperationData::getProductsWithMovement();
                             <i class="fas fa-list mr-1"></i> Listado General de Productos y Existencias
                         </h3>
                         <div class="card-tools">
+                            <a href="./?view=reportevencimientos" class="btn btn-danger btn-sm text-white mr-2">
+                                <i class="fas fa-calendar-times mr-1"></i> Reporte de Vencimientos
+                            </a>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
