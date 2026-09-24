@@ -200,7 +200,7 @@ if($found) {
                       font-size: 15px; font-weight: bold;
                       color: #ffffff; letter-spacing: 2px;
                       text-transform: uppercase;">
-              Botica Alfonzo Ugarte
+              Botica ALFONSO Ugarte
             </p>
             <p style="margin: 4px 0 0 0; font-family: Arial, sans-serif;
                       font-size: 11px; color: #7fa8cc;

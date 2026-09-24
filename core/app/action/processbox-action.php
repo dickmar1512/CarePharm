@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             </div>
         </div>";
         
-        $firma = '<tr><td class="sub_pie">BOTICA ALFONZO UGARTE</td></tr>';
+        $firma = '<tr><td class="sub_pie">BOTICA ALFONSO UGARTE</td></tr>';
         $firma .= '<tr><td class="sub_pie">botica.au@gmail.com</td></tr>';            
         
         $mailer->fnMail($arraddress,$arrAddcc,$asunto,$cuerpo,'pie',$firma,null);

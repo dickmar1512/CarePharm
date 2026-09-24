@@ -790,7 +790,7 @@ $arraddress = ['juan.irene@kalpg.com'];
 $arrAddcc   = ['sagitatario.1982@gmail.com', 'mayaya.ocampo@gmail.com'];
 $asunto     = "REPORTE DE VENCIMIENTOS [" . date('d/m/Y') . "] — {$tipo_ejecucion} — {$total_alertas} producto(s) con alerta";
 
-$firma  = '<tr><td class="sub_pie">BOTICA ALFONZO UGARTE</td></tr>';
+$firma  = '<tr><td class="sub_pie">BOTICA ALFONSO UGARTE</td></tr>';
 $firma .= '<tr><td class="sub_pie">botica.au@gmail.com</td></tr>';
 
 $mailer  = new CLSPHPMailer();

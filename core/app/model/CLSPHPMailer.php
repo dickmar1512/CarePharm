@@ -25,7 +25,7 @@ class CLSPHPMailer
 	private $de = "botica.au";
 	private $usuario = "botica.au@gmail.com";
 	private $clave = "qhsc ueuz lsza ykup"; //sbfi twaq trmc yuef, kkon sgwz kipa koow
-	private $tituloCorreoMSG = "BOTICA ALFONZO UGARTE";
+	private $tituloCorreoMSG = "BOTICA ALFONSO UGARTE";
 	private $fromname = 'AVISOS';
 	private $objMail;
 

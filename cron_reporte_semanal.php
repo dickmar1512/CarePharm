@@ -280,7 +280,7 @@ $cuerpo .= "</td>
     </tfoot>
 </table>";
 
-$firma = '<tr><td class="sub_pie">BOTICA ALFONZO UGARTE</td></tr>';
+$firma = '<tr><td class="sub_pie">BOTICA ALFONSO UGARTE</td></tr>';
 $firma .= '<tr><td class="sub_pie">botica.au@gmail.com</td></tr>';            
 
 $mailer = new CLSPHPMailer();
