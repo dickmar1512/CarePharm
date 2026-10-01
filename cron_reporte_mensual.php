@@ -5,6 +5,7 @@
  */
 
 define("ROOT", dirname(__FILE__));
+chdir(ROOT);
 date_default_timezone_set("America/Lima");
 
 include_once "core/autoload.php";
